@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.travelmanager.controller.MainController"
+            prefHeight="700.0" prefWidth="1000.0">
+    
+    <top>
+        <VBox styleClass="header" BorderPane.alignment="CENTER">
+            <MenuBar>
+                <Menu text="File">
+                    <MenuItem text="New Trip"/>
+                    <MenuItem text="Load Trip"/>
+                    <MenuItem text="Save Trip"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Exit"/>
+                </Menu>
+                <Menu text="Schedules">
+                    <MenuItem text="Manage Bus Schedules"/>
+                    <MenuItem text="Manage Train Schedules"/>
+                </Menu>
+                <Menu text="Help">
+                    <MenuItem text="About"/>
+                </Menu>
+            </MenuBar>
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10"/>
+            </padding>
+        </VBox>
+    </top>
+    
+    <center>
+        <VBox alignment="CENTER" spacing="20" BorderPane.alignment="CENTER">
+            <Label fx:id="welcomeLabel" text="Welcome to Travel Schedule Manager">
+                <font>
+                    <Font name="System Bold" size="24.0"/>
+                </font>
+            </Label>
+            <Label text="Plan your multi-modal journey with ease">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Label>
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20"/>
+            </padding>
+        </VBox>
+    </center>
+    
+    <bottom>
+        <HBox alignment="CENTER" spacing="10" BorderPane.alignment="CENTER">
+            <Label text="Ready to plan your trip"/>
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10"/>
+            </padding>
+        </HBox>
+    </bottom>
+</BorderPane>

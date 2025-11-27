@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.travelmanager.controller.HelpController"
+            prefHeight="600.0" prefWidth="700.0"
+            stylesheets="@../css/styles.css">
+    
+    <top>
+        <VBox style="-fx-background-color: #2c3e50; -fx-padding: 15;">
+            <Label text="Help - How to Use This App" textFill="white">
+                <font>
+                    <Font name="System Bold" size="20.0"/>
+                </font>
+            </Label>
+        </VBox>
+    </top>
+    
+    <center>
+        <VBox BorderPane.alignment="CENTER" style="-fx-background-color: white; -fx-padding: 15;">
+            <TextArea fx:id="helpText" editable="false" wrapText="true" VBox.vgrow="ALWAYS"
+                      style="-fx-font-family: 'Consolas', 'Courier New'; -fx-font-size: 12px;"/>
+        </VBox>
+    </center>
+</BorderPane>
