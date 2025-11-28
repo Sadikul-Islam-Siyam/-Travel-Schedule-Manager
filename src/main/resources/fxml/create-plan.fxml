@@ -65,46 +65,47 @@
                     </HBox>
                 </VBox>
                 
-                <!-- Schedules Table -->
+                <!-- Available Schedules -->
                 <VBox spacing="5" VBox.vgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 10; -fx-background-radius: 5;">
-                    <Label text="Available Schedules" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
-                    <TableView fx:id="scheduleTable" VBox.vgrow="ALWAYS">
-                        <columns>
-                            <TableColumn fx:id="typeColumn" text="Type" prefWidth="60"/>
-                            <TableColumn fx:id="nameColumn" text="Name" prefWidth="100"/>
-                            <TableColumn fx:id="originColumn" text="Origin" prefWidth="80"/>
-                            <TableColumn fx:id="destinationColumn" text="Destination" prefWidth="90"/>
-                            <TableColumn fx:id="departureColumn" text="Departure" prefWidth="120"/>
-                            <TableColumn fx:id="arrivalColumn" text="Arrival" prefWidth="120"/>
-                            <TableColumn fx:id="fareColumn" text="Fare (৳)" prefWidth="70"/>
-                            <TableColumn fx:id="durationColumn" text="Duration" prefWidth="80"/>
-                            <TableColumn fx:id="seatsColumn" text="Seats" prefWidth="50"/>
-                        </columns>
-                    </TableView>
-                    <Button fx:id="addToPlanButton" text="➕ Add to Plan" onAction="#handleAddToPlan"
-                            style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-padding: 8 20; -fx-cursor: hand;"/>
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="Available Schedules" style="-fx-font-weight: bold; -fx-font-size: 14px;" HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="searchResultCountLabel" style="-fx-text-fill: #3498db; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                    </HBox>
+                    <ScrollPane fx:id="scheduleScrollPane" VBox.vgrow="ALWAYS" fitToWidth="true"
+                               style="-fx-background: #f8f9fa; -fx-background-color: #f8f9fa; -fx-border-color: #e0e0e0; -fx-border-radius: 5;">
+                        <VBox fx:id="scheduleContainer" spacing="8" style="-fx-padding: 10;"/>
+                    </ScrollPane>
                 </VBox>
             </VBox>
             
             <!-- Right side - Current Plan -->
-            <VBox spacing="10" prefWidth="300" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;">
-                <Label text="Your Travel Plan" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+            <VBox spacing="10" prefWidth="350" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Your Travel Plan" style="-fx-font-weight: bold; -fx-font-size: 16px;" HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="legCountLabel" text="0 Legs" style="-fx-text-fill: #3498db; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                </HBox>
                 
-                <ListView fx:id="planListView" VBox.vgrow="ALWAYS" style="-fx-font-family: 'Courier New';"/>
+                <ScrollPane fx:id="planScrollPane" VBox.vgrow="ALWAYS" fitToWidth="true" 
+                           style="-fx-background: #f8f9fa; -fx-background-color: #f8f9fa; -fx-border-color: #e0e0e0; -fx-border-radius: 5;">
+                    <VBox fx:id="planContainer" spacing="8" style="-fx-padding: 10;"/>
+                </ScrollPane>
                 
-                <Separator/>
+                <VBox spacing="5">
+                    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 8; -fx-background-color: #ecf0f1; -fx-background-radius: 5;">
+                        <Label text="Total Fare:" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="totalFareLabel" text="৳0.00" style="-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 14px;"/>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 8; -fx-background-color: #ecf0f1; -fx-background-radius: 5;">
+                        <Label text="Total Time:" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="totalTimeLabel" text="0h 0m" style="-fx-text-fill: #3498db; -fx-font-weight: bold; -fx-font-size: 14px;"/>
+                    </HBox>
+                </VBox>
                 
-                <Label fx:id="totalFareLabel" text="Total Fare: ৳0.00" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                <Label text="Add schedules to build your multi-leg journey. Click 'Summarize' when ready." 
+                       wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px; -fx-padding: 5 0;"/>
                 
-                <Button fx:id="summarizeButton" text="📋 Summarize Plan" onAction="#handleSummarize"
-                        style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-padding: 10 20; -fx-cursor: hand;"/>
-                
-                <Separator/>
-                
-                <Label text="Save Your Plan" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
-                <TextField fx:id="planNameField" promptText="Enter plan name"/>
-                <Button fx:id="savePlanButton" text="💾 Save Plan" onAction="#handleSavePlan"
-                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 10 20; -fx-cursor: hand;"/>
+                <Button fx:id="summarizeButton" text="📋 Summarize &amp; Save Plan" onAction="#handleSummarize"
+                        style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-padding: 12 20; -fx-cursor: hand; -fx-font-weight: bold;"/>
             </VBox>
         </HBox>
     </center>

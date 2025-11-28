@@ -37,8 +37,13 @@ public class AutoCompletePopup extends PopupControl {
             }
         });
         
-        // Setup text field listener
+        // Setup text field listener - only show popup when user is typing
         textField.textProperty().addListener((obs, oldValue, newValue) -> {
+            // Only show popup if text field has focus (user is actively typing)
+            if (!textField.isFocused()) {
+                return;
+            }
+            
             if (newValue == null || newValue.trim().isEmpty()) {
                 hide();
                 return;

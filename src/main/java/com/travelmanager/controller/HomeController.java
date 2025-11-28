@@ -28,6 +28,7 @@ public class HomeController {
             stage.setTitle("Create New Plan");
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setMaximized(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -43,6 +44,7 @@ public class HomeController {
             stage.setTitle("Saved Plans");
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setMaximized(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,6 +60,7 @@ public class HomeController {
             stage.setTitle("Automatic Route Generation");
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setMaximized(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,6 +76,7 @@ public class HomeController {
             stage.setTitle("Help - How to Use This App");
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setMaximized(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

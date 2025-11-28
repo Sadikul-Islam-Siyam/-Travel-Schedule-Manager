@@ -20,6 +20,7 @@ public class App extends Application {
         scene = new Scene(loadFXML("home"), 1000, 700);
         stage.setTitle("Smart Multi-Modal Travel Schedule Manager");
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 

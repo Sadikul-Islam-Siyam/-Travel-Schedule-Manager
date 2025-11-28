@@ -46,4 +46,5 @@ Thumbs.db
 
 # Application data
 data/*.json
+data/*.db
 !data/.gitkeep
