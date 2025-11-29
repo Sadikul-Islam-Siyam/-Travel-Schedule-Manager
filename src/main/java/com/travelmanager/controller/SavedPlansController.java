@@ -4,16 +4,12 @@ import com.travelmanager.database.DatabaseManager;
 import com.travelmanager.model.Route;
 import com.travelmanager.model.Schedule;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -87,21 +83,14 @@ public class SavedPlansController {
             Route route = DatabaseManager.getInstance().loadPlan(selectedPlanName);
             DatabaseManager.PlanSummary summary = DatabaseManager.getInstance().getPlanSummary(selectedPlanName);
             
-            // Open view details window
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/view-plan-details.fxml"));
-            Scene scene = new Scene(loader.load(), 850, 700);
-            
-            ViewPlanDetailsController controller = loader.getController();
-            String formattedDate = LocalDateTime.parse(summary.getCreatedDate())
-                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-            controller.setPlanData(summary.getName(), formattedDate, summary.getNotes(), route);
-            
-            Stage stage = new Stage();
-            stage.setTitle("View Plan Details");
-            stage.setScene(scene);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setMaximized(true);
-            stage.show();
+            // Navigate to view details
+            ViewPlanDetailsController controller = com.travelmanager.util.NavigationManager.navigateToWithController(
+                "view-plan-details", ViewPlanDetailsController.class);
+            if (controller != null) {
+                String formattedDate = LocalDateTime.parse(summary.getCreatedDate())
+                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+                controller.setPlanData(summary.getName(), formattedDate, summary.getNotes(), route);
+            }
             
         } catch (Exception e) {
             showAlert("Error loading plan: " + e.getMessage());
@@ -146,23 +135,12 @@ public class SavedPlansController {
         try {
             Route route = DatabaseManager.getInstance().loadPlan(selectedPlanName);
             
-            // Open edit window
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/edit-plan.fxml"));
-            Scene scene = new Scene(loader.load(), 1100, 700);
-            
-            // Pass plan data to edit controller
-            EditPlanController controller = loader.getController();
-            controller.setPlanData(selectedPlanName, route);
-            
-            Stage stage = new Stage();
-            stage.setTitle("Edit Plan - " + selectedPlanName);
-            stage.setScene(scene);
-            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-            stage.setMaximized(true);
-            stage.showAndWait();
-            
-            // Refresh after edit window closes
-            handleRefresh();
+            // Navigate to edit view
+            EditPlanController controller = com.travelmanager.util.NavigationManager.navigateToWithController(
+                "edit-plan", EditPlanController.class);
+            if (controller != null) {
+                controller.setPlanData(selectedPlanName, route);
+            }
             
         } catch (Exception e) {
             showAlert("Error opening edit window: " + e.getMessage());
@@ -173,6 +151,11 @@ public class SavedPlansController {
     @FXML
     private void handleRefresh() {
         loadPlans();
+    }
+    
+    @FXML
+    private void handleBack() {
+        com.travelmanager.util.NavigationManager.goBack();
     }
 
     private void updateButtonStates() {

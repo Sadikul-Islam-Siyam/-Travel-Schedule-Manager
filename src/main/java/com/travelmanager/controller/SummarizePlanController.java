@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -199,9 +198,8 @@ public class SummarizePlanController {
             alert.setContentText("Plan '" + planName + "' saved successfully!");
             alert.showAndWait();
             
-            // Close window
-            Stage stage = (Stage) savePlanButton.getScene().getWindow();
-            stage.close();
+            // Go back to home
+            com.travelmanager.util.NavigationManager.goBack();
             
         } catch (Exception e) {
             if (e.getMessage().contains("UNIQUE constraint failed")) {
@@ -215,8 +213,12 @@ public class SummarizePlanController {
 
     @FXML
     private void handleCancel() {
-        Stage stage = (Stage) cancelButton.getScene().getWindow();
-        stage.close();
+        com.travelmanager.util.NavigationManager.goBack();
+    }
+    
+    @FXML
+    private void handleBack() {
+        com.travelmanager.util.NavigationManager.goBack();
     }
 
     public boolean isPlanSaved() {

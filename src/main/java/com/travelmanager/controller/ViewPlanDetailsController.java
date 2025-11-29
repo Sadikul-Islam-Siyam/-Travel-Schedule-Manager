@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -167,7 +166,11 @@ public class ViewPlanDetailsController {
 
     @FXML
     private void handleClose() {
-        Stage stage = (Stage) planDetailsContainer.getScene().getWindow();
-        stage.close();
+        com.travelmanager.util.NavigationManager.navigateTo("saved-plans");
+    }
+    
+    @FXML
+    private void handleBack() {
+        com.travelmanager.util.NavigationManager.navigateTo("saved-plans");
     }
 }

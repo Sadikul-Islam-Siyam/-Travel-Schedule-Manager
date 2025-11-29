@@ -6,14 +6,11 @@ import com.travelmanager.model.TrainSchedule;
 import com.travelmanager.service.ScheduleService;
 import com.travelmanager.util.AutoCompletePopup;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -203,32 +200,11 @@ public class CreatePlanController {
             return;
         }
         
-        try {
-            // Open summarize window
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/summarize-plan.fxml"));
-            Scene scene = new Scene(loader.load(), 800, 700);
-            
-            // Pass schedules to summarize controller
-            SummarizePlanController controller = loader.getController();
+        // Navigate to summarize view and pass schedules
+        SummarizePlanController controller = com.travelmanager.util.NavigationManager.navigateToWithController(
+            "summarize-plan", SummarizePlanController.class);
+        if (controller != null) {
             controller.setSchedules(new ArrayList<>(currentPlan));
-            
-            Stage stage = new Stage();
-            stage.setTitle("Summarize and Save Plan");
-            stage.setScene(scene);
-            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-            stage.setMaximized(true);
-            stage.showAndWait();
-            
-            // Check if plan was saved, then close create plan window
-            // The summarize controller will indicate if save was successful
-            if (controller.isPlanSaved()) {
-                Stage createPlanStage = (Stage) summarizeButton.getScene().getWindow();
-                createPlanStage.close();
-            }
-            
-        } catch (Exception e) {
-            showAlert("Error opening summary: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -244,6 +220,11 @@ public class CreatePlanController {
         datePicker.setValue(LocalDate.now());
         
         summarizeButton.setDisable(true);
+    }
+    
+    @FXML
+    private void handleBack() {
+        com.travelmanager.util.NavigationManager.goBack();
     }
 
     private void updatePlanView() {

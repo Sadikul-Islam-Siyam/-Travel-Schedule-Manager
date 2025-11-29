@@ -1,5 +1,6 @@
 package com.travelmanager;
 
+import com.travelmanager.util.NavigationManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,6 +18,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        NavigationManager.setPrimaryStage(stage);
         scene = new Scene(loadFXML("home"), 1000, 700);
         stage.setTitle("Smart Multi-Modal Travel Schedule Manager");
         stage.setScene(scene);

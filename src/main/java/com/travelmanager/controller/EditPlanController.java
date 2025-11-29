@@ -13,7 +13,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -497,8 +496,7 @@ public class EditPlanController {
             successAlert.setContentText("Plan updated successfully!");
             successAlert.showAndWait();
             
-            Stage stage = (Stage) saveChangesButton.getScene().getWindow();
-            stage.close();
+            com.travelmanager.util.NavigationManager.navigateTo("saved-plans");
             
         } catch (Exception e) {
             showAlert("Error saving changes: " + e.getMessage());
@@ -515,8 +513,7 @@ public class EditPlanController {
         
         confirmAlert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                Stage stage = (Stage) cancelButton.getScene().getWindow();
-                stage.close();
+                com.travelmanager.util.NavigationManager.navigateTo("saved-plans");
             }
         });
     }
@@ -557,5 +554,10 @@ public class EditPlanController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    
+    @FXML
+    private void handleBack() {
+        com.travelmanager.util.NavigationManager.navigateTo("saved-plans");
     }
 }

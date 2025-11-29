@@ -112,4 +112,9 @@ public class HelpController {
         
         helpText.setText(helpContent);
     }
+    
+    @FXML
+    private void handleBack() {
+        com.travelmanager.util.NavigationManager.goBack();
+    }
 }

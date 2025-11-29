@@ -15,4 +15,9 @@ public class AutomaticRouteController {
     public void initialize() {
         statusLabel.setText("Automatic route generation will be implemented soon");
     }
+    
+    @FXML
+    private void handleBack() {
+        com.travelmanager.util.NavigationManager.goBack();
+    }
 }
