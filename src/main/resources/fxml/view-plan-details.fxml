@@ -50,13 +50,28 @@
                 
                 <VBox alignment="CENTER" spacing="5" HBox.hgrow="ALWAYS"
                       style="-fx-background-color: #e67e22; -fx-padding: 15; -fx-background-radius: 5;">
-                    <Label fx:id="totalTimeLabel" text="0h 0m" textFill="white">
+                    <Label fx:id="totalTimeLabel" text="Travel: 0h 0m" textFill="white">
+                        <font>
+                            <Font name="System Bold" size="16.0"/>
+                        </font>
+                    </Label>
+                </VBox>
+                
+                <VBox alignment="CENTER" spacing="5" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #9b59b6; -fx-padding: 15; -fx-background-radius: 5;">
+                    <Label fx:id="totalDurationLabel" text="Duration: 0h 0m" textFill="white">
                         <font>
                             <Font name="System Bold" size="16.0"/>
                         </font>
                     </Label>
                 </VBox>
             </HBox>
+            
+            <!-- Notes Section (if present) -->
+            <VBox fx:id="notesSection" spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+                <Label text="📝 Notes" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                <Label fx:id="notesLabel" wrapText="true" style="-fx-font-size: 13px; -fx-text-fill: #34495e; -fx-padding: 5; -fx-background-color: #f8f9fa; -fx-background-radius: 5; -fx-padding: 10;"/>
+            </VBox>
             
             <!-- Plan Details -->
             <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">

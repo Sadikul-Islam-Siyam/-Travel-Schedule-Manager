@@ -340,13 +340,29 @@ public class CreatePlanController {
             bottomBox.getChildren().addAll(fareLabel, durationLabel);
             
             card.getChildren().addAll(header, nameLabel, routeBox, timeBox, bottomBox);
+            
+            // Check for tight connection (if not the last leg)
+            if (i < currentPlan.size() - 1) {
+                Schedule nextSchedule = currentPlan.get(i + 1);
+                long connectionMinutes = Duration.between(s.getArrivalTime(), nextSchedule.getDepartureTime()).toMinutes();
+                
+                if (connectionMinutes < 30 && connectionMinutes >= 0) {
+                    Label warningLabel = new Label("⚠ Tight connection: " + connectionMinutes + " min");
+                    warningLabel.setStyle("-fx-background-color: #ff9800; -fx-text-fill: white; " +
+                                         "-fx-padding: 4 8; -fx-background-radius: 3; -fx-font-size: 10px; -fx-font-weight: bold;");
+                    card.getChildren().add(warningLabel);
+                }
+            }
+            
             planContainer.getChildren().add(card);
         }
         
-        // Calculate total travel time
+        // Calculate total duration from first departure to last arrival
         long totalMinutes = 0;
-        for (Schedule s : currentPlan) {
-            totalMinutes += Duration.between(s.getDepartureTime(), s.getArrivalTime()).toMinutes();
+        if (!currentPlan.isEmpty()) {
+            LocalDateTime firstDeparture = currentPlan.get(0).getDepartureTime();
+            LocalDateTime lastArrival = currentPlan.get(currentPlan.size() - 1).getArrivalTime();
+            totalMinutes = Duration.between(firstDeparture, lastArrival).toMinutes();
         }
         long totalHours = totalMinutes / 60;
         long totalMins = totalMinutes % 60;

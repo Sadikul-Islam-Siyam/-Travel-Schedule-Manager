@@ -38,10 +38,18 @@ public class DatabaseManager {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT NOT NULL UNIQUE,
                     total_fare REAL NOT NULL,
-                    created_date TEXT NOT NULL
+                    created_date TEXT NOT NULL,
+                    notes TEXT
                 )
                 """;
             stmt.execute(createPlansTable);
+            
+            // Add notes column if it doesn't exist (for existing databases)
+            try {
+                stmt.execute("ALTER TABLE plans ADD COLUMN notes TEXT");
+            } catch (SQLException e) {
+                // Column already exists, ignore
+            }
 
             // Create schedules table
             String createSchedulesTable = """
@@ -73,17 +81,18 @@ public class DatabaseManager {
         }
     }
 
-    public void savePlan(String planName, Route route) throws SQLException {
+    public void savePlan(String planName, Route route, String notes) throws SQLException {
         try (Connection conn = DriverManager.getConnection(DB_URL)) {
             conn.setAutoCommit(false);
             
             try {
                 // Insert plan
-                String insertPlan = "INSERT INTO plans (name, total_fare, created_date) VALUES (?, ?, ?)";
+                String insertPlan = "INSERT INTO plans (name, total_fare, created_date, notes) VALUES (?, ?, ?, ?)";
                 PreparedStatement pstmt = conn.prepareStatement(insertPlan);
                 pstmt.setString(1, planName);
                 pstmt.setDouble(2, route.getTotalFare());
                 pstmt.setString(3, LocalDateTime.now().toString());
+                pstmt.setString(4, notes);
                 pstmt.executeUpdate();
 
                 // Get generated plan ID using SQLite's last_insert_rowid()
@@ -232,7 +241,7 @@ public class DatabaseManager {
 
     public PlanSummary getPlanSummary(String planName) throws SQLException {
         String query = """
-            SELECT p.name, p.total_fare, p.created_date, COUNT(s.id) as leg_count,
+            SELECT p.name, p.total_fare, p.created_date, p.notes, COUNT(s.id) as leg_count,
                    MIN(s.departure_time) as first_departure,
                    MAX(s.arrival_time) as last_arrival
             FROM plans p
@@ -252,6 +261,7 @@ public class DatabaseManager {
                     rs.getString("name"),
                     rs.getDouble("total_fare"),
                     rs.getString("created_date"),
+                    rs.getString("notes"),
                     rs.getInt("leg_count"),
                     rs.getString("first_departure"),
                     rs.getString("last_arrival")
@@ -266,15 +276,17 @@ public class DatabaseManager {
         private final String name;
         private final double totalFare;
         private final String createdDate;
+        private final String notes;
         private final int legCount;
         private final String firstDeparture;
         private final String lastArrival;
 
-        public PlanSummary(String name, double totalFare, String createdDate, 
+        public PlanSummary(String name, double totalFare, String createdDate, String notes,
                           int legCount, String firstDeparture, String lastArrival) {
             this.name = name;
             this.totalFare = totalFare;
             this.createdDate = createdDate;
+            this.notes = notes;
             this.legCount = legCount;
             this.firstDeparture = firstDeparture;
             this.lastArrival = lastArrival;
@@ -283,6 +295,7 @@ public class DatabaseManager {
         public String getName() { return name; }
         public double getTotalFare() { return totalFare; }
         public String getCreatedDate() { return createdDate; }
+        public String getNotes() { return notes; }
         public int getLegCount() { return legCount; }
         public String getFirstDeparture() { return firstDeparture; }
         public String getLastArrival() { return lastArrival; }

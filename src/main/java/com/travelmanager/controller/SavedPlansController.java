@@ -94,7 +94,7 @@ public class SavedPlansController {
             ViewPlanDetailsController controller = loader.getController();
             String formattedDate = LocalDateTime.parse(summary.getCreatedDate())
                 .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-            controller.setPlanData(summary.getName(), formattedDate, route);
+            controller.setPlanData(summary.getName(), formattedDate, summary.getNotes(), route);
             
             Stage stage = new Stage();
             stage.setTitle("View Plan Details");

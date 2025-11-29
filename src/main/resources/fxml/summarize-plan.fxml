@@ -28,42 +28,54 @@
     
     <center>
         <VBox spacing="15" BorderPane.alignment="CENTER" style="-fx-background-color: #ecf0f1; -fx-padding: 20;">
-            <!-- Summary Display -->
-            <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
-                <Label text="Your Complete Journey" style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 0 0 10 0;"/>
-                <ScrollPane fx:id="planSummaryScrollPane" VBox.vgrow="ALWAYS" fitToWidth="true"
-                           style="-fx-background: #f8f9fa; -fx-background-color: #f8f9fa; -fx-border-color: #e0e0e0; -fx-border-radius: 5;">
-                    <VBox fx:id="planSummaryContainer" spacing="8" style="-fx-padding: 10;"/>
-                </ScrollPane>
-            </VBox>
-            
-            <!-- Summary Stats -->
-            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
-                <VBox alignment="CENTER" spacing="5" HBox.hgrow="ALWAYS" 
-                      style="-fx-background-color: #3498db; -fx-padding: 15; -fx-background-radius: 5;">
-                    <Label fx:id="totalLegsLabel" text="Total Legs: 0" textFill="white">
-                        <font>
-                            <Font name="System Bold" size="16.0"/>
-                        </font>
-                    </Label>
+            <!-- Main Content - Horizontal Split -->
+            <HBox spacing="15" VBox.vgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+                <!-- Left Side - Summary Stats Stack -->
+                <VBox spacing="10" prefWidth="220" style="-fx-background-color: #f8f9fa; -fx-padding: 12; -fx-background-radius: 5;">
+                    <VBox alignment="CENTER_LEFT" spacing="5" 
+                          style="-fx-background-color: #3498db; -fx-padding: 12; -fx-background-radius: 5;">
+                        <Label fx:id="totalLegsLabel" text="Total Legs: 0" textFill="white">
+                            <font>
+                                <Font name="System Bold" size="14.0"/>
+                            </font>
+                        </Label>
+                    </VBox>
+                    
+                    <VBox alignment="CENTER_LEFT" spacing="5"
+                          style="-fx-background-color: #2ecc71; -fx-padding: 12; -fx-background-radius: 5;">
+                        <Label fx:id="totalFareLabel" text="Total Fare: ৳0.00" textFill="white">
+                            <font>
+                                <Font name="System Bold" size="14.0"/>
+                            </font>
+                        </Label>
+                    </VBox>
+                    
+                    <VBox alignment="CENTER_LEFT" spacing="5"
+                          style="-fx-background-color: #e67e22; -fx-padding: 12; -fx-background-radius: 5;">
+                        <Label fx:id="totalTimeLabel" text="Travel Time: 0h 0m" textFill="white">
+                            <font>
+                                <Font name="System Bold" size="14.0"/>
+                            </font>
+                        </Label>
+                    </VBox>
+                    
+                    <VBox alignment="CENTER_LEFT" spacing="5"
+                          style="-fx-background-color: #9b59b6; -fx-padding: 12; -fx-background-radius: 5;">
+                        <Label fx:id="totalDurationLabel" text="Total Duration: 0h 0m" textFill="white">
+                            <font>
+                                <Font name="System Bold" size="14.0"/>
+                            </font>
+                        </Label>
+                    </VBox>
                 </VBox>
                 
-                <VBox alignment="CENTER" spacing="5" HBox.hgrow="ALWAYS"
-                      style="-fx-background-color: #2ecc71; -fx-padding: 15; -fx-background-radius: 5;">
-                    <Label fx:id="totalFareLabel" text="Total Fare: ৳0.00" textFill="white">
-                        <font>
-                            <Font name="System Bold" size="16.0"/>
-                        </font>
-                    </Label>
-                </VBox>
-                
-                <VBox alignment="CENTER" spacing="5" HBox.hgrow="ALWAYS"
-                      style="-fx-background-color: #e67e22; -fx-padding: 15; -fx-background-radius: 5;">
-                    <Label fx:id="totalTimeLabel" text="Total Time: 0h 0m" textFill="white">
-                        <font>
-                            <Font name="System Bold" size="16.0"/>
-                        </font>
-                    </Label>
+                <!-- Right Side - Journey Cards -->
+                <VBox VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" spacing="10">
+                    <Label text="Your Complete Journey" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                    <ScrollPane fx:id="planSummaryScrollPane" VBox.vgrow="ALWAYS" fitToWidth="true"
+                               style="-fx-background: #f8f9fa; -fx-background-color: #f8f9fa; -fx-border-color: #e0e0e0; -fx-border-radius: 5;">
+                        <VBox fx:id="planSummaryContainer" spacing="8" style="-fx-padding: 10;"/>
+                    </ScrollPane>
                 </VBox>
             </HBox>
             
@@ -78,6 +90,12 @@
                     <TextField fx:id="planNameField" promptText="e.g., Dhaka to Cox's Bazar Trip" 
                                HBox.hgrow="ALWAYS" style="-fx-font-size: 14px;"/>
                 </HBox>
+                
+                <VBox spacing="5">
+                    <Label text="Notes (Optional):" style="-fx-font-weight: bold;"/>
+                    <TextArea fx:id="notesArea" promptText="Add any notes or comments about this plan (e.g., booking confirmations, special requirements, etc.)"
+                             prefRowCount="3" wrapText="true" style="-fx-font-size: 13px;"/>
+                </VBox>
                 
                 <HBox spacing="15" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
                     <Button fx:id="savePlanButton" text="💾 Save Plan" onAction="#handleSavePlan"

@@ -43,30 +43,36 @@
                 </VBox>
                 
                 <!-- Right side - Add Schedule -->
-                <VBox spacing="15" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+                <VBox spacing="10" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
                     <Label text="Add New Schedule" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
                     
-                    <!-- Search Form -->
-                    <GridPane hgap="10" vgap="10">
-                        <Label text="Start Location:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                        <TextField fx:id="startField" promptText="e.g., Dhaka" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-                        
-                        <Label text="Destination:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                        <TextField fx:id="destinationField" promptText="e.g., Chittagong" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                        
-                        <Label text="Date:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                        <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                        
-                        <Label text="Transport:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                            <RadioButton fx:id="allRadio" text="All"/>
-                            <RadioButton fx:id="busRadio" text="Bus Only"/>
-                            <RadioButton fx:id="trainRadio" text="Train Only"/>
-                        </HBox>
-                    </GridPane>
-                    
-                    <Button fx:id="searchButton" text="🔍 Search Schedules" onAction="#handleSearch" maxWidth="Infinity"
-                            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 10 20; -fx-cursor: hand;"/>
+                    <!-- Search Form - Compact Horizontal Layout -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <VBox spacing="3" prefWidth="180">
+                            <Label text="Start:" style="-fx-font-size: 11px; -fx-font-weight: bold;"/>
+                            <TextField fx:id="startField" promptText="e.g., Dhaka" style="-fx-font-size: 12px;"/>
+                        </VBox>
+                        <VBox spacing="3" prefWidth="180">
+                            <Label text="Destination:" style="-fx-font-size: 11px; -fx-font-weight: bold;"/>
+                            <TextField fx:id="destinationField" promptText="e.g., Chittagong" style="-fx-font-size: 12px;"/>
+                        </VBox>
+                        <VBox spacing="3" prefWidth="200">
+                            <Label text="Date:" style="-fx-font-size: 11px; -fx-font-weight: bold;"/>
+                            <DatePicker fx:id="datePicker" prefWidth="200" style="-fx-font-size: 12px;"/>
+                        </VBox>
+                        <VBox spacing="3" prefWidth="220">
+                            <Label text="Transport:" style="-fx-font-weight: bold; -fx-font-size: 11px;"/>
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <RadioButton fx:id="allRadio" text="All" style="-fx-font-size: 11px;"/>
+                                <RadioButton fx:id="busRadio" text="Bus" style="-fx-font-size: 11px;"/>
+                                <RadioButton fx:id="trainRadio" text="Train" style="-fx-font-size: 11px;"/>
+                            </HBox>
+                        </VBox>
+                        <VBox spacing="3" alignment="BOTTOM_LEFT">
+                            <Button fx:id="searchButton" text="🔍 Search" onAction="#handleSearch"
+                                    style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 6 20; -fx-cursor: hand; -fx-font-size: 12px;"/>
+                        </VBox>
+                    </HBox>
                     
                     <Separator/>
                     
@@ -79,45 +85,65 @@
                 </VBox>
             </HBox>
             
-            <!-- Summary Stats and Action Buttons -->
-            <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
-                <HBox spacing="15" alignment="CENTER">
-                    <VBox alignment="CENTER" spacing="5" HBox.hgrow="ALWAYS" 
-                          style="-fx-background-color: #3498db; -fx-padding: 15; -fx-background-radius: 5;">
+            <!-- Summary Stats, Notes and Action Buttons -->
+            <HBox spacing="15" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+                <!-- Left Side - Summary Stats Stack -->
+                <VBox spacing="10" prefWidth="220" style="-fx-background-color: #f8f9fa; -fx-padding: 12; -fx-background-radius: 5;">
+                    <VBox alignment="CENTER_LEFT" spacing="5" 
+                          style="-fx-background-color: #3498db; -fx-padding: 12; -fx-background-radius: 5;">
                         <Label fx:id="totalLegsLabel" text="Total Legs: 0" textFill="white">
                             <font>
-                                <Font name="System Bold" size="16.0"/>
+                                <Font name="System Bold" size="14.0"/>
                             </font>
                         </Label>
                     </VBox>
                     
-                    <VBox alignment="CENTER" spacing="5" HBox.hgrow="ALWAYS"
-                          style="-fx-background-color: #2ecc71; -fx-padding: 15; -fx-background-radius: 5;">
+                    <VBox alignment="CENTER_LEFT" spacing="5"
+                          style="-fx-background-color: #2ecc71; -fx-padding: 12; -fx-background-radius: 5;">
                         <Label fx:id="totalFareLabel" text="Total Fare: ৳0.00" textFill="white">
                             <font>
-                                <Font name="System Bold" size="16.0"/>
+                                <Font name="System Bold" size="14.0"/>
                             </font>
                         </Label>
                     </VBox>
                     
-                    <VBox alignment="CENTER" spacing="5" HBox.hgrow="ALWAYS"
-                          style="-fx-background-color: #e67e22; -fx-padding: 15; -fx-background-radius: 5;">
-                        <Label fx:id="totalTimeLabel" text="Total Time: 0h 0m" textFill="white">
+                    <VBox alignment="CENTER_LEFT" spacing="5"
+                          style="-fx-background-color: #e67e22; -fx-padding: 12; -fx-background-radius: 5;">
+                        <Label fx:id="totalTimeLabel" text="Travel: 0h 0m" textFill="white">
                             <font>
-                                <Font name="System Bold" size="16.0"/>
+                                <Font name="System Bold" size="14.0"/>
                             </font>
                         </Label>
                     </VBox>
-                </HBox>
+                    
+                    <VBox alignment="CENTER_LEFT" spacing="5"
+                          style="-fx-background-color: #9b59b6; -fx-padding: 12; -fx-background-radius: 5;">
+                        <Label fx:id="totalDurationLabel" text="Duration: 0h 0m" textFill="white">
+                            <font>
+                                <Font name="System Bold" size="14.0"/>
+                            </font>
+                        </Label>
+                    </VBox>
+                </VBox>
                 
-                <!-- Action Buttons -->
-                <HBox spacing="15" alignment="CENTER">
-                    <Button fx:id="saveChangesButton" text="💾 Save Changes" onAction="#handleSaveChanges"
-                            style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-padding: 12 40; -fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 5;"/>
-                    <Button fx:id="cancelButton" text="✖ Cancel" onAction="#handleCancel"
-                            style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 12 40; -fx-font-size: 14px; -fx-cursor: hand; -fx-background-radius: 5;"/>
-                </HBox>
-            </VBox>
+                <!-- Right Side - Notes and Action Buttons -->
+                <VBox spacing="15" HBox.hgrow="ALWAYS">
+                    <!-- Notes Section -->
+                    <VBox spacing="5">
+                        <Label text="📝 Plan Notes (Optional)" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                        <TextArea fx:id="notesArea" promptText="Add or edit notes for this plan..."
+                                 prefRowCount="3" wrapText="true" style="-fx-font-size: 13px;"/>
+                    </VBox>
+                    
+                    <!-- Action Buttons -->
+                    <HBox spacing="15" alignment="CENTER">
+                        <Button fx:id="saveChangesButton" text="💾 Save Changes" onAction="#handleSaveChanges"
+                                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-padding: 12 40; -fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 5;"/>
+                        <Button fx:id="cancelButton" text="✖ Cancel" onAction="#handleCancel"
+                                style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 12 40; -fx-font-size: 14px; -fx-cursor: hand; -fx-background-radius: 5;"/>
+                    </HBox>
+                </VBox>
+            </HBox>
         </VBox>
     </center>
 </BorderPane>

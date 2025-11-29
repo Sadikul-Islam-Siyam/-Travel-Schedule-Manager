@@ -32,12 +32,14 @@ public class EditPlanController {
     @FXML private VBox currentPlanContainer;
     @FXML private ScrollPane currentPlanScrollPane;
     @FXML private Label legCountLabel;
+    @FXML private TextArea notesArea;
     @FXML private Button addScheduleButton;
     @FXML private Button saveChangesButton;
     @FXML private Button cancelButton;
     @FXML private Label totalFareLabel;
     @FXML private Label totalLegsLabel;
     @FXML private Label totalTimeLabel;
+    @FXML private Label totalDurationLabel;
     
     // Add schedule section
     @FXML private TextField startField;
@@ -61,6 +63,17 @@ public class EditPlanController {
     public void setPlanData(String planName, Route route) {
         this.originalPlanName = planName;
         this.schedules = new ArrayList<>(route.getSchedules());
+        
+        // Load existing notes
+        try {
+            DatabaseManager.PlanSummary summary = DatabaseManager.getInstance().getPlanSummary(planName);
+            if (summary != null && summary.getNotes() != null) {
+                notesArea.setText(summary.getNotes());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         displaySchedules();
     }
 
@@ -260,6 +273,19 @@ public class EditPlanController {
             durationLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #7f8c8d;");
             bottomBox.getChildren().addAll(fareLabel, durationLabel);
             
+            // Check for tight connection (if not the last leg)
+            if (i < schedules.size() - 1) {
+                Schedule next = schedules.get(i + 1);
+                long connectionMinutes = Duration.between(s.getArrivalTime(), next.getDepartureTime()).toMinutes();
+                
+                if (connectionMinutes < 30 && connectionMinutes >= 0) {
+                    Label warningLabel = new Label("⚠ Tight connection: " + connectionMinutes + " min");
+                    warningLabel.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white; " +
+                                         "-fx-padding: 3 8; -fx-background-radius: 3; -fx-font-size: 11px; -fx-font-weight: bold;");
+                    bottomBox.getChildren().add(warningLabel);
+                }
+            }
+            
             card.getChildren().addAll(header, nameLabel, routeBox, timeBox, bottomBox);
             currentPlanContainer.getChildren().add(card);
         }
@@ -272,11 +298,23 @@ public class EditPlanController {
         long totalHours = totalMinutes / 60;
         long totalMins = totalMinutes % 60;
         
+        // Calculate total journey duration (if schedules exist)
+        long journeyHours = 0;
+        long journeyMins = 0;
+        if (!schedules.isEmpty()) {
+            LocalDateTime firstDeparture = schedules.get(0).getDepartureTime();
+            LocalDateTime lastArrival = schedules.get(schedules.size() - 1).getArrivalTime();
+            long journeyMinutes = Duration.between(firstDeparture, lastArrival).toMinutes();
+            journeyHours = journeyMinutes / 60;
+            journeyMins = journeyMinutes % 60;
+        }
+        
         // Update totals
         legCountLabel.setText(schedules.size() + " Leg" + (schedules.size() != 1 ? "s" : ""));
         totalFareLabel.setText("Total Fare: ৳" + String.format("%.2f", totalFare));
         totalLegsLabel.setText("Total Legs: " + schedules.size());
-        totalTimeLabel.setText("Total Time: " + totalHours + "h " + totalMins + "m");
+        totalTimeLabel.setText("Travel: " + totalHours + "h " + totalMins + "m");
+        totalDurationLabel.setText("Duration: " + journeyHours + "h " + journeyMins + "m");
     }
 
     @FXML
@@ -433,6 +471,13 @@ public class EditPlanController {
             return;
         }
         
+        // Validate plan feasibility
+        String validationError = validatePlanFeasibility();
+        if (validationError != null) {
+            showAlert(validationError);
+            return;
+        }
+        
         try {
             // Delete old plan
             DatabaseManager.getInstance().deletePlan(originalPlanName);
@@ -443,7 +488,8 @@ public class EditPlanController {
                 updatedRoute.addSchedule(s);
             }
             
-            DatabaseManager.getInstance().savePlan(originalPlanName, updatedRoute);
+            String notes = notesArea.getText().trim();
+            DatabaseManager.getInstance().savePlan(originalPlanName, updatedRoute, notes.isEmpty() ? null : notes);
             
             Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
             successAlert.setTitle("Success");
@@ -473,6 +519,36 @@ public class EditPlanController {
                 stage.close();
             }
         });
+    }
+
+    private String validatePlanFeasibility() {
+        if (schedules == null || schedules.isEmpty()) {
+            return "No schedules to validate.";
+        }
+        
+        // Check that each leg connects properly (arrival time < next departure time)
+        for (int i = 0; i < schedules.size() - 1; i++) {
+            Schedule current = schedules.get(i);
+            Schedule next = schedules.get(i + 1);
+            
+            // Check if current destination matches next origin
+            if (!current.getDestination().equalsIgnoreCase(next.getOrigin())) {
+                return "Invalid connection: Leg " + (i + 1) + " ends at " + current.getDestination() + 
+                       " but Leg " + (i + 2) + " starts at " + next.getOrigin() + ".\n" +
+                       "Each leg must start where the previous leg ended.";
+            }
+            
+            // Check if arrival time is before next departure time
+            if (current.getArrivalTime().isAfter(next.getDepartureTime())) {
+                return "Invalid timing: Leg " + (i + 1) + " arrives at " + 
+                       current.getArrivalTime().format(DateTimeFormatter.ofPattern("dd/MM HH:mm")) +
+                       " but Leg " + (i + 2) + " departs at " +
+                       next.getDepartureTime().format(DateTimeFormatter.ofPattern("dd/MM HH:mm")) + ".\n" +
+                       "Each leg must depart after the previous leg arrives.";
+            }
+        }
+        
+        return null; // No errors
     }
 
     private void showAlert(String message) {

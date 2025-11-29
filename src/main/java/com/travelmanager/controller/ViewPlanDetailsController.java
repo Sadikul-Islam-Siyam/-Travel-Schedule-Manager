@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -25,18 +26,25 @@ public class ViewPlanDetailsController {
     @FXML private Label totalLegsLabel;
     @FXML private Label totalFareLabel;
     @FXML private Label totalTimeLabel;
+    @FXML private Label totalDurationLabel;
     @FXML private VBox planDetailsContainer;
     @FXML private ScrollPane planDetailsScrollPane;
+    @FXML private VBox notesSection;
+    @FXML private Label notesLabel;
 
-    private String planName;
-    private String createdDate;
-
-    public void setPlanData(String planName, String createdDate, Route route) {
-        this.planName = planName;
-        this.createdDate = createdDate;
-        
+    public void setPlanData(String planName, String createdDate, String notes, Route route) {
         planTitleLabel.setText("📋 " + planName);
         planCreatedLabel.setText("Created: " + createdDate);
+        
+        // Display notes if present
+        if (notes != null && !notes.trim().isEmpty()) {
+            notesLabel.setText(notes);
+            notesSection.setVisible(true);
+            notesSection.setManaged(true);
+        } else {
+            notesSection.setVisible(false);
+            notesSection.setManaged(false);
+        }
         
         displayPlanDetails(route);
     }
@@ -123,6 +131,19 @@ public class ViewPlanDetailsController {
             durationLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #7f8c8d;");
             bottomBox.getChildren().addAll(fareLabel, durationLabel);
             
+            // Check for tight connection (if not the last leg)
+            if (i < schedules.size() - 1) {
+                Schedule next = schedules.get(i + 1);
+                long connectionMinutes = Duration.between(s.getArrivalTime(), next.getDepartureTime()).toMinutes();
+                
+                if (connectionMinutes < 30 && connectionMinutes >= 0) {
+                    Label warningLabel = new Label("⚠ Tight connection: " + connectionMinutes + " min");
+                    warningLabel.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white; " +
+                                         "-fx-padding: 3 8; -fx-background-radius: 3; -fx-font-size: 11px; -fx-font-weight: bold;");
+                    bottomBox.getChildren().add(warningLabel);
+                }
+            }
+            
             card.getChildren().addAll(header, nameLabel, routeBox, timeBox, bottomBox);
             planDetailsContainer.getChildren().add(card);
         }
@@ -131,9 +152,17 @@ public class ViewPlanDetailsController {
         long totalHours = totalMinutes / 60;
         long totalMins = totalMinutes % 60;
         
+        // Calculate total journey duration
+        LocalDateTime firstDeparture = schedules.get(0).getDepartureTime();
+        LocalDateTime lastArrival = schedules.get(schedules.size() - 1).getArrivalTime();
+        long journeyMinutes = Duration.between(firstDeparture, lastArrival).toMinutes();
+        long journeyHours = journeyMinutes / 60;
+        long journeyMins = journeyMinutes % 60;
+        
         totalLegsLabel.setText(schedules.size() + " Leg" + (schedules.size() != 1 ? "s" : ""));
         totalFareLabel.setText("৳" + String.format("%.2f", totalFare));
-        totalTimeLabel.setText(totalHours + "h " + totalMins + "m");
+        totalTimeLabel.setText("Travel: " + totalHours + "h " + totalMins + "m");
+        totalDurationLabel.setText("Duration: " + journeyHours + "h " + journeyMins + "m");
     }
 
     @FXML

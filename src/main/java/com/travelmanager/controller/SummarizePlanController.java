@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -25,7 +26,9 @@ public class SummarizePlanController {
     @FXML private Label totalFareLabel;
     @FXML private Label totalLegsLabel;
     @FXML private Label totalTimeLabel;
+    @FXML private Label totalDurationLabel;
     @FXML private TextField planNameField;
+    @FXML private TextArea notesArea;
     @FXML private Button savePlanButton;
     @FXML private Button cancelButton;
 
@@ -124,11 +127,24 @@ public class SummarizePlanController {
             durationLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #7f8c8d;");
             bottomBox.getChildren().addAll(fareLabel, durationLabel);
             
+            // Check for tight connection (if not the last leg)
+            if (i < schedules.size() - 1) {
+                Schedule next = schedules.get(i + 1);
+                long connectionMinutes = Duration.between(s.getArrivalTime(), next.getDepartureTime()).toMinutes();
+                
+                if (connectionMinutes < 30 && connectionMinutes >= 0) {
+                    Label warningLabel = new Label("⚠ Tight connection: " + connectionMinutes + " min");
+                    warningLabel.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white; " +
+                                         "-fx-padding: 3 8; -fx-background-radius: 3; -fx-font-size: 11px; -fx-font-weight: bold;");
+                    bottomBox.getChildren().add(warningLabel);
+                }
+            }
+            
             card.getChildren().addAll(header, nameLabel, routeBox, timeBox, bottomBox);
             planSummaryContainer.getChildren().add(card);
         }
         
-        // Calculate total travel time
+        // Calculate total travel time (actual time spent traveling)
         long totalMinutes = 0;
         for (Schedule s : schedules) {
             totalMinutes += Duration.between(s.getDepartureTime(), s.getArrivalTime()).toMinutes();
@@ -136,9 +152,17 @@ public class SummarizePlanController {
         long totalHours = totalMinutes / 60;
         long totalMins = totalMinutes % 60;
         
+        // Calculate total journey duration (from first departure to last arrival, including waits)
+        LocalDateTime firstDeparture = schedules.get(0).getDepartureTime();
+        LocalDateTime lastArrival = schedules.get(schedules.size() - 1).getArrivalTime();
+        long journeyMinutes = Duration.between(firstDeparture, lastArrival).toMinutes();
+        long journeyHours = journeyMinutes / 60;
+        long journeyMins = journeyMinutes % 60;
+        
         totalFareLabel.setText("Total Fare: ৳" + String.format("%.2f", totalFare));
         totalLegsLabel.setText("Total Legs: " + schedules.size());
-        totalTimeLabel.setText("Total Time: " + totalHours + "h " + totalMins + "m");
+        totalTimeLabel.setText("Travel Time: " + totalHours + "h " + totalMins + "m");
+        totalDurationLabel.setText("Total Duration: " + journeyHours + "h " + journeyMins + "m");
     }
 
     @FXML
@@ -150,6 +174,13 @@ public class SummarizePlanController {
             return;
         }
         
+        // Validate plan feasibility
+        String validationError = validatePlanFeasibility();
+        if (validationError != null) {
+            showAlert(validationError);
+            return;
+        }
+        
         try {
             Route route = new Route();
             for (Schedule s : schedules) {
@@ -157,7 +188,8 @@ public class SummarizePlanController {
             }
             
             // Save to database
-            DatabaseManager.getInstance().savePlan(planName, route);
+            String notes = notesArea.getText().trim();
+            DatabaseManager.getInstance().savePlan(planName, route, notes.isEmpty() ? null : notes);
             
             planSaved = true;
             
@@ -189,6 +221,36 @@ public class SummarizePlanController {
 
     public boolean isPlanSaved() {
         return planSaved;
+    }
+
+    private String validatePlanFeasibility() {
+        if (schedules == null || schedules.isEmpty()) {
+            return "No schedules to validate.";
+        }
+        
+        // Check that each leg connects properly (arrival time < next departure time)
+        for (int i = 0; i < schedules.size() - 1; i++) {
+            Schedule current = schedules.get(i);
+            Schedule next = schedules.get(i + 1);
+            
+            // Check if current destination matches next origin
+            if (!current.getDestination().equalsIgnoreCase(next.getOrigin())) {
+                return "Invalid connection: Leg " + (i + 1) + " ends at " + current.getDestination() + 
+                       " but Leg " + (i + 2) + " starts at " + next.getOrigin() + ".\n" +
+                       "Each leg must start where the previous leg ended.";
+            }
+            
+            // Check if arrival time is before next departure time
+            if (current.getArrivalTime().isAfter(next.getDepartureTime())) {
+                return "Invalid timing: Leg " + (i + 1) + " arrives at " + 
+                       current.getArrivalTime().format(DateTimeFormatter.ofPattern("dd/MM HH:mm")) +
+                       " but Leg " + (i + 2) + " departs at " +
+                       next.getDepartureTime().format(DateTimeFormatter.ofPattern("dd/MM HH:mm")) + ".\n" +
+                       "Each leg must depart after the previous leg arrives.";
+            }
+        }
+        
+        return null; // No errors
     }
 
     private void showAlert(String message) {
