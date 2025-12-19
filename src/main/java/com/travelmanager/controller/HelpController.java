@@ -24,16 +24,45 @@ public class HelpController {
                 
                 ═════════════════════════════════════════════════════════════════════════════════════════════════════════
                 
-                HOME PAGE - THREE MAIN SECTIONS:
+                ACCOUNT SETUP & LOGIN INFORMATION:
                 
-                1. CREATE PLAN
-                   - Design your custom travel itinerary step by step
-                   
-                2. SAVED PLANS
-                   - View and manage your previously saved travel plans
-                   
-                3. AUTOMATIC ROUTE
-                   - Let the system find optimal routes for you
+                💡 Getting Started with Your Account:
+                
+                   • New User Registration:
+                     - Click "Create Account" on the login page
+                     - Fill in all required fields (Full Name, Username, Email, Password)
+                     - Choose your account type: USER or DEVELOPER
+                     - Password must be at least 6 characters long
+                     - Username must be at least 3 characters long
+                
+                   • Account Approval Process:
+                     - All new accounts require Master approval before you can login
+                     - After registration, wait for the Master to approve your account
+                     - You'll receive an error message if you try to login before approval
+                
+                   • Master Account (Default):
+                     - Username: master
+                     - Password: master123
+                     - The Master can approve pending accounts and manage API changes
+                
+                   • User Roles:
+                     - USER: Can create travel plans, save plans, and use all travel features
+                     - DEVELOPER: Can submit API changes for Master approval (plus all USER features)
+                     - MASTER: Can approve accounts, approve API changes, and manage all system features
+                
+                ═════════════════════════════════════════════════════════════════════════════════════════════════════════
+                
+                HOME PAGE - ROLE-BASED FEATURES:
+                
+                For USER & DEVELOPER:
+                1. CREATE PLAN - Design your custom travel itinerary step by step
+                2. SAVED PLANS - View and manage your previously saved travel plans
+                3. AUTOMATIC ROUTE - Let the system find optimal routes for you
+                
+                For MASTER Only:
+                1. EDIT API - Manage routes and API configurations directly
+                2. PENDING API CHANGES - Review and approve developer-submitted route changes
+                3. PENDING ACCOUNTS - Review and approve new account registrations
                 
                 ═════════════════════════════════════════════════════════════════════════════════════════════════════════
                 
@@ -92,6 +121,22 @@ public class HelpController {
                 • Arrival: Date and time of arrival
                 • Fare: Cost in BDT (৳)
                 • Seats: Number of available seats
+                
+                ═════════════════════════════════════════════════════════════════════════════════════════════════════════
+                
+                TROUBLESHOOTING:
+                
+                • Can't Login? 
+                  - Check if your account has been approved by the Master
+                  - Verify your username and password are correct
+                  - Contact the system administrator if issues persist
+                
+                • Forgot Password?
+                  - Contact the Master to reset your account
+                
+                • Need Account Approved?
+                  - Ask the Master to login and check "Pending Accounts"
+                  - Or login as Master yourself using the default credentials above
                 
                 ═════════════════════════════════════════════════════════════════════════════════════════════════════════
                 

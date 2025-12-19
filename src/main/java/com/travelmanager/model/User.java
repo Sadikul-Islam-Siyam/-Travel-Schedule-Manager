@@ -7,7 +7,8 @@ public class User {
     
     public enum Role {
         USER,       // Normal user - read-only access
-        DEVELOPER   // Developer/Admin - full access
+        DEVELOPER,  // Developer/Admin - full access
+        MASTER      // Master - full access + account approval
     }
     
     private int id;
@@ -88,15 +89,23 @@ public class User {
     
     // Permission checking methods
     public boolean isDeveloper() {
-        return role == Role.DEVELOPER;
+        return role == Role.DEVELOPER || role == Role.MASTER;
+    }
+    
+    public boolean isMaster() {
+        return role == Role.MASTER;
     }
     
     public boolean canModifyData() {
-        return role == Role.DEVELOPER;
+        return role == Role.DEVELOPER || role == Role.MASTER;
     }
     
     public boolean canDeleteData() {
-        return role == Role.DEVELOPER;
+        return role == Role.DEVELOPER || role == Role.MASTER;
+    }
+    
+    public boolean canApproveAccounts() {
+        return role == Role.MASTER;
     }
     
     @Override

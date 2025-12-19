@@ -42,7 +42,8 @@
                 </font>
             </Label>
             
-            <HBox alignment="CENTER" spacing="40">
+            <!-- Regular user cards (hidden for master) -->
+            <HBox fx:id="regularUserSection" alignment="CENTER" spacing="40" managed="true" visible="true">
                 <!-- Create Plan Card -->
                 <VBox alignment="CENTER" spacing="15" styleClass="card" 
                       style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);">
@@ -91,18 +92,111 @@
                             style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-padding: 12 30; -fx-font-size: 14px; -fx-cursor: hand; -fx-background-radius: 5;"/>
                 </VBox>
             </HBox>
+            
+            <!-- Master-only section for Pending Accounts and Edit API -->
+            <HBox fx:id="masterSection" alignment="CENTER" spacing="30" managed="false" visible="false">
+                <!-- Edit API / Manage Routes Card -->
+                <VBox alignment="CENTER" spacing="15" styleClass="card"
+                      style="-fx-background-color: white; -fx-padding: 30 25; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);">
+                    <Label text="🛠️" style="-fx-font-size: 42px;"/>
+                    <Label text="Edit API">
+                        <font>
+                            <Font name="System Bold" size="18.0"/>
+                        </font>
+                    </Label>
+                    <Label text="Manage routes and" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
+                    <Label text="API configurations" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
+                    <Button text="Manage Routes" onAction="#handleManageRoutes"
+                            style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-padding: 10 25; -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 5;"/>
+                </VBox>
+                
+                <!-- Pending API Changes Card -->
+                <VBox alignment="CENTER" spacing="15" styleClass="card"
+                      style="-fx-background-color: white; -fx-padding: 30 25; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);">
+                    <Label text="⚠️" style="-fx-font-size: 42px;"/>
+                    <Label text="Pending API Changes">
+                        <font>
+                            <Font name="System Bold" size="18.0"/>
+                        </font>
+                    </Label>
+                    <Label text="Review and approve" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
+                    <Label text="developer changes" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
+                    <Button text="Review Changes" onAction="#handleApiApproval"
+                            style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-padding: 10 25; -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 5;"/>
+                </VBox>
+                
+                <!-- Pending Accounts Card -->
+                <VBox alignment="CENTER" spacing="15" styleClass="card"
+                      style="-fx-background-color: white; -fx-padding: 30 25; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);">
+                    <Label text="👥" style="-fx-font-size: 42px;"/>
+                    <Label text="Pending Accounts">
+                        <font>
+                            <Font name="System Bold" size="18.0"/>
+                        </font>
+                    </Label>
+                    <Label text="Review and approve" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
+                    <Label text="new account requests" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
+                    <Button text="Review Accounts" onAction="#handlePendingAccounts"
+                            style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-padding: 10 25; -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 5;"/>
+                </VBox>
+                
+                <!-- Manage Users Card -->
+                <VBox alignment="CENTER" spacing="15" styleClass="card"
+                      style="-fx-background-color: white; -fx-padding: 30 25; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);">
+                    <Label text="⚙️" style="-fx-font-size: 42px;"/>
+                    <Label text="Manage Users">
+                        <font>
+                            <Font name="System Bold" size="18.0"/>
+                        </font>
+                    </Label>
+                    <Label text="Change user roles" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
+                    <Label text="and permissions" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
+                    <Button text="Manage Roles" onAction="#handleManageUsers"
+                            style="-fx-background-color: #16a085; -fx-text-fill: white; -fx-padding: 10 25; -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 5;"/>
+                </VBox>
+            </HBox>
         </VBox>
     </center>
     
     <bottom>
-        <HBox alignment="CENTER" spacing="20" BorderPane.alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 15;">
-            <Button text="❓ Help" onAction="#handleHelp" 
-                    style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 8 20; -fx-cursor: hand; -fx-background-radius: 5;"/>
-            <Label text="Plan your multi-modal journey with ease" textFill="white">
-                <font>
-                    <Font size="12.0"/>
-                </font>
-            </Label>
-        </HBox>
+        <VBox>
+            <!-- Master Statistics Dashboard -->
+            <VBox fx:id="statsSection" style="-fx-background-color: #2c3e50; -fx-padding: 15;" spacing="10" managed="false" visible="false">
+                <Label text="📊 System Statistics" textFill="white" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <HBox spacing="30" alignment="CENTER">
+                    <VBox alignment="CENTER" spacing="5" style="-fx-background-color: #34495e; -fx-padding: 15; -fx-background-radius: 8;">
+                        <Label text="Total Users" textFill="#95a5a6" style="-fx-font-size: 11px;"/>
+                        <Label fx:id="totalUsersLabel" text="0" textFill="#3498db" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="5" style="-fx-background-color: #34495e; -fx-padding: 15; -fx-background-radius: 8;">
+                        <Label text="Pending Accounts" textFill="#95a5a6" style="-fx-font-size: 11px;"/>
+                        <Label fx:id="pendingAccountsLabel" text="0" textFill="#f39c12" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="5" style="-fx-background-color: #34495e; -fx-padding: 15; -fx-background-radius: 8;">
+                        <Label text="Approvals (7 days)" textFill="#95a5a6" style="-fx-font-size: 11px;"/>
+                        <Label fx:id="recentApprovalsLabel" text="0" textFill="#2ecc71" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="5" style="-fx-background-color: #34495e; -fx-padding: 15; -fx-background-radius: 8;">
+                        <Label text="Failed Logins (24h)" textFill="#95a5a6" style="-fx-font-size: 11px;"/>
+                        <Label fx:id="failedLoginsLabel" text="0" textFill="#e74c3c" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="5" style="-fx-background-color: #34495e; -fx-padding: 15; -fx-background-radius: 8;">
+                        <Label text="Logins Today" textFill="#95a5a6" style="-fx-font-size: 11px;"/>
+                        <Label fx:id="todayLoginsLabel" text="0" textFill="#9b59b6" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+            
+            <!-- Footer -->
+            <HBox alignment="CENTER" spacing="20" style="-fx-background-color: #34495e; -fx-padding: 15;">
+                <Button text="❓ Help" onAction="#handleHelp" 
+                        style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 8 20; -fx-cursor: hand; -fx-background-radius: 5;"/>
+                <Label text="Plan your multi-modal journey with ease" textFill="white">
+                    <font>
+                        <Font size="12.0"/>
+                    </font>
+                </Label>
+            </HBox>
+        </VBox>
     </bottom>
 </BorderPane>

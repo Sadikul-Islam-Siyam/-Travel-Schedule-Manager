@@ -124,6 +124,77 @@ public class DatabaseManager {
                 // Column already exists, ignore
             }
             
+            // Create pending users table
+            String createPendingUsersTable = """
+                CREATE TABLE IF NOT EXISTS pending_users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT NOT NULL UNIQUE,
+                    email TEXT NOT NULL UNIQUE,
+                    password_hash TEXT NOT NULL,
+                    password_salt TEXT NOT NULL,
+                    role TEXT NOT NULL,
+                    full_name TEXT NOT NULL,
+                    created_date TEXT NOT NULL,
+                    status TEXT DEFAULT 'PENDING'
+                )
+                """;
+            stmt.execute(createPendingUsersTable);
+            
+            // Create routes table for API management
+            String createRoutesTable = """
+                CREATE TABLE IF NOT EXISTS routes (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    route_name TEXT NOT NULL,
+                    origin TEXT NOT NULL,
+                    destination TEXT NOT NULL,
+                    transport_type TEXT NOT NULL,
+                    status TEXT DEFAULT 'ACTIVE',
+                    duration_minutes INTEGER,
+                    price REAL,
+                    schedule_time TEXT,
+                    metadata TEXT,
+                    created_date TEXT NOT NULL,
+                    modified_date TEXT
+                )
+                """;
+            stmt.execute(createRoutesTable);
+            
+            // Create pending routes table for API change approval
+            String createPendingRoutesTable = """
+                CREATE TABLE IF NOT EXISTS pending_routes (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    route_name TEXT NOT NULL,
+                    origin TEXT NOT NULL,
+                    destination TEXT NOT NULL,
+                    transport_type TEXT NOT NULL,
+                    duration_minutes INTEGER,
+                    price REAL,
+                    schedule_time TEXT,
+                    metadata TEXT,
+                    status TEXT DEFAULT 'PENDING',
+                    change_type TEXT NOT NULL,
+                    original_route_id INTEGER,
+                    submitted_by TEXT NOT NULL,
+                    submitted_date TEXT NOT NULL,
+                    notes TEXT
+                )
+                """;
+            stmt.execute(createPendingRoutesTable);
+            
+            // Create activity log table for tracking user actions
+            String createActivityLogTable = """
+                CREATE TABLE IF NOT EXISTS activity_log (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT NOT NULL,
+                    action_type TEXT NOT NULL,
+                    action_details TEXT,
+                    ip_address TEXT,
+                    timestamp TEXT NOT NULL,
+                    success INTEGER DEFAULT 1
+                )
+                """;
+            stmt.execute(createActivityLogTable);
+            
             // Create default users if table is empty
             createDefaultUsers(conn);
 
@@ -139,33 +210,21 @@ public class DatabaseManager {
         ResultSet rs = stmt.executeQuery(checkQuery);
         
         if (rs.next() && rs.getInt(1) == 0) {
-            // Create default developer account
             String insertUser = "INSERT INTO users (username, email, password_hash, password_salt, role, full_name, created_date, failed_login_attempts) VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
             
-            // Default Developer: username=developer, password=dev123
-            String devSalt = generateSalt();
+            // Master Account: username=siyam2207031, password=2207031
+            String masterSalt = generateSalt();
             PreparedStatement pstmt = conn.prepareStatement(insertUser);
-            pstmt.setString(1, "developer");
-            pstmt.setString(2, "developer@travelmanager.com");
-            pstmt.setString(3, hashPasswordWithSalt("dev123", devSalt));
-            pstmt.setString(4, devSalt);
-            pstmt.setString(5, "DEVELOPER");
-            pstmt.setString(6, "System Developer");
+            pstmt.setString(1, "siyam2207031");
+            pstmt.setString(2, "siyam2207031@travelmanager.com");
+            pstmt.setString(3, hashPasswordWithSalt("2207031", masterSalt));
+            pstmt.setString(4, masterSalt);
+            pstmt.setString(5, "MASTER");
+            pstmt.setString(6, "Master Account");
             pstmt.setString(7, LocalDateTime.now().toString());
             pstmt.executeUpdate();
             
-            // Default User: username=user, password=user123
-            String userSalt = generateSalt();
-            pstmt.setString(1, "user");
-            pstmt.setString(2, "user@travelmanager.com");
-            pstmt.setString(3, hashPasswordWithSalt("user123", userSalt));
-            pstmt.setString(4, userSalt);
-            pstmt.setString(5, "USER");
-            pstmt.setString(6, "Demo User");
-            pstmt.setString(7, LocalDateTime.now().toString());
-            pstmt.executeUpdate();
-            
-            System.out.println("Default users created successfully");
+            System.out.println("Master account created successfully");
         }
     }
     
@@ -206,7 +265,6 @@ public class DatabaseManager {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Error hashing password", e);
         }
-    }
     }
     
     // User authentication with account lockout protection
@@ -344,6 +402,611 @@ public class DatabaseManager {
             }
             throw e;
         }
+    }
+    
+    // Create pending user account (requires master approval)
+    public boolean createPendingUser(String username, String email, String password, User.Role role, String fullName) throws SQLException {
+        String salt = generateSalt();
+        String query = "INSERT INTO pending_users (username, email, password_hash, password_salt, role, full_name, created_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'PENDING')";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, username);
+            pstmt.setString(2, email);
+            pstmt.setString(3, hashPasswordWithSalt(password, salt));
+            pstmt.setString(4, salt);
+            pstmt.setString(5, role.name());
+            pstmt.setString(6, fullName);
+            pstmt.setString(7, LocalDateTime.now().toString());
+            
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            if (e.getMessage().contains("UNIQUE constraint failed")) {
+                return false; // Username or email already exists
+            }
+            throw e;
+        }
+    }
+    
+    // Get all pending users for master approval
+    public List<PendingUser> getPendingUsers() throws SQLException {
+        String query = "SELECT * FROM pending_users WHERE status = 'PENDING' ORDER BY created_date DESC";
+        List<PendingUser> pendingUsers = new ArrayList<>();
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
+            
+            while (rs.next()) {
+                PendingUser pu = new PendingUser(
+                    rs.getInt("id"),
+                    rs.getString("username"),
+                    rs.getString("email"),
+                    rs.getString("password_hash"),
+                    rs.getString("password_salt"),
+                    User.Role.valueOf(rs.getString("role")),
+                    rs.getString("full_name"),
+                    rs.getString("created_date")
+                );
+                pendingUsers.add(pu);
+            }
+        }
+        
+        return pendingUsers;
+    }
+    
+    // Approve pending user account
+    public boolean approvePendingUser(int pendingUserId) throws SQLException {
+        try (Connection conn = DriverManager.getConnection(DB_URL)) {
+            conn.setAutoCommit(false);
+            
+            try {
+                // Get pending user data
+                String selectQuery = "SELECT * FROM pending_users WHERE id = ?";
+                PreparedStatement selectStmt = conn.prepareStatement(selectQuery);
+                selectStmt.setInt(1, pendingUserId);
+                ResultSet rs = selectStmt.executeQuery();
+                
+                if (rs.next()) {
+                    // Insert into users table
+                    String insertQuery = "INSERT INTO users (username, email, password_hash, password_salt, role, full_name, created_date, failed_login_attempts) VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
+                    PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
+                    insertStmt.setString(1, rs.getString("username"));
+                    insertStmt.setString(2, rs.getString("email"));
+                    insertStmt.setString(3, rs.getString("password_hash"));
+                    insertStmt.setString(4, rs.getString("password_salt"));
+                    insertStmt.setString(5, rs.getString("role"));
+                    insertStmt.setString(6, rs.getString("full_name"));
+                    insertStmt.setString(7, LocalDateTime.now().toString());
+                    insertStmt.executeUpdate();
+                    
+                    // Delete from pending_users
+                    String deleteQuery = "DELETE FROM pending_users WHERE id = ?";
+                    PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery);
+                    deleteStmt.setInt(1, pendingUserId);
+                    deleteStmt.executeUpdate();
+                    
+                    conn.commit();
+                    return true;
+                }
+                
+                conn.rollback();
+                return false;
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
+        }
+    }
+    
+    // Reject pending user account
+    public boolean rejectPendingUser(int pendingUserId) throws SQLException {
+        String query = "DELETE FROM pending_users WHERE id = ?";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setInt(1, pendingUserId);
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        }
+    }
+    
+    // Check if a username exists in pending_users table
+    public boolean isPendingUser(String username) {
+        String query = "SELECT COUNT(*) FROM pending_users WHERE username = ?";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    // Check if a username exists in users table
+    public boolean userExists(String username) {
+        String query = "SELECT COUNT(*) FROM users WHERE username = ?";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    // Change user role (Master only)
+    public boolean changeUserRole(String username, String newRole) throws SQLException {
+        String query = "UPDATE users SET role = ? WHERE username = ?";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, newRole);
+            pstmt.setString(2, username);
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        }
+    }
+    
+    // Get all users for management
+    public List<User> getAllUsers() throws SQLException {
+        String query = "SELECT id, username, email, password_hash, role, full_name FROM users ORDER BY created_date DESC";
+        List<User> users = new ArrayList<>();
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            
+            while (rs.next()) {
+                User.Role role = User.Role.valueOf(rs.getString("role"));
+                User user = new User(
+                    rs.getInt("id"),
+                    rs.getString("username"),
+                    rs.getString("email"),
+                    rs.getString("password_hash"),
+                    role,
+                    rs.getString("full_name")
+                );
+                users.add(user);
+            }
+        }
+        
+        return users;
+    }
+    
+    // ==================== ROUTES MANAGEMENT (Master API) ====================
+    
+    // Create a new route (Master only - goes directly to live)
+    public boolean createRoute(String routeName, String origin, String destination, 
+                               String transportType, int durationMinutes, double price, 
+                               String scheduleTime, String metadata) {
+        String query = "INSERT INTO routes (route_name, origin, destination, transport_type, " +
+                      "duration_minutes, price, schedule_time, metadata, status, created_date) " +
+                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', ?)";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, routeName);
+            pstmt.setString(2, origin);
+            pstmt.setString(3, destination);
+            pstmt.setString(4, transportType);
+            pstmt.setInt(5, durationMinutes);
+            pstmt.setDouble(6, price);
+            pstmt.setString(7, scheduleTime);
+            pstmt.setString(8, metadata);
+            pstmt.setString(9, LocalDateTime.now().toString());
+            
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    // Get all routes
+    public List<RouteData> getAllRoutes() throws SQLException {
+        String query = "SELECT * FROM routes ORDER BY created_date DESC";
+        List<RouteData> routes = new ArrayList<>();
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            
+            while (rs.next()) {
+                routes.add(new RouteData(
+                    rs.getInt("id"),
+                    rs.getString("route_name"),
+                    rs.getString("origin"),
+                    rs.getString("destination"),
+                    rs.getString("transport_type"),
+                    rs.getString("status"),
+                    rs.getInt("duration_minutes"),
+                    rs.getDouble("price"),
+                    rs.getString("schedule_time"),
+                    rs.getString("metadata"),
+                    rs.getString("created_date"),
+                    rs.getString("modified_date")
+                ));
+            }
+        }
+        return routes;
+    }
+    
+    // Update a route
+    public boolean updateRoute(int routeId, String routeName, String origin, String destination,
+                              String transportType, int durationMinutes, double price,
+                              String scheduleTime, String metadata, String status) {
+        String query = "UPDATE routes SET route_name = ?, origin = ?, destination = ?, " +
+                      "transport_type = ?, duration_minutes = ?, price = ?, schedule_time = ?, " +
+                      "metadata = ?, status = ?, modified_date = ? WHERE id = ?";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, routeName);
+            pstmt.setString(2, origin);
+            pstmt.setString(3, destination);
+            pstmt.setString(4, transportType);
+            pstmt.setInt(5, durationMinutes);
+            pstmt.setDouble(6, price);
+            pstmt.setString(7, scheduleTime);
+            pstmt.setString(8, metadata);
+            pstmt.setString(9, status);
+            pstmt.setString(10, LocalDateTime.now().toString());
+            pstmt.setInt(11, routeId);
+            
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    // Delete a route
+    public boolean deleteRoute(int routeId) {
+        String query = "DELETE FROM routes WHERE id = ?";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setInt(1, routeId);
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    // ==================== PENDING ROUTES (Developer Submissions) ====================
+    
+    // Submit a new route change request (Developer)
+    public boolean submitPendingRoute(String routeName, String origin, String destination,
+                                     String transportType, int durationMinutes, double price,
+                                     String scheduleTime, String metadata, String changeType,
+                                     Integer originalRouteId, String submittedBy, String notes) {
+        String query = "INSERT INTO pending_routes (route_name, origin, destination, transport_type, " +
+                      "duration_minutes, price, schedule_time, metadata, status, change_type, " +
+                      "original_route_id, submitted_by, submitted_date, notes) " +
+                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'PENDING', ?, ?, ?, ?, ?)";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, routeName);
+            pstmt.setString(2, origin);
+            pstmt.setString(3, destination);
+            pstmt.setString(4, transportType);
+            pstmt.setInt(5, durationMinutes);
+            pstmt.setDouble(6, price);
+            pstmt.setString(7, scheduleTime);
+            pstmt.setString(8, metadata);
+            pstmt.setString(9, changeType);
+            if (originalRouteId != null) {
+                pstmt.setInt(10, originalRouteId);
+            } else {
+                pstmt.setNull(10, java.sql.Types.INTEGER);
+            }
+            pstmt.setString(11, submittedBy);
+            pstmt.setString(12, LocalDateTime.now().toString());
+            pstmt.setString(13, notes);
+            
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    // Get all pending route changes
+    public List<PendingRouteData> getPendingRoutes() throws SQLException {
+        String query = "SELECT * FROM pending_routes WHERE status = 'PENDING' ORDER BY submitted_date DESC";
+        List<PendingRouteData> routes = new ArrayList<>();
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            
+            while (rs.next()) {
+                routes.add(new PendingRouteData(
+                    rs.getInt("id"),
+                    rs.getString("route_name"),
+                    rs.getString("origin"),
+                    rs.getString("destination"),
+                    rs.getString("transport_type"),
+                    rs.getInt("duration_minutes"),
+                    rs.getDouble("price"),
+                    rs.getString("schedule_time"),
+                    rs.getString("metadata"),
+                    rs.getString("status"),
+                    rs.getString("change_type"),
+                    rs.getObject("original_route_id") != null ? rs.getInt("original_route_id") : null,
+                    rs.getString("submitted_by"),
+                    rs.getString("submitted_date"),
+                    rs.getString("notes")
+                ));
+            }
+        }
+        return routes;
+    }
+    
+    // Approve pending route change (Master)
+    public boolean approvePendingRoute(int pendingRouteId) throws SQLException {
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+            conn.setAutoCommit(false);
+            
+            // Get pending route data
+            String selectQuery = "SELECT * FROM pending_routes WHERE id = ?";
+            PreparedStatement selectStmt = conn.prepareStatement(selectQuery);
+            selectStmt.setInt(1, pendingRouteId);
+            ResultSet rs = selectStmt.executeQuery();
+            
+            if (rs.next()) {
+                String changeType = rs.getString("change_type");
+                
+                if ("CREATE".equals(changeType)) {
+                    // Insert new route to live routes table
+                    String insertQuery = "INSERT INTO routes (route_name, origin, destination, transport_type, " +
+                                        "duration_minutes, price, schedule_time, metadata, status, created_date) " +
+                                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', ?)";
+                    PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
+                    insertStmt.setString(1, rs.getString("route_name"));
+                    insertStmt.setString(2, rs.getString("origin"));
+                    insertStmt.setString(3, rs.getString("destination"));
+                    insertStmt.setString(4, rs.getString("transport_type"));
+                    insertStmt.setInt(5, rs.getInt("duration_minutes"));
+                    insertStmt.setDouble(6, rs.getDouble("price"));
+                    insertStmt.setString(7, rs.getString("schedule_time"));
+                    insertStmt.setString(8, rs.getString("metadata"));
+                    insertStmt.setString(9, LocalDateTime.now().toString());
+                    insertStmt.executeUpdate();
+                    
+                } else if ("UPDATE".equals(changeType)) {
+                    // Update existing route
+                    int originalRouteId = rs.getInt("original_route_id");
+                    String updateQuery = "UPDATE routes SET route_name = ?, origin = ?, destination = ?, " +
+                                        "transport_type = ?, duration_minutes = ?, price = ?, schedule_time = ?, " +
+                                        "metadata = ?, modified_date = ? WHERE id = ?";
+                    PreparedStatement updateStmt = conn.prepareStatement(updateQuery);
+                    updateStmt.setString(1, rs.getString("route_name"));
+                    updateStmt.setString(2, rs.getString("origin"));
+                    updateStmt.setString(3, rs.getString("destination"));
+                    updateStmt.setString(4, rs.getString("transport_type"));
+                    updateStmt.setInt(5, rs.getInt("duration_minutes"));
+                    updateStmt.setDouble(6, rs.getDouble("price"));
+                    updateStmt.setString(7, rs.getString("schedule_time"));
+                    updateStmt.setString(8, rs.getString("metadata"));
+                    updateStmt.setString(9, LocalDateTime.now().toString());
+                    updateStmt.setInt(10, originalRouteId);
+                    updateStmt.executeUpdate();
+                    
+                } else if ("DELETE".equals(changeType)) {
+                    // Delete route from live table
+                    int originalRouteId = rs.getInt("original_route_id");
+                    String deleteQuery = "DELETE FROM routes WHERE id = ?";
+                    PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery);
+                    deleteStmt.setInt(1, originalRouteId);
+                    deleteStmt.executeUpdate();
+                }
+                
+                // Update pending route status to APPROVED and delete
+                String deleteQuery = "DELETE FROM pending_routes WHERE id = ?";
+                PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery);
+                deleteStmt.setInt(1, pendingRouteId);
+                deleteStmt.executeUpdate();
+                
+                conn.commit();
+                return true;
+            }
+            
+            conn.rollback();
+            return false;
+            
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            throw e;
+        } finally {
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                conn.close();
+            }
+        }
+    }
+    
+    // Reject pending route change (Master)
+    public boolean rejectPendingRoute(int pendingRouteId) throws SQLException {
+        String query = "DELETE FROM pending_routes WHERE id = ?";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setInt(1, pendingRouteId);
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        }
+    }
+    
+    // Helper class for pending route data
+    public static class PendingRouteData {
+        private int id;
+        private String routeName;
+        private String origin;
+        private String destination;
+        private String transportType;
+        private int durationMinutes;
+        private double price;
+        private String scheduleTime;
+        private String metadata;
+        private String status;
+        private String changeType;
+        private Integer originalRouteId;
+        private String submittedBy;
+        private String submittedDate;
+        private String notes;
+        
+        public PendingRouteData(int id, String routeName, String origin, String destination,
+                               String transportType, int durationMinutes, double price,
+                               String scheduleTime, String metadata, String status, String changeType,
+                               Integer originalRouteId, String submittedBy, String submittedDate, String notes) {
+            this.id = id;
+            this.routeName = routeName;
+            this.origin = origin;
+            this.destination = destination;
+            this.transportType = transportType;
+            this.durationMinutes = durationMinutes;
+            this.price = price;
+            this.scheduleTime = scheduleTime;
+            this.metadata = metadata;
+            this.status = status;
+            this.changeType = changeType;
+            this.originalRouteId = originalRouteId;
+            this.submittedBy = submittedBy;
+            this.submittedDate = submittedDate;
+            this.notes = notes;
+        }
+        
+        public int getId() { return id; }
+        public String getRouteName() { return routeName; }
+        public String getOrigin() { return origin; }
+        public String getDestination() { return destination; }
+        public String getTransportType() { return transportType; }
+        public int getDurationMinutes() { return durationMinutes; }
+        public double getPrice() { return price; }
+        public String getScheduleTime() { return scheduleTime; }
+        public String getMetadata() { return metadata; }
+        public String getStatus() { return status; }
+        public String getChangeType() { return changeType; }
+        public Integer getOriginalRouteId() { return originalRouteId; }
+        public String getSubmittedBy() { return submittedBy; }
+        public String getSubmittedDate() { return submittedDate; }
+        public String getNotes() { return notes; }
+    }
+    
+    // Helper class for route data
+    public static class RouteData {
+        private int id;
+        private String routeName;
+        private String origin;
+        private String destination;
+        private String transportType;
+        private String status;
+        private int durationMinutes;
+        private double price;
+        private String scheduleTime;
+        private String metadata;
+        private String createdDate;
+        private String modifiedDate;
+        
+        public RouteData(int id, String routeName, String origin, String destination,
+                        String transportType, String status, int durationMinutes, double price,
+                        String scheduleTime, String metadata, String createdDate, String modifiedDate) {
+            this.id = id;
+            this.routeName = routeName;
+            this.origin = origin;
+            this.destination = destination;
+            this.transportType = transportType;
+            this.status = status;
+            this.durationMinutes = durationMinutes;
+            this.price = price;
+            this.scheduleTime = scheduleTime;
+            this.metadata = metadata;
+            this.createdDate = createdDate;
+            this.modifiedDate = modifiedDate;
+        }
+        
+        public int getId() { return id; }
+        public String getRouteName() { return routeName; }
+        public String getOrigin() { return origin; }
+        public String getDestination() { return destination; }
+        public String getTransportType() { return transportType; }
+        public String getStatus() { return status; }
+        public int getDurationMinutes() { return durationMinutes; }
+        public double getPrice() { return price; }
+        public String getScheduleTime() { return scheduleTime; }
+        public String getMetadata() { return metadata; }
+        public String getCreatedDate() { return createdDate; }
+        public String getModifiedDate() { return modifiedDate; }
+    }
+    
+    // Helper class for pending users
+    public static class PendingUser {
+        private int id;
+        private String username;
+        private String email;
+        private String passwordHash;
+        private String passwordSalt;
+        private User.Role role;
+        private String fullName;
+        private String createdDate;
+        
+        public PendingUser(int id, String username, String email, String passwordHash, 
+                          String passwordSalt, User.Role role, String fullName, String createdDate) {
+            this.id = id;
+            this.username = username;
+            this.email = email;
+            this.passwordHash = passwordHash;
+            this.passwordSalt = passwordSalt;
+            this.role = role;
+            this.fullName = fullName;
+            this.createdDate = createdDate;
+        }
+        
+        public int getId() { return id; }
+        public String getUsername() { return username; }
+        public String getEmail() { return email; }
+        public User.Role getRole() { return role; }
+        public String getFullName() { return fullName; }
+        public String getCreatedDate() { return createdDate; }
     }
 
     public void savePlan(String planName, Route route, String notes) throws SQLException {
@@ -535,6 +1198,148 @@ public class DatabaseManager {
         }
         
         return null;
+    }
+
+    // Activity Logging Methods
+    public void logActivity(String username, String actionType, String actionDetails, boolean success) {
+        String query = "INSERT INTO activity_log (username, action_type, action_details, timestamp, success) VALUES (?, ?, ?, ?, ?)";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, username);
+            pstmt.setString(2, actionType);
+            pstmt.setString(3, actionDetails);
+            pstmt.setString(4, LocalDateTime.now().toString());
+            pstmt.setInt(5, success ? 1 : 0);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error logging activity: " + e.getMessage());
+        }
+    }
+    
+    public List<ActivityLog> getRecentActivity(int limit) throws SQLException {
+        String query = "SELECT * FROM activity_log ORDER BY timestamp DESC LIMIT ?";
+        List<ActivityLog> activities = new ArrayList<>();
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setInt(1, limit);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+                activities.add(new ActivityLog(
+                    rs.getInt("id"),
+                    rs.getString("username"),
+                    rs.getString("action_type"),
+                    rs.getString("action_details"),
+                    rs.getString("timestamp"),
+                    rs.getInt("success") == 1
+                ));
+            }
+        }
+        
+        return activities;
+    }
+    
+    public int getFailedLoginAttempts(String username, int minutes) throws SQLException {
+        String query = """
+            SELECT COUNT(*) FROM activity_log 
+            WHERE username = ? AND action_type = 'LOGIN_FAILED' 
+            AND datetime(timestamp) > datetime('now', '-' || ? || ' minutes')
+            """;
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, username);
+            pstmt.setInt(2, minutes);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        
+        return 0;
+    }
+    
+    // Statistics Methods
+    public SystemStatistics getSystemStatistics() throws SQLException {
+        SystemStatistics stats = new SystemStatistics();
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement()) {
+            
+            // Total users
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM users");
+            if (rs.next()) stats.totalUsers = rs.getInt(1);
+            
+            // Pending accounts
+            rs = stmt.executeQuery("SELECT COUNT(*) FROM pending_users WHERE status = 'PENDING'");
+            if (rs.next()) stats.pendingAccounts = rs.getInt(1);
+            
+            // Recent approvals (last 7 days)
+            rs = stmt.executeQuery("""
+                SELECT COUNT(*) FROM activity_log 
+                WHERE action_type = 'ACCOUNT_APPROVED' 
+                AND datetime(timestamp) > datetime('now', '-7 days')
+                """);
+            if (rs.next()) stats.recentApprovals = rs.getInt(1);
+            
+            // Failed login attempts (last 24 hours)
+            rs = stmt.executeQuery("""
+                SELECT COUNT(*) FROM activity_log 
+                WHERE action_type = 'LOGIN_FAILED' 
+                AND datetime(timestamp) > datetime('now', '-1 day')
+                """);
+            if (rs.next()) stats.failedLogins = rs.getInt(1);
+            
+            // Total logins today
+            rs = stmt.executeQuery("""
+                SELECT COUNT(*) FROM activity_log 
+                WHERE action_type = 'LOGIN_SUCCESS' 
+                AND date(timestamp) = date('now')
+                """);
+            if (rs.next()) stats.todayLogins = rs.getInt(1);
+        }
+        
+        return stats;
+    }
+
+    public static class ActivityLog {
+        private final int id;
+        private final String username;
+        private final String actionType;
+        private final String actionDetails;
+        private final String timestamp;
+        private final boolean success;
+        
+        public ActivityLog(int id, String username, String actionType, String actionDetails, 
+                          String timestamp, boolean success) {
+            this.id = id;
+            this.username = username;
+            this.actionType = actionType;
+            this.actionDetails = actionDetails;
+            this.timestamp = timestamp;
+            this.success = success;
+        }
+        
+        public int getId() { return id; }
+        public String getUsername() { return username; }
+        public String getActionType() { return actionType; }
+        public String getActionDetails() { return actionDetails; }
+        public String getTimestamp() { return timestamp; }
+        public boolean isSuccess() { return success; }
+    }
+    
+    public static class SystemStatistics {
+        public int totalUsers;
+        public int pendingAccounts;
+        public int recentApprovals;
+        public int failedLogins;
+        public int todayLogins;
     }
 
     public static class PlanSummary {

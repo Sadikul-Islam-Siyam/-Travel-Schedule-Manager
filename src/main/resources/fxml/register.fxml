@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.travelmanager.controller.RegistrationController"
+            prefHeight="700.0" prefWidth="900.0"
+            stylesheets="@../css/styles.css"
+            style="-fx-background-color: linear-gradient(to bottom right, #2c3e50, #34495e);">
+    
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background: transparent; -fx-background-color: transparent;">
+            <VBox alignment="CENTER" spacing="20" style="-fx-padding: 30 20;">
+                <!-- Header -->
+                <Label text="Create New Account" textFill="white">
+                    <font>
+                        <Font name="System Bold" size="28.0"/>
+                    </font>
+                </Label>
+                <Label text="Fill in the details below. Your account will need master approval." textFill="#ecf0f1" style="-fx-font-size: 13px;"/>
+                
+                <!-- Registration Form -->
+                <VBox alignment="CENTER" spacing="18" maxWidth="450" prefWidth="450" style="-fx-background-color: white; -fx-padding: 35 40; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0, 0, 5);">
+                    
+                    <VBox spacing="5" prefWidth="370" maxWidth="370">
+                        <Label text="Full Name" style="-fx-font-size: 13px; -fx-text-fill: #34495e; -fx-font-weight: bold;"/>
+                        <TextField fx:id="fullNameField" promptText="Enter your full name" prefWidth="370" maxWidth="370"
+                                   style="-fx-font-size: 14px; -fx-padding: 12; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+                    </VBox>
+                    
+                    <VBox spacing="5" prefWidth="370" maxWidth="370">
+                        <Label text="Username" style="-fx-font-size: 13px; -fx-text-fill: #34495e; -fx-font-weight: bold;"/>
+                        <TextField fx:id="usernameField" promptText="Choose a username" prefWidth="370" maxWidth="370"
+                                   style="-fx-font-size: 14px; -fx-padding: 12; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+                    </VBox>
+                    
+                    <VBox spacing="5" prefWidth="370" maxWidth="370">
+                        <Label text="Email" style="-fx-font-size: 13px; -fx-text-fill: #34495e; -fx-font-weight: bold;"/>
+                        <TextField fx:id="emailField" promptText="Enter your email" prefWidth="370" maxWidth="370"
+                                   style="-fx-font-size: 14px; -fx-padding: 12; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+                    </VBox>
+                    
+                    <VBox spacing="5" prefWidth="370" maxWidth="370">
+                        <Label text="Password" style="-fx-font-size: 13px; -fx-text-fill: #34495e; -fx-font-weight: bold;"/>
+                        <PasswordField fx:id="passwordField" promptText="Choose a password" prefWidth="370" maxWidth="370"
+                                       style="-fx-font-size: 14px; -fx-padding: 12; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+                    </VBox>
+                    
+                    <VBox spacing="5" prefWidth="370" maxWidth="370">
+                        <Label text="Confirm Password" style="-fx-font-size: 13px; -fx-text-fill: #34495e; -fx-font-weight: bold;"/>
+                        <PasswordField fx:id="confirmPasswordField" promptText="Confirm your password" prefWidth="370" maxWidth="370"
+                                       style="-fx-font-size: 14px; -fx-padding: 12; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+                    </VBox>
+                    
+                    <VBox spacing="5" prefWidth="370" maxWidth="370">
+                        <Label text="Account Type" style="-fx-font-size: 13px; -fx-text-fill: #34495e; -fx-font-weight: bold;"/>
+                        <ComboBox fx:id="roleComboBox" promptText="Select account type" prefWidth="370" maxWidth="370"
+                                  style="-fx-font-size: 14px; -fx-padding: 8;"/>
+                    </VBox>
+                    
+                    <Label fx:id="errorLabel" textFill="#e74c3c" 
+                           style="-fx-font-size: 13px; -fx-font-weight: bold;" 
+                           wrapText="true" maxWidth="370" prefWidth="370" minHeight="0" visible="false" managed="false"/>
+                    <Label fx:id="successLabel" textFill="#27ae60" 
+                           style="-fx-font-size: 13px; -fx-font-weight: bold;" 
+                           wrapText="true" maxWidth="370" prefWidth="370" minHeight="0" visible="false" managed="false"/>
+                    
+                    <HBox spacing="10" alignment="CENTER" prefWidth="370">
+                        <Button text="Create Account" onAction="#handleRegister" prefWidth="115"
+                                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 12 15; -fx-cursor: hand; -fx-background-radius: 8;"/>
+                        <Button text="❓ Help" onAction="#handleHelp" prefWidth="70"
+                                style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 12 10; -fx-cursor: hand; -fx-background-radius: 8;"/>
+                        <Button text="Back to Login" onAction="#handleBack" prefWidth="175"
+                                style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 12 15; -fx-cursor: hand; -fx-background-radius: 8;"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

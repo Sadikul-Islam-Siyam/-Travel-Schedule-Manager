@@ -1,7 +1,6 @@
 package com.travelmanager.service;
 
 import com.travelmanager.model.Route;
-import com.travelmanager.model.Schedule;
 import java.util.ArrayList;
 import java.util.List;
 
