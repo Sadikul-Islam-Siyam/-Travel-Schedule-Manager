@@ -3,6 +3,7 @@ package com.travelmanager.controller;
 import com.travelmanager.database.DatabaseManager;
 import com.travelmanager.model.Route;
 import com.travelmanager.model.Schedule;
+import com.travelmanager.util.AuthenticationManager;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -41,6 +42,17 @@ public class SavedPlansController {
         editButton.setDisable(true);
         deleteButton.setDisable(true);
         
+        // Hide edit/delete buttons for normal users
+        AuthenticationManager auth = AuthenticationManager.getInstance();
+        if (!auth.canModifyData()) {
+            editButton.setVisible(false);
+            editButton.setManaged(false);
+        }
+        if (!auth.canDeleteData()) {
+            deleteButton.setVisible(false);
+            deleteButton.setManaged(false);
+        }
+        
         // Load plans from database
         loadPlans();
     }
@@ -53,7 +65,7 @@ public class SavedPlansController {
         List<String> plans = DatabaseManager.getInstance().getAllPlanNames();
         
         if (plans.isEmpty()) {
-            javafx.scene.control.Label emptyLabel = new javafx.scene.control.Label("No saved plans yet. Create one to get started!");
+            javafx.scene.control.Label emptyLabel = new javafx.scene.control.Label("No saved plans yet.");
             emptyLabel.setStyle("-fx-text-fill: #7f8c8d; -fx-font-style: italic; -fx-padding: 20; -fx-font-size: 14px;");
             plansContainer.getChildren().add(emptyLabel);
             selectedPlanName = null;
@@ -103,6 +115,12 @@ public class SavedPlansController {
             return;
         }
         
+        // Check permissions
+        if (!AuthenticationManager.getInstance().canDeleteData()) {
+            showAlert("You don't have permission to delete plans. Only developers can delete plans.");
+            return;
+        }
+        
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmAlert.setTitle("Delete Plan");
         confirmAlert.setHeaderText("Are you sure you want to delete this plan?");
@@ -129,6 +147,12 @@ public class SavedPlansController {
     @FXML
     private void handleEditPlan() {
         if (selectedPlanName == null) {
+            return;
+        }
+        
+        // Check permissions
+        if (!AuthenticationManager.getInstance().canModifyData()) {
+            showAlert("You don't have permission to edit plans. Only developers can edit plans.");
             return;
         }
         

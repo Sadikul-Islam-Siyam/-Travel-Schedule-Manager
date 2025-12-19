@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -213,12 +214,20 @@ public class SummarizePlanController {
 
     @FXML
     private void handleCancel() {
-        com.travelmanager.util.NavigationManager.goBack();
+        CreatePlanController controller = com.travelmanager.util.NavigationManager.navigateToWithController(
+            "create-plan", CreatePlanController.class);
+        if (controller != null && schedules != null) {
+            controller.setSchedules(new ArrayList<>(schedules));
+        }
     }
     
     @FXML
     private void handleBack() {
-        com.travelmanager.util.NavigationManager.goBack();
+        CreatePlanController controller = com.travelmanager.util.NavigationManager.navigateToWithController(
+            "create-plan", CreatePlanController.class);
+        if (controller != null && schedules != null) {
+            controller.setSchedules(new ArrayList<>(schedules));
+        }
     }
 
     public boolean isPlanSaved() {

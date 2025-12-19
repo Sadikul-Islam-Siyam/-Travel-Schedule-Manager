@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.travelmanager.controller.LoginController"
+            prefHeight="600.0" prefWidth="900.0"
+            stylesheets="@../css/styles.css"
+            style="-fx-background-color: linear-gradient(to bottom right, #2c3e50, #34495e);">
+    
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background: transparent; -fx-background-color: transparent;" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" spacing="20" style="-fx-padding: 30 20;">
+                <!-- Logo/Title Section -->
+                <VBox alignment="CENTER" spacing="10" style="-fx-padding: 0 0 15 0;">
+                    <Label text="🚌 🚂" style="-fx-font-size: 42px;"/>
+                    <Label text="Travel Schedule Manager" textFill="white">
+                        <font>
+                            <Font name="System Bold" size="28.0"/>
+                        </font>
+                    </Label>
+                    <Label text="Plan Your Journey with Confidence" textFill="#ecf0f1" style="-fx-font-size: 13px;"/>
+                </VBox>
+                
+                <!-- Login Card -->
+                <VBox alignment="CENTER" spacing="18" maxWidth="420" prefWidth="420" style="-fx-background-color: white; -fx-padding: 35 40; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0, 0, 5);">
+                    
+                    <Label text="Sign In" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                    
+                    <VBox spacing="5" prefWidth="340" maxWidth="340">
+                        <Label text="Username or Email" style="-fx-font-size: 13px; -fx-text-fill: #34495e; -fx-font-weight: bold;"/>
+                        <TextField fx:id="usernameField" promptText="Enter username or email" prefWidth="340" maxWidth="340"
+                                   style="-fx-font-size: 14px; -fx-padding: 12; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+                    </VBox>
+                    
+                    <VBox spacing="5" prefWidth="340" maxWidth="340">
+                        <Label text="Password" style="-fx-font-size: 13px; -fx-text-fill: #34495e; -fx-font-weight: bold;"/>
+                        <PasswordField fx:id="passwordField" promptText="Enter password" prefWidth="340" maxWidth="340"
+                                       style="-fx-font-size: 14px; -fx-padding: 12; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;"
+                                       onAction="#handleLogin"/>
+                    </VBox>
+                    
+                    <Label fx:id="errorLabel" textFill="#e74c3c" style="-fx-font-size: 12px; -fx-font-weight: bold;" wrapText="true" maxWidth="340" prefWidth="340"/>
+                    
+                    <Button text="Sign In" onAction="#handleLogin" defaultButton="true" prefWidth="340" maxWidth="340"
+                            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 12 40; -fx-cursor: hand; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);"/>
+                    
+                    <Separator prefWidth="340" maxWidth="340"/>
+                    
+                    <!-- Demo Credentials Info -->
+                    <VBox spacing="8" style="-fx-background-color: #ecf0f1; -fx-padding: 12; -fx-background-radius: 8;" prefWidth="340" maxWidth="340">
+                        <Label text="Demo Credentials:" style="-fx-font-weight: bold; -fx-font-size: 12px; -fx-text-fill: #2c3e50;"/>
+                        
+                        <HBox spacing="8" alignment="CENTER">
+                            <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                <Label text="Normal User" style="-fx-font-weight: bold; -fx-font-size: 10px; -fx-text-fill: #27ae60;"/>
+                                <Label text="Username: user" style="-fx-font-size: 10px; -fx-text-fill: #34495e;"/>
+                                <Label text="Password: user123" style="-fx-font-size: 10px; -fx-text-fill: #34495e;"/>
+                            </VBox>
+                            
+                            <Separator orientation="VERTICAL" prefHeight="45"/>
+                            
+                            <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                <Label text="Developer" style="-fx-font-weight: bold; -fx-font-size: 10px; -fx-text-fill: #e74c3c;"/>
+                                <Label text="Username: developer" style="-fx-font-size: 10px; -fx-text-fill: #34495e;"/>
+                                <Label text="Password: dev123" style="-fx-font-size: 10px; -fx-text-fill: #34495e;"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+                
+                <!-- Footer -->
+                <Label text="© 2025 Travel Schedule Manager. All rights reserved." textFill="#95a5a6" style="-fx-font-size: 10px; -fx-padding: 15 0 0 0;"/>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

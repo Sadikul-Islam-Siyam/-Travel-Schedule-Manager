@@ -4,11 +4,20 @@ import com.travelmanager.model.BusSchedule;
 import com.travelmanager.model.Route;
 import com.travelmanager.model.Schedule;
 import com.travelmanager.model.TrainSchedule;
+import com.travelmanager.model.User;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 /**
  * Database manager for storing and retrieving saved travel plans
@@ -75,9 +84,265 @@ public class DatabaseManager {
                 """;
             stmt.execute(createSchedulesTable);
 
+            // Create users table
+            String createUsersTable = """
+                CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT NOT NULL UNIQUE,
+                    email TEXT NOT NULL UNIQUE,
+                    password_hash TEXT NOT NULL,
+                    password_salt TEXT NOT NULL,
+                    role TEXT NOT NULL,
+                    full_name TEXT NOT NULL,
+                    created_date TEXT NOT NULL,
+                    failed_login_attempts INTEGER DEFAULT 0,
+                    account_locked_until TEXT,
+                    last_login TEXT
+                )
+                """;
+            stmt.execute(createUsersTable);
+            
+            // Add new security columns if they don't exist (for existing databases)
+            try {
+                stmt.execute("ALTER TABLE users ADD COLUMN password_salt TEXT");
+            } catch (SQLException e) {
+                // Column already exists, ignore
+            }
+            try {
+                stmt.execute("ALTER TABLE users ADD COLUMN failed_login_attempts INTEGER DEFAULT 0");
+            } catch (SQLException e) {
+                // Column already exists, ignore
+            }
+            try {
+                stmt.execute("ALTER TABLE users ADD COLUMN account_locked_until TEXT");
+            } catch (SQLException e) {
+                // Column already exists, ignore
+            }
+            try {
+                stmt.execute("ALTER TABLE users ADD COLUMN last_login TEXT");
+            } catch (SQLException e) {
+                // Column already exists, ignore
+            }
+            
+            // Create default users if table is empty
+            createDefaultUsers(conn);
+
         } catch (SQLException e) {
             System.err.println("Error initializing database: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+    
+    private void createDefaultUsers(Connection conn) throws SQLException {
+        String checkQuery = "SELECT COUNT(*) FROM users";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(checkQuery);
+        
+        if (rs.next() && rs.getInt(1) == 0) {
+            // Create default developer account
+            String insertUser = "INSERT INTO users (username, email, password_hash, password_salt, role, full_name, created_date, failed_login_attempts) VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
+            
+            // Default Developer: username=developer, password=dev123
+            String devSalt = generateSalt();
+            PreparedStatement pstmt = conn.prepareStatement(insertUser);
+            pstmt.setString(1, "developer");
+            pstmt.setString(2, "developer@travelmanager.com");
+            pstmt.setString(3, hashPasswordWithSalt("dev123", devSalt));
+            pstmt.setString(4, devSalt);
+            pstmt.setString(5, "DEVELOPER");
+            pstmt.setString(6, "System Developer");
+            pstmt.setString(7, LocalDateTime.now().toString());
+            pstmt.executeUpdate();
+            
+            // Default User: username=user, password=user123
+            String userSalt = generateSalt();
+            pstmt.setString(1, "user");
+            pstmt.setString(2, "user@travelmanager.com");
+            pstmt.setString(3, hashPasswordWithSalt("user123", userSalt));
+            pstmt.setString(4, userSalt);
+            pstmt.setString(5, "USER");
+            pstmt.setString(6, "Demo User");
+            pstmt.setString(7, LocalDateTime.now().toString());
+            pstmt.executeUpdate();
+            
+            System.out.println("Default users created successfully");
+        }
+    }
+    
+    // Generate random salt for password hashing
+    private String generateSalt() {
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+        return Base64.getEncoder().encodeToString(salt);
+    }
+    
+    // Enhanced password hashing using PBKDF2 with salt
+    private String hashPasswordWithSalt(String password, String salt) {
+        try {
+            byte[] saltBytes = Base64.getDecoder().decode(salt);
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), saltBytes, 65536, 128);
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] hash = factory.generateSecret(spec).getEncoded();
+            return Base64.getEncoder().encodeToString(hash);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException("Error hashing password with salt", e);
+        }
+    }
+    
+    // Legacy SHA-256 hashing (kept for backward compatibility during migration)
+    @Deprecated
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error hashing password", e);
+        }
+    }
+    }
+    
+    // User authentication with account lockout protection
+    public User authenticateUser(String usernameOrEmail, String password) throws SQLException {
+        String query = "SELECT * FROM users WHERE username = ? OR email = ?";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, usernameOrEmail);
+            pstmt.setString(2, usernameOrEmail);
+            
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                int userId = rs.getInt("id");
+                
+                // Check if account is locked
+                String lockedUntil = rs.getString("account_locked_until");
+                if (lockedUntil != null) {
+                    LocalDateTime lockTime = LocalDateTime.parse(lockedUntil);
+                    if (LocalDateTime.now().isBefore(lockTime)) {
+                        throw new SQLException("Account is locked due to multiple failed login attempts. Try again later.");
+                    } else {
+                        // Unlock account and reset failed attempts
+                        unlockAccount(conn, userId);
+                    }
+                }
+                
+                String storedHash = rs.getString("password_hash");
+                String storedSalt = rs.getString("password_salt");
+                String inputHash;
+                
+                // Support both new (with salt) and legacy (without salt) authentication
+                if (storedSalt != null && !storedSalt.isEmpty()) {
+                    inputHash = hashPasswordWithSalt(password, storedSalt);
+                } else {
+                    // Fallback to legacy SHA-256 for old accounts
+                    inputHash = hashPassword(password);
+                }
+                
+                if (storedHash.equals(inputHash)) {
+                    // Successful login - reset failed attempts and update last login
+                    resetFailedLoginAttempts(conn, userId);
+                    updateLastLogin(conn, userId);
+                    
+                    return new User(
+                        userId,
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        storedHash,
+                        User.Role.valueOf(rs.getString("role")),
+                        rs.getString("full_name")
+                    );
+                } else {
+                    // Failed login - increment failed attempts
+                    incrementFailedLoginAttempts(conn, userId);
+                }
+            }
+        }
+        
+        return null; // Authentication failed
+    }
+    
+    // Increment failed login attempts and lock account if threshold exceeded
+    private void incrementFailedLoginAttempts(Connection conn, int userId) throws SQLException {
+        String query = "UPDATE users SET failed_login_attempts = failed_login_attempts + 1 WHERE id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setInt(1, userId);
+        pstmt.executeUpdate();
+        
+        // Check if account should be locked (5 failed attempts)
+        String checkQuery = "SELECT failed_login_attempts FROM users WHERE id = ?";
+        pstmt = conn.prepareStatement(checkQuery);
+        pstmt.setInt(1, userId);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next() && rs.getInt("failed_login_attempts") >= 5) {
+            // Lock account for 15 minutes
+            LocalDateTime lockUntil = LocalDateTime.now().plusMinutes(15);
+            String lockQuery = "UPDATE users SET account_locked_until = ? WHERE id = ?";
+            pstmt = conn.prepareStatement(lockQuery);
+            pstmt.setString(1, lockUntil.toString());
+            pstmt.setInt(2, userId);
+            pstmt.executeUpdate();
+        }
+    }
+    
+    // Reset failed login attempts after successful login
+    private void resetFailedLoginAttempts(Connection conn, int userId) throws SQLException {
+        String query = "UPDATE users SET failed_login_attempts = 0, account_locked_until = NULL WHERE id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setInt(1, userId);
+        pstmt.executeUpdate();
+    }
+    
+    // Unlock account after lockout period expires
+    private void unlockAccount(Connection conn, int userId) throws SQLException {
+        String query = "UPDATE users SET failed_login_attempts = 0, account_locked_until = NULL WHERE id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setInt(1, userId);
+        pstmt.executeUpdate();
+    }
+    
+    // Update last login timestamp
+    private void updateLastLogin(Connection conn, int userId) throws SQLException {
+        String query = "UPDATE users SET last_login = ? WHERE id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setString(1, LocalDateTime.now().toString());
+        pstmt.setInt(2, userId);
+        pstmt.executeUpdate();
+    }
+    
+    // Create new user with enhanced security
+    public boolean createUser(String username, String email, String password, User.Role role, String fullName) throws SQLException {
+        String salt = generateSalt();
+        String query = "INSERT INTO users (username, email, password_hash, password_salt, role, full_name, created_date, failed_login_attempts) VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, username);
+            pstmt.setString(2, email);
+            pstmt.setString(3, hashPasswordWithSalt(password, salt));
+            pstmt.setString(4, salt);
+            pstmt.setString(5, role.name());
+            pstmt.setString(6, fullName);
+            pstmt.setString(7, LocalDateTime.now().toString());
+            
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            if (e.getMessage().contains("UNIQUE constraint failed")) {
+                return false; // Username or email already exists
+            }
+            throw e;
         }
     }
 

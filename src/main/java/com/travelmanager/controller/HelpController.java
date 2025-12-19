@@ -14,17 +14,15 @@ public class HelpController {
     @FXML
     public void initialize() {
         String helpContent = """
-                ═══════════════════════════════════════════════════════════
-                     SMART MULTI-MODAL TRAVEL SCHEDULE MANAGER
-                                    USER GUIDE
-                ═══════════════════════════════════════════════════════════
+                ═════════════════════════════════════════════════════════════════════════════════════════════════════════
+                                           SMART MULTI-MODAL TRAVEL SCHEDULE MANAGER - USER GUIDE
+                ═════════════════════════════════════════════════════════════════════════════════════════════════════════
                 
                 WELCOME!
-                This application helps you plan long-distance journeys using
-                buses and trains. You can create custom multi-leg trips and
-                save them for future reference.
+                This application helps you plan long-distance journeys using buses and trains. You can create custom
+                multi-leg trips and save them for future reference.
                 
-                ═══════════════════════════════════════════════════════════
+                ═════════════════════════════════════════════════════════════════════════════════════════════════════════
                 
                 HOME PAGE - THREE MAIN SECTIONS:
                 
@@ -37,7 +35,7 @@ public class HelpController {
                 3. AUTOMATIC ROUTE
                    - Let the system find optimal routes for you
                 
-                ═══════════════════════════════════════════════════════════
+                ═════════════════════════════════════════════════════════════════════════════════════════════════════════
                 
                 HOW TO CREATE A PLAN:
                 
@@ -68,24 +66,21 @@ public class HelpController {
                    • Click "Save Plan" to store it
                    • Access it later from "Saved Plans"
                 
-                ═══════════════════════════════════════════════════════════
+                ═════════════════════════════════════════════════════════════════════════════════════════════════════════
                 
                 TIPS FOR BEST RESULTS:
                 
-                • Plan Multi-Stop Journeys: Add multiple legs to create
-                  complex itineraries (e.g., Dhaka → Chittagong → Cox's Bazar)
+                • Plan Multi-Stop Journeys: Add multiple legs to create complex itineraries (e.g., Dhaka → Chittagong → Cox's Bazar)
                 
-                • Compare Options: Review different bus and train schedules
-                  to find the best timing and prices
+                • Compare Options: Review different bus and train schedules to find the best timing and prices
                 
-                • Save Multiple Plans: Create different plans for different
-                  travel dates or route preferences
+                • Save Multiple Plans: Create different plans for different travel dates or route preferences
                 
                 • Check Availability: Note the available seats before booking
                 
                 • Reset Anytime: Use the "Reset" button to start over
                 
-                ═══════════════════════════════════════════════════════════
+                ═════════════════════════════════════════════════════════════════════════════════════════════════════════
                 
                 UNDERSTANDING THE SCHEDULE TABLE:
                 
@@ -98,16 +93,11 @@ public class HelpController {
                 • Fare: Cost in BDT (৳)
                 • Seats: Number of available seats
                 
-                ═══════════════════════════════════════════════════════════
+                ═════════════════════════════════════════════════════════════════════════════════════════════════════════
                 
-                NEED MORE HELP?
+                More Adjustments and Features Coming Soon!
                 
-                If you encounter any issues or have questions, please
-                refer to this guide or contact support.
-                
-                Happy Travels! 🚌 🚂
-                
-                ═══════════════════════════════════════════════════════════
+                ═════════════════════════════════════════════════════════════════════════════════════════════════════════
                 """;
         
         helpText.setText(helpContent);

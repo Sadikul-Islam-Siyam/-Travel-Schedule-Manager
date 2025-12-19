@@ -19,6 +19,13 @@
                         <Font name="System Bold" size="26.0"/>
                     </font>
                 </Label>
+                <Region HBox.hgrow="ALWAYS"/>
+                <VBox alignment="CENTER_RIGHT" spacing="5">
+                    <Label fx:id="welcomeLabel" text="Welcome, User!" textFill="white" style="-fx-font-size: 13px; -fx-font-weight: bold;"/>
+                    <Label fx:id="roleLabel" text="Role: User" textFill="#ecf0f1" style="-fx-font-size: 11px;"/>
+                </VBox>
+                <Button text="🚪 Logout" onAction="#handleLogout" 
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 8 20; -fx-cursor: hand; -fx-font-size: 12px; -fx-background-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);"/>
             </HBox>
         </VBox>
     </top>

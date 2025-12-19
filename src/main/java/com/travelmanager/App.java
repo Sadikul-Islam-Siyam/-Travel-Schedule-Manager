@@ -19,7 +19,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         NavigationManager.setPrimaryStage(stage);
-        scene = new Scene(loadFXML("home"), 1000, 700);
+        scene = new Scene(loadFXML("login"), 900, 600);
         stage.setTitle("Smart Multi-Modal Travel Schedule Manager");
         stage.setScene(scene);
         stage.setMaximized(true);

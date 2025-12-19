@@ -4,13 +4,19 @@ A smart multi-modal travel schedule management application built with JavaFX.
 
 ## Features 
 
+-  **API Integration** - Real-time schedule fetching via API providers (mock data included)
 -  **Create Travel Plans** - Build multi-leg journeys with ease
 -  **Smart Search** - Autocomplete for 14 Bangladesh cities
 -  **Filter Options** - View All, Bus Only, or Train Only schedules
+-  **Date-Based Search** - Get schedules for specific travel dates
 -  **Save & Manage** - SQLite database for persistent storage
 -  **Edit Plans** - Add or remove schedules from existing plans
 -  **View Details** - See complete itinerary with fare breakdown
 -  **Calculate Totals** - Automatic calculation of total fare and duration
+-  **Plan Validation** - Checks for connection point consistency and timing
+-  **Tight Connection Warnings** - Alerts for connections under 30 minutes
+-  **Notes/Comments** - Add notes to saved plans
+-  **Single-Window Navigation** - Clean UI with back buttons (no popups)
 
 ---
 
@@ -55,25 +61,38 @@ Before running the application, ensure you have:
 
  src/main/java/com/travelmanager/
     App.java                      # Main application
+    api/                          # API Integration (NEW)
+       ApiClient.java             # HTTP client
+       ApiConfig.java             # Configuration manager
+       ScheduleApiProvider.java   # Provider interface
+       ScheduleApiManager.java    # Provider coordinator
+       MockBusApiProvider.java    # Mock bus data
+       MockTrainApiProvider.java  # Mock train data
     controller/                   # UI Controllers
        HomeController.java
        CreatePlanController.java
        SummarizePlanController.java
        EditPlanController.java
        SavedPlansController.java
+       ViewPlanDetailsController.java
+       HelpController.java
+       AutomaticRouteController.java
     model/                        # Data Models
     service/                      # Business Logic
     database/                     # SQLite Database
-    util/                        # Utilities
+    util/                        # Utilities (NavigationManager, etc.)
 
  src/main/resources/
-    fxml/                        # UI Layouts
+    fxml/                        # UI Layouts (7 files)
     css/                         # Stylesheets
+    api-config.properties        # API Configuration (NEW)
 
  START.bat                        # Windows Quick Launcher
  run.bat                          # Alternative launcher
  pom.xml                          # Maven configuration
  README.md                        # This file
+ API_INTEGRATION.md               # API integration guide (NEW)
+ API_SUMMARY.md                   # API implementation summary (NEW)
 ```
 
 ---
@@ -160,6 +179,54 @@ mvn javafx:run
 1. Go to **\"Saved Plans\"**
 2. Select a plan
 3. Click **\"View Details\"**
+
+---
+
+##  API Configuration
+
+The application uses API providers to fetch bus and train schedules.
+
+### Mock Data (Default)
+- Enabled by default for development and testing
+- Generates realistic random schedules
+- No API keys required
+- Works offline
+
+### Real API Integration
+To use real APIs:
+1. Edit `src/main/resources/api-config.properties`
+2. Set `use.mock.data=false`
+3. Configure API endpoints and keys
+4. See `API_INTEGRATION.md` for detailed guide
+
+---
+
+##  New Features (Latest Update)
+
+### API Integration
+- ✅ Complete API infrastructure
+- ✅ Mock providers for development
+- ✅ Configuration-based provider management
+- ✅ Date-based schedule searching
+- ✅ Automatic result caching
+- ✅ Offline fallback support
+
+### UI/UX Improvements
+- ✅ Single-window navigation (no popups)
+- ✅ Enhanced back buttons throughout app
+- ✅ Plan validation with warnings
+- ✅ Tight connection alerts (<30 min)
+- ✅ Total journey duration display
+- ✅ Notes/comments on saved plans
+- ✅ Improved form layouts
+
+---
+
+##  Documentation
+
+- **API_INTEGRATION.md** - Complete API integration guide
+- **API_SUMMARY.md** - Implementation summary and architecture
+- **README.md** - This file (user guide)
 
 ---
 

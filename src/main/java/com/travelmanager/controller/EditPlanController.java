@@ -80,11 +80,16 @@ public class EditPlanController {
     public void initialize() {
         scheduleService = new ScheduleService();
         
-        // Initialize locations list
+        // Initialize locations - All 64 districts of Bangladesh
         allLocations = Arrays.asList(
-            "Dhaka", "Chittagong", "Sylhet", "Rajshahi", "Khulna", 
-            "Barisal", "Rangpur", "Mymensingh", "Cox's Bazar", 
-            "Comilla", "Dinajpur", "Jessore", "Bogra", "Pabna"
+            "Barguna", "Barishal", "Bhola", "Jhalokati", "Patuakhali", "Pirojpur",
+            "Bandarban", "Brahmanbaria", "Chandpur", "Chattogram", "Cox's Bazar", "Cumilla", "Feni", "Khagrachari", "Lakshmipur", "Noakhali", "Rangamati",
+            "Dhaka", "Faridpur", "Gazipur", "Gopalganj", "Kishoreganj", "Madaripur", "Manikganj", "Munshiganj", "Narayanganj", "Narsingdi", "Rajbari", "Shariatpur", "Tangail",
+            "Bagerhat", "Chuadanga", "Jashore", "Jhenaidah", "Khulna", "Kushtia", "Magura", "Meherpur", "Narail", "Satkhira",
+            "Jamalpur", "Mymensingh", "Netrokona", "Sherpur",
+            "Bogura", "Joypurhat", "Naogaon", "Natore", "Chapai Nawabganj", "Pabna", "Rajshahi", "Sirajganj",
+            "Dinajpur", "Gaibandha", "Kurigram", "Lalmonirhat", "Nilphamari", "Panchagarh", "Rangpur", "Thakurgaon",
+            "Habiganj", "Moulvibazar", "Sunamganj", "Sylhet"
         );
         
         // Setup autocomplete for text fields

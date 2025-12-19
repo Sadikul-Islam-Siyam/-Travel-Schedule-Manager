@@ -1,16 +1,26 @@
 package com.travelmanager.controller;
 
+import com.travelmanager.util.AuthenticationManager;
 import com.travelmanager.util.NavigationManager;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 
 /**
  * Controller for the home page with three main sections
  */
 public class HomeController {
 
+    @FXML private Label welcomeLabel;
+    @FXML private Label roleLabel;
+
     @FXML
     public void initialize() {
-        // Initialize home page
+        // Display user information
+        AuthenticationManager auth = AuthenticationManager.getInstance();
+        if (auth.isLoggedIn()) {
+            welcomeLabel.setText("Welcome, " + auth.getCurrentUserFullName() + "!");
+            roleLabel.setText(auth.isDeveloper() ? "Role: Developer" : "Role: User");
+        }
     }
 
     @FXML
@@ -31,5 +41,11 @@ public class HomeController {
     @FXML
     private void handleHelp() {
         NavigationManager.navigateTo("help");
+    }
+    
+    @FXML
+    private void handleLogout() {
+        AuthenticationManager.getInstance().logout();
+        NavigationManager.navigateTo("login");
     }
 }

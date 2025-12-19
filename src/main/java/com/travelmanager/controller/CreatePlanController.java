@@ -19,7 +19,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Controller for creating a new travel plan
@@ -53,17 +52,30 @@ public class CreatePlanController {
     private ToggleGroup transportTypeGroup;
     private List<Schedule> lastSearchResults;
 
+    public void setSchedules(List<Schedule> schedules) {
+        if (schedules != null && !schedules.isEmpty()) {
+            this.currentPlan = new ArrayList<>(schedules);
+            updatePlanView();
+            summarizeButton.setDisable(false);
+        }
+    }
+
     @FXML
     public void initialize() {
         scheduleService = new ScheduleService();
         currentPlan = new ArrayList<>();
         lastSearchResults = new ArrayList<>();
         
-        // Initialize locations list
+        // Initialize locations list - All 64 districts of Bangladesh
         allLocations = Arrays.asList(
-            "Dhaka", "Chittagong", "Sylhet", "Rajshahi", "Khulna", 
-            "Barisal", "Rangpur", "Mymensingh", "Cox's Bazar", 
-            "Comilla", "Dinajpur", "Jessore", "Bogra", "Pabna"
+            "Barguna", "Barishal", "Bhola", "Jhalokati", "Patuakhali", "Pirojpur",
+            "Bandarban", "Brahmanbaria", "Chandpur", "Chattogram", "Cox's Bazar", "Cumilla", "Feni", "Khagrachari", "Lakshmipur", "Noakhali", "Rangamati",
+            "Dhaka", "Faridpur", "Gazipur", "Gopalganj", "Kishoreganj", "Madaripur", "Manikganj", "Munshiganj", "Narayanganj", "Narsingdi", "Rajbari", "Shariatpur", "Tangail",
+            "Bagerhat", "Chuadanga", "Jashore", "Jhenaidah", "Khulna", "Kushtia", "Magura", "Meherpur", "Narail", "Satkhira",
+            "Jamalpur", "Mymensingh", "Netrokona", "Sherpur",
+            "Bogura", "Joypurhat", "Naogaon", "Natore", "Chapai Nawabganj", "Pabna", "Rajshahi", "Sirajganj",
+            "Dinajpur", "Gaibandha", "Kurigram", "Lalmonirhat", "Nilphamari", "Panchagarh", "Rangpur", "Thakurgaon",
+            "Habiganj", "Moulvibazar", "Sunamganj", "Sylhet"
         );
         
         // Setup autocomplete for text fields
@@ -77,9 +89,6 @@ public class CreatePlanController {
         trainRadio.setToggleGroup(transportTypeGroup);
         allRadio.setSelected(true);
         
-        // Load sample schedules
-        loadSampleSchedules();
-        
         // Set default date to today
         datePicker.setValue(LocalDate.now());
         
@@ -87,98 +96,44 @@ public class CreatePlanController {
         summarizeButton.setDisable(true);
     }
 
-    private void loadSampleSchedules() {
-        LocalDateTime now = LocalDateTime.now();
-        
-        // Sample bus schedules
-        scheduleService.addSchedule(new BusSchedule(
-            "BUS001", "Dhaka", "Chittagong",
-            now.plusHours(2), now.plusHours(7), 
-            500.0, 40, "Green Line", "AC"
-        ));
-        scheduleService.addSchedule(new BusSchedule(
-            "BUS002", "Dhaka", "Sylhet",
-            now.plusHours(3), now.plusHours(8), 
-            450.0, 35, "Shyamoli", "Non-AC"
-        ));
-        scheduleService.addSchedule(new BusSchedule(
-            "BUS003", "Chittagong", "Cox's Bazar",
-            now.plusHours(1), now.plusHours(5), 
-            350.0, 30, "Soudia", "AC"
-        ));
-        scheduleService.addSchedule(new BusSchedule(
-            "BUS004", "Dhaka", "Rajshahi",
-            now.plusHours(4), now.plusHours(10), 
-            600.0, 38, "Hanif", "AC"
-        ));
-        scheduleService.addSchedule(new BusSchedule(
-            "BUS005", "Dhaka", "Khulna",
-            now.plusHours(2), now.plusHours(8), 
-            550.0, 35, "Eagle Paribahan", "AC"
-        ));
-        scheduleService.addSchedule(new BusSchedule(
-            "BUS006", "Chittagong", "Dhaka",
-            now.plusHours(3), now.plusHours(8), 
-            500.0, 40, "Shyamoli", "AC"
-        ));
-        
-        // Sample train schedules
-        scheduleService.addSchedule(new TrainSchedule(
-            "TRAIN001", "Dhaka", "Chittagong",
-            now.plusHours(1), now.plusHours(6), 
-            600.0, 200, "Subarna Express", "701", "First Class"
-        ));
-        scheduleService.addSchedule(new TrainSchedule(
-            "TRAIN002", "Dhaka", "Sylhet",
-            now.plusHours(2), now.plusHours(7), 
-            550.0, 180, "Parabat Express", "709", "First Class"
-        ));
-        scheduleService.addSchedule(new TrainSchedule(
-            "TRAIN003", "Dhaka", "Rajshahi",
-            now.plusHours(5), now.plusHours(12), 
-            700.0, 150, "Silk City Express", "751", "Shovon"
-        ));
-        scheduleService.addSchedule(new TrainSchedule(
-            "TRAIN004", "Chittagong", "Sylhet",
-            now.plusHours(3), now.plusHours(9), 
-            500.0, 160, "Udayan Express", "753", "Shovon"
-        ));
-        scheduleService.addSchedule(new TrainSchedule(
-            "TRAIN005", "Dhaka", "Khulna",
-            now.plusHours(6), now.plusHours(14), 
-            650.0, 140, "Sundarban Express", "725", "First Class"
-        ));
-        scheduleService.addSchedule(new TrainSchedule(
-            "TRAIN006", "Chittagong", "Dhaka",
-            now.plusHours(4), now.plusHours(9), 
-            600.0, 200, "Turna Nishitha", "721", "AC"
-        ));
-    }
-
     @FXML
     private void handleSearch() {
         String start = startField.getText().trim();
         String destination = destinationField.getText().trim();
+        LocalDate travelDate = datePicker.getValue();
         
         if (start.isEmpty() || destination.isEmpty()) {
             showAlert("Please enter both start and destination locations.");
             return;
         }
         
-        List<Schedule> results = scheduleService.searchSchedules(start, destination);
-        
-        // Filter by transport type
-        RadioButton selectedRadio = (RadioButton) transportTypeGroup.getSelectedToggle();
-        if (selectedRadio == busRadio) {
-            results = results.stream()
-                .filter(s -> s instanceof BusSchedule)
-                .collect(Collectors.toList());
-        } else if (selectedRadio == trainRadio) {
-            results = results.stream()
-                .filter(s -> s instanceof TrainSchedule)
-                .collect(Collectors.toList());
+        if (travelDate == null) {
+            showAlert("Please select a travel date.");
+            return;
         }
-        // If allRadio is selected, no filtering needed
+        
+        // Show loading indicator
+        searchResultCountLabel.setText("Searching schedules...");
+        scheduleContainer.getChildren().clear();
+        
+        List<Schedule> results;
+        
+        // Fetch schedules based on transport type selection
+        RadioButton selectedRadio = (RadioButton) transportTypeGroup.getSelectedToggle();
+        try {
+            if (selectedRadio == busRadio) {
+                results = scheduleService.searchBusSchedules(start, destination, travelDate);
+            } else if (selectedRadio == trainRadio) {
+                results = scheduleService.searchTrainSchedules(start, destination, travelDate);
+            } else {
+                // All transport types
+                results = scheduleService.searchSchedules(start, destination, travelDate);
+            }
+        } catch (Exception e) {
+            showAlert("Error fetching schedules: " + e.getMessage());
+            searchResultCountLabel.setText("Search Results (0)");
+            return;
+        }
         
         // Sort by departure time
         results.sort((s1, s2) -> s1.getDepartureTime().compareTo(s2.getDepartureTime()));

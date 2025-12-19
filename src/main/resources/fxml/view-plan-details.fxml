@@ -47,7 +47,7 @@
                 
                 <VBox alignment="CENTER" spacing="5" HBox.hgrow="ALWAYS"
                       style="-fx-background-color: #2ecc71; -fx-padding: 15; -fx-background-radius: 5;">
-                    <Label fx:id="totalFareLabel" text="৳0.00" textFill="white">
+                    <Label fx:id="totalFareLabel" text="Fare: ৳0.00" textFill="white">
                         <font>
                             <Font name="System Bold" size="16.0"/>
                         </font>
