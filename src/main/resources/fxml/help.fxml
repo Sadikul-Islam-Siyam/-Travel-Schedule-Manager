@@ -8,7 +8,7 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.travelmanager.controller.HelpController"
-            prefHeight="600.0" prefWidth="700.0"
+            minHeight="450.0" minWidth="600.0"
             stylesheets="@../css/styles.css">
     
     <top>
@@ -26,9 +26,11 @@
     </top>
     
     <center>
-        <VBox BorderPane.alignment="CENTER" style="-fx-background-color: white; -fx-padding: 15;">
-            <TextArea fx:id="helpText" editable="false" wrapText="true" VBox.vgrow="ALWAYS"
-                      style="-fx-font-family: 'Consolas', 'Courier New'; -fx-font-size: 12px;"/>
-        </VBox>
+        <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background: white; -fx-background-color: white;">
+            <VBox style="-fx-background-color: white; -fx-padding: 20;">
+                <TextArea fx:id="helpText" editable="false" wrapText="true" VBox.vgrow="ALWAYS"
+                          style="-fx-font-family: 'Segoe UI', 'Arial'; -fx-font-size: 13px; -fx-control-inner-background: white;"/>
+            </VBox>
+        </ScrollPane>
     </center>
 </BorderPane>

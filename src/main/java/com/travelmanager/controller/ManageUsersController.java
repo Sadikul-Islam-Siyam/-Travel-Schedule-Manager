@@ -7,19 +7,21 @@ import com.travelmanager.util.NavigationManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public class ManageUsersController {
-    @FXML private TableView<UserRow> usersTable;
-    @FXML private TableColumn<UserRow, String> usernameColumn;
-    @FXML private TableColumn<UserRow, String> fullNameColumn;
-    @FXML private TableColumn<UserRow, String> emailColumn;
-    @FXML private TableColumn<UserRow, String> roleColumn;
+    @FXML private VBox usersContainer;
     @FXML private Label statusLabel;
     
     private DatabaseManager databaseManager;
@@ -30,46 +32,6 @@ public class ManageUsersController {
         databaseManager = DatabaseManager.getInstance();
         usersList = FXCollections.observableArrayList();
         
-        // Setup table columns
-        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
-        fullNameColumn.setCellValueFactory(new PropertyValueFactory<>("fullName"));
-        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-        roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
-        
-        // Setup role change column
-        TableColumn<UserRow, Void> actionColumn = new TableColumn<>("Change Role");
-        actionColumn.setPrefWidth(150);
-        actionColumn.setCellFactory(param -> new TableCell<UserRow, Void>() {
-            private final ComboBox<String> roleComboBox = new ComboBox<>();
-            
-            {
-                roleComboBox.getItems().addAll("USER", "DEVELOPER", "MASTER");
-                roleComboBox.setStyle("-fx-font-size: 11px;");
-                roleComboBox.setOnAction(event -> {
-                    UserRow user = getTableView().getItems().get(getIndex());
-                    String newRole = roleComboBox.getValue();
-                    if (newRole != null && !newRole.equals(user.getRole())) {
-                        handleRoleChange(user, newRole);
-                    }
-                });
-            }
-            
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    UserRow user = getTableView().getItems().get(getIndex());
-                    roleComboBox.setValue(user.getRole());
-                    setGraphic(roleComboBox);
-                }
-            }
-        });
-        
-        usersTable.getColumns().add(actionColumn);
-        usersTable.setItems(usersList);
-        
         loadUsers();
     }
     
@@ -77,14 +39,17 @@ public class ManageUsersController {
         try {
             List<User> users = databaseManager.getAllUsers();
             usersList.clear();
+            usersContainer.getChildren().clear();
             
             for (User user : users) {
-                usersList.add(new UserRow(
+                UserRow userRow = new UserRow(
                     user.getUsername(),
                     user.getFullName(),
                     user.getEmail(),
                     user.getRole().toString()
-                ));
+                );
+                usersList.add(userRow);
+                usersContainer.getChildren().add(createUserCard(userRow));
             }
             
             statusLabel.setText("");
@@ -92,6 +57,70 @@ public class ManageUsersController {
             showStatus("Error loading users: " + e.getMessage(), true);
             e.printStackTrace();
         }
+    }
+    
+    private VBox createUserCard(UserRow user) {
+        VBox card = new VBox(10);
+        card.setPadding(new Insets(15));
+        card.setStyle("-fx-background-color: white; -fx-border-color: #d0d0d0; " +
+                     "-fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5;");
+        
+        // Header with username and role badge
+        HBox headerBox = new HBox(10);
+        headerBox.setAlignment(Pos.CENTER_LEFT);
+        
+        Label usernameLabel = new Label(user.getUsername());
+        usernameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #2c3e50;");
+        
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        
+        Label currentRoleLabel = new Label(user.getRole());
+        String roleColor = user.getRole().equals("MASTER") ? "#e74c3c" : 
+                          (user.getRole().equals("DEVELOPER") ? "#f39c12" : "#3498db");
+        currentRoleLabel.setStyle("-fx-background-color: " + roleColor + "; -fx-text-fill: white; " +
+                                 "-fx-padding: 4 10; -fx-background-radius: 3; -fx-font-size: 11px; -fx-font-weight: bold;");
+        
+        headerBox.getChildren().addAll(usernameLabel, spacer, currentRoleLabel);
+        
+        // Full name
+        Label fullNameLabel = new Label("👤 " + user.getFullName());
+        fullNameLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
+        
+        // Email
+        Label emailLabel = new Label("✉ " + user.getEmail());
+        emailLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #7f8c8d;");
+        
+        // Role change section
+        HBox roleChangeBox = new HBox(10);
+        roleChangeBox.setAlignment(Pos.CENTER_LEFT);
+        roleChangeBox.setPadding(new Insets(5, 0, 0, 0));
+        
+        Label changeLabel = new Label("Change Role:");
+        changeLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #555; -fx-font-weight: bold;");
+        
+        ComboBox<String> roleComboBox = new ComboBox<>();
+        roleComboBox.getItems().addAll("USER", "DEVELOPER", "MASTER");
+        roleComboBox.setValue(user.getRole());
+        roleComboBox.setStyle("-fx-font-size: 12px;");
+        roleComboBox.setPrefWidth(150);
+        
+        Button applyBtn = new Button("Apply");
+        applyBtn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 12px; " +
+                         "-fx-padding: 6 15; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-weight: bold;");
+        applyBtn.setOnAction(e -> {
+            String newRole = roleComboBox.getValue();
+            if (newRole != null && !newRole.equals(user.getRole())) {
+                handleRoleChange(user, newRole);
+            }
+        });
+        
+        roleChangeBox.getChildren().addAll(changeLabel, roleComboBox, applyBtn);
+        
+        // Add all elements to card
+        card.getChildren().addAll(headerBox, fullNameLabel, emailLabel, roleChangeBox);
+        
+        return card;
     }
     
     private void handleRoleChange(UserRow user, String newRole) {

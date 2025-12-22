@@ -2,13 +2,12 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.travelmanager.controller.ApiApprovalController"
+            fx:controller="com.travelmanager.controller.MyPendingRequestsController"
             minHeight="500.0" minWidth="800.0"
             stylesheets="@../css/styles.css"
             style="-fx-background-color: linear-gradient(to bottom right, #1a252f, #2c3e50);">
@@ -19,7 +18,7 @@
                 <Button text="← Back" onAction="#handleBack" 
                         style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8 15; -fx-cursor: hand; -fx-background-radius: 5;"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Label text="Pending API Changes" textFill="white">
+                <Label text="My Pending API Requests" textFill="white">
                     <font>
                         <Font name="System Bold" size="24"/>
                     </font>
@@ -38,18 +37,18 @@
                 
                 <!-- Cards container -->
                 <VBox VBox.vgrow="ALWAYS" spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;">
-                <Label text="Pending API Changes" style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #2c3e50;"/>
-                <Label text="Review and approve/reject route modifications submitted by developers" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+                <Label text="Your Submitted API Changes" style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #2c3e50;"/>
+                <Label text="Track the status of your route modification requests" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
                 
-                <ScrollPane fx:id="changesScrollPane" VBox.vgrow="ALWAYS" fitToWidth="true"
+                <ScrollPane fx:id="requestsScrollPane" VBox.vgrow="ALWAYS" fitToWidth="true"
                            style="-fx-background: #f8f9fa; -fx-background-color: #f8f9fa; -fx-border-color: #d0d0d0; -fx-border-radius: 5;">
-                    <VBox fx:id="changesContainer" spacing="10" style="-fx-padding: 10;"/>
+                    <VBox fx:id="requestsContainer" spacing="10" style="-fx-padding: 10;"/>
                 </ScrollPane>
             </VBox>
             
             <!-- Empty state message -->
             <HBox alignment="CENTER" spacing="10">
-                <Label fx:id="emptyLabel" text="No pending API changes awaiting approval." 
+                <Label fx:id="emptyLabel" text="You have no pending API change requests." 
                        textFill="#95a5a6" style="-fx-font-size: 14px; -fx-font-style: italic;"/>
             </HBox>
             </VBox>

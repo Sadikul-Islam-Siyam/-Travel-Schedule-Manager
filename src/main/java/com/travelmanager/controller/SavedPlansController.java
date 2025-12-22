@@ -42,16 +42,8 @@ public class SavedPlansController {
         editButton.setDisable(true);
         deleteButton.setDisable(true);
         
-        // Hide edit/delete buttons for normal users
-        AuthenticationManager auth = AuthenticationManager.getInstance();
-        if (!auth.canModifyData()) {
-            editButton.setVisible(false);
-            editButton.setManaged(false);
-        }
-        if (!auth.canDeleteData()) {
-            deleteButton.setVisible(false);
-            deleteButton.setManaged(false);
-        }
+        // All users can edit and delete their own plans
+        // No need to hide these buttons based on role
         
         // Load plans from database
         loadPlans();
@@ -115,11 +107,7 @@ public class SavedPlansController {
             return;
         }
         
-        // Check permissions
-        if (!AuthenticationManager.getInstance().canDeleteData()) {
-            showAlert("You don't have permission to delete plans. Only developers can delete plans.");
-            return;
-        }
+        // All users can delete their own plans
         
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmAlert.setTitle("Delete Plan");
@@ -150,11 +138,7 @@ public class SavedPlansController {
             return;
         }
         
-        // Check permissions
-        if (!AuthenticationManager.getInstance().canModifyData()) {
-            showAlert("You don't have permission to edit plans. Only developers can edit plans.");
-            return;
-        }
+        // All users can edit their own plans
         
         try {
             Route route = DatabaseManager.getInstance().loadPlan(selectedPlanName);
@@ -179,7 +163,7 @@ public class SavedPlansController {
     
     @FXML
     private void handleBack() {
-        com.travelmanager.util.NavigationManager.goBack();
+        com.travelmanager.util.NavigationManager.getInstance().navigateToHome();
     }
 
     private void updateButtonStates() {

@@ -90,4 +90,8 @@ public class AuthenticationManager {
     public String getCurrentUserFullName() {
         return currentUser != null ? currentUser.getFullName() : "Guest";
     }
+    
+    public String getCurrentUserRole() {
+        return currentUser != null ? currentUser.getRole().toString() : "Guest";
+    }
 }

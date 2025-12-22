@@ -8,7 +8,7 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.travelmanager.controller.SavedPlansController"
-            prefHeight="650.0" prefWidth="900.0"
+            minHeight="450.0" minWidth="700.0"
             stylesheets="@../css/styles.css">
     
     <top>
@@ -26,7 +26,8 @@
     </top>
     
     <center>
-        <VBox spacing="15" BorderPane.alignment="CENTER" style="-fx-padding: 20; -fx-background-color: #ecf0f1;">
+        <ScrollPane fitToWidth="true" style="-fx-background: #ecf0f1; -fx-background-color: #ecf0f1;">
+            <VBox spacing="15" style="-fx-padding: 20; -fx-background-color: #ecf0f1;">
             <!-- Plan list section -->
             <VBox VBox.vgrow="ALWAYS" spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;">
                 <Label text="Your Saved Travel Plans" style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #2c3e50;"/>
@@ -49,6 +50,7 @@
                 <Button text="↻ Refresh List" onAction="#handleRefresh" 
                         style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 12 30; -fx-cursor: hand; -fx-font-size: 14px; -fx-background-radius: 5;"/>
             </HBox>
-        </VBox>
+            </VBox>
+        </ScrollPane>
     </center>
 </BorderPane>

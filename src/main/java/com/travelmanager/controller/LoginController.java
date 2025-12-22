@@ -5,6 +5,7 @@ import com.travelmanager.model.User;
 import com.travelmanager.util.AuthenticationManager;
 import com.travelmanager.util.NavigationManager;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -261,10 +262,16 @@ public class LoginController {
                     dbManager.logActivity(usernameOrEmail, "LOGIN_FAILED", "Invalid password", false);
                     showError("❌ Incorrect Password");
                     showInfo("💡 The password you entered is incorrect. Please try again.\n🔒 Passwords are case-sensitive. Check if Caps Lock is on.");
+                    showErrorAlert("Incorrect Password", "The password you entered is incorrect.\n\n" +
+                            "Please try again.\n" +
+                            "Note: Passwords are case-sensitive. Check if Caps Lock is on.");
                 } else {
                     dbManager.logActivity(usernameOrEmail, "LOGIN_FAILED", "Account not found", false);
                     showError("❌ Account Not Found");
                     showInfo("💡 No account exists with this username or email.\n✨ Click 'Create Account' below to register.\n⏳ New accounts require Master approval before first login.");
+                    showErrorAlert("Account Not Found", "No account exists with this username or email.\n\n" +
+                            "Click 'Create Account' below to register.\n" +
+                            "Note: New accounts require Master approval before first login.");
                 }
                 passwordField.clear();
                 passwordTextField.clear();
@@ -306,5 +313,13 @@ public class LoginController {
             infoLabel.setText("");
             infoLabel.setVisible(false);
         }
+    }
+    
+    private void showErrorAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Login Failed");
+        alert.setHeaderText(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

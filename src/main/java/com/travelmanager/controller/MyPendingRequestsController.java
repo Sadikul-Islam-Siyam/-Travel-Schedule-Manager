@@ -1,6 +1,7 @@
 package com.travelmanager.controller;
 
 import com.travelmanager.database.DatabaseManager;
+import com.travelmanager.util.AuthenticationManager;
 import com.travelmanager.util.NavigationManager;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -16,32 +17,40 @@ import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
-public class ApiApprovalController {
+public class MyPendingRequestsController {
     
-    @FXML private VBox changesContainer;
+    @FXML private VBox requestsContainer;
     @FXML private Label statusLabel;
     @FXML private Label emptyLabel;
     
     private DatabaseManager databaseManager;
-    private ObservableList<PendingChangeRow> pendingChangesData;
+    private ObservableList<PendingChangeRow> myRequestsData;
+    private String currentUsername;
     
     @FXML
     public void initialize() {
         databaseManager = DatabaseManager.getInstance();
-        pendingChangesData = FXCollections.observableArrayList();
+        myRequestsData = FXCollections.observableArrayList();
+        currentUsername = AuthenticationManager.getInstance().getCurrentUsername();
         
-        loadPendingChanges();
+        loadMyPendingRequests();
     }
     
-    private void loadPendingChanges() {
+    private void loadMyPendingRequests() {
         try {
-            List<DatabaseManager.PendingRouteData> pendingRoutes = databaseManager.getPendingRoutes();
-            pendingChangesData.clear();
-            changesContainer.getChildren().clear();
+            List<DatabaseManager.PendingRouteData> allPendingRoutes = databaseManager.getPendingRoutes();
             
-            for (DatabaseManager.PendingRouteData data : pendingRoutes) {
+            // Filter only the routes submitted by current user
+            List<DatabaseManager.PendingRouteData> myRoutes = allPendingRoutes.stream()
+                .filter(data -> currentUsername.equals(data.getSubmittedBy()))
+                .collect(Collectors.toList());
+            
+            myRequestsData.clear();
+            requestsContainer.getChildren().clear();
+            
+            for (DatabaseManager.PendingRouteData data : myRoutes) {
                 PendingChangeRow row = new PendingChangeRow(
                     data.getId(),
                     data.getChangeType(),
@@ -58,19 +67,19 @@ public class ApiApprovalController {
                     data.getSubmittedDate(),
                     data.getNotes()
                 );
-                pendingChangesData.add(row);
-                changesContainer.getChildren().add(createChangeCard(row));
+                myRequestsData.add(row);
+                requestsContainer.getChildren().add(createRequestCard(row));
             }
             
             updateStatusLabel();
-            emptyLabel.setVisible(pendingChangesData.isEmpty());
+            emptyLabel.setVisible(myRequestsData.isEmpty());
             
         } catch (SQLException e) {
-            showError("Failed to load pending changes: " + e.getMessage());
+            showError("Failed to load your pending requests: " + e.getMessage());
         }
     }
     
-    private VBox createChangeCard(PendingChangeRow row) {
+    private VBox createRequestCard(PendingChangeRow row) {
         VBox card = new VBox(10);
         card.setPadding(new Insets(15));
         card.setStyle("-fx-background-color: white; -fx-border-color: #d0d0d0; " +
@@ -93,10 +102,14 @@ public class ApiApprovalController {
         changeTypeLabel.setStyle("-fx-background-color: " + changeColor + "; -fx-text-fill: white; " +
                                 "-fx-padding: 4 10; -fx-background-radius: 3; -fx-font-size: 11px; -fx-font-weight: bold;");
         
+        Label statusBadge = new Label("⏳ PENDING");
+        statusBadge.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white; " +
+                            "-fx-padding: 4 10; -fx-background-radius: 3; -fx-font-size: 11px; -fx-font-weight: bold;");
+        
         Label idLabel = new Label("#" + row.getId());
         idLabel.setStyle("-fx-text-fill: #95a5a6; -fx-font-size: 11px;");
         
-        headerBox.getChildren().addAll(routeNameLabel, spacer, changeTypeLabel, idLabel);
+        headerBox.getChildren().addAll(routeNameLabel, spacer, changeTypeLabel, statusBadge, idLabel);
         
         // Route details (origin and destination)
         if (!row.getChangeType().equals("DELETE")) {
@@ -123,30 +136,41 @@ public class ApiApprovalController {
         }
         
         // Submission info
-        Label submissionLabel = new Label("Submitted by: " + row.getSubmittedBy() + " • " + row.getSubmittedDate());
+        Label submissionLabel = new Label("📅 Submitted on: " + row.getSubmittedDate());
         submissionLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #95a5a6; -fx-font-style: italic;");
+        
+        // Notes if any
+        if (row.getNotes() != null && !row.getNotes().isEmpty()) {
+            Label notesLabel = new Label("📝 Notes: " + row.getNotes());
+            notesLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #555; -fx-padding: 5 0;");
+            notesLabel.setWrapText(true);
+            card.getChildren().add(notesLabel);
+        }
         
         // Action buttons
         HBox buttonBox = new HBox(10);
         buttonBox.setAlignment(Pos.CENTER_RIGHT);
         buttonBox.setPadding(new Insets(5, 0, 0, 0));
         
-        Button detailsBtn = new Button("Details");
+        Button detailsBtn = new Button("View Details");
         detailsBtn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 12px; " +
                            "-fx-padding: 6 15; -fx-cursor: hand; -fx-background-radius: 4;");
         detailsBtn.setOnAction(e -> showDetailsDialog(row));
         
-        Button approveBtn = new Button("✓ Approve");
-        approveBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 12px; " +
-                           "-fx-padding: 8 20; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-weight: bold;");
-        approveBtn.setOnAction(e -> handleApprove(row));
+        Button editBtn = new Button("✏ Edit");
+        editBtn.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-size: 12px; " +
+                        "-fx-padding: 6 15; -fx-cursor: hand; -fx-background-radius: 4;");
+        editBtn.setOnAction(e -> handleEdit(row));
         
-        Button rejectBtn = new Button("✗ Reject");
-        rejectBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 12px; " +
-                          "-fx-padding: 8 20; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-weight: bold;");
-        rejectBtn.setOnAction(e -> handleReject(row));
+        Button withdrawBtn = new Button("🗑 Withdraw");
+        withdrawBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 12px; " +
+                            "-fx-padding: 6 15; -fx-cursor: hand; -fx-background-radius: 4;");
+        withdrawBtn.setOnAction(e -> handleWithdraw(row));
         
-        buttonBox.getChildren().addAll(detailsBtn, approveBtn, rejectBtn);
+        Label waitingLabel = new Label("⏳ Awaiting Master Approval");
+        waitingLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #f39c12; -fx-font-style: italic;");
+        
+        buttonBox.getChildren().addAll(waitingLabel, detailsBtn, editBtn, withdrawBtn);
         
         // Add all elements to card
         card.getChildren().addAll(headerBox);
@@ -159,23 +183,23 @@ public class ApiApprovalController {
     }
     
     private void updateStatusLabel() {
-        if (pendingChangesData.isEmpty()) {
-            statusLabel.setText("All pending changes reviewed.");
-            statusLabel.setStyle("-fx-text-fill: #2ecc71; -fx-font-size: 14px; -fx-font-weight: bold;");
+        if (myRequestsData.isEmpty()) {
+            statusLabel.setText("You have no pending requests.");
+            statusLabel.setStyle("-fx-text-fill: #95a5a6; -fx-font-size: 14px; -fx-font-weight: bold;");
         } else {
-            statusLabel.setText("⚠ " + pendingChangesData.size() + " pending change(s) awaiting approval");
+            statusLabel.setText("📋 You have " + myRequestsData.size() + " pending request(s) awaiting approval");
             statusLabel.setStyle("-fx-text-fill: #f39c12; -fx-font-size: 14px; -fx-font-weight: bold;");
         }
     }
     
     private void showDetailsDialog(PendingChangeRow row) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Change Details");
+        alert.setTitle("Request Details");
         alert.setHeaderText("API Change Request #" + row.getId());
         
         StringBuilder details = new StringBuilder();
         details.append("Change Type: ").append(row.getChangeType()).append("\n");
-        details.append("Submitted By: ").append(row.getSubmittedBy()).append("\n");
+        details.append("Status: PENDING APPROVAL\n");
         details.append("Submitted Date: ").append(row.getSubmittedDate()).append("\n\n");
         
         if ("DELETE".equals(row.getChangeType())) {
@@ -188,7 +212,7 @@ public class ApiApprovalController {
             details.append("Destination: ").append(row.getDestination()).append("\n");
             details.append("Transport Type: ").append(row.getTransportType()).append("\n");
             details.append("Duration: ").append(row.getDurationMinutes()).append(" minutes\n");
-            details.append("Price: $").append(row.getPrice()).append("\n");
+            details.append("Price: ৳").append(row.getPrice()).append("\n");
             details.append("Schedule Time: ").append(row.getScheduleTime()).append("\n");
             
             if (row.getMetadata() != null && !row.getMetadata().isEmpty()) {
@@ -208,84 +232,176 @@ public class ApiApprovalController {
         alert.showAndWait();
     }
     
-    private void handleApprove(PendingChangeRow row) {
+    @FXML
+    private void handleRefresh() {
+        loadMyPendingRequests();
+    }
+    
+    private void handleWithdraw(PendingChangeRow row) {
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmAlert.setTitle("Approve Change");
-        confirmAlert.setHeaderText("Approve API Change #" + row.getId() + "?");
-        confirmAlert.setContentText("This will " + row.getChangeType().toLowerCase() + 
-                                   " the route in the live API.\n\nRoute: " + row.getRouteName() +
-                                   "\nSubmitted by: " + row.getSubmittedBy());
+        confirmAlert.setTitle("Withdraw Request");
+        confirmAlert.setHeaderText("Withdraw API Change Request #" + row.getId() + "?");
+        confirmAlert.setContentText("This action cannot be undone. The request will be permanently deleted.");
         
         Optional<ButtonType> result = confirmAlert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
-                String reviewedBy = AuthenticationManager.getInstance().getCurrentUsername();
-                databaseManager.approvePendingRoute(row.getId(), reviewedBy);
-                showSuccess("Change approved successfully! Route " + row.getChangeType().toLowerCase() + 
-                          "d in live API.");
-                loadPendingChanges();
+                boolean success = databaseManager.withdrawPendingRoute(row.getId(), currentUsername);
+                if (success) {
+                    showSuccess("Request withdrawn successfully.");
+                    loadMyPendingRequests();
+                } else {
+                    showError("Failed to withdraw request. It may have already been processed.");
+                }
             } catch (SQLException e) {
-                showError("Failed to approve change: " + e.getMessage());
+                showError("Failed to withdraw request: " + e.getMessage());
             }
         }
     }
     
-    private void handleReject(PendingChangeRow row) {
-        // Create custom dialog for feedback
-        Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Reject API Change");
-        dialog.setHeaderText("Reject API Change Request #" + row.getId());
+    private void handleEdit(PendingChangeRow row) {
+        // Cannot edit DELETE requests
+        if ("DELETE".equals(row.getChangeType())) {
+            showError("Cannot edit a DELETE request. Please withdraw and submit a new one if needed.");
+            return;
+        }
         
-        ButtonType rejectButtonType = new ButtonType("Reject", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(rejectButtonType, ButtonType.CANCEL);
+        // Create edit dialog
+        Dialog<PendingChangeRow> dialog = new Dialog<>();
+        dialog.setTitle("Edit Pending Request");
+        dialog.setHeaderText("Edit API Change Request #" + row.getId());
         
-        // Create feedback input
-        VBox content = new VBox(10);
+        ButtonType saveButtonType = new ButtonType("Save Changes", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+        
+        // Create form
+        VBox content = new VBox(15);
         content.setPadding(new Insets(20));
+        content.setPrefWidth(500);
         
-        Label infoLabel = new Label("Route: " + row.getRouteName() + "\nSubmitted by: " + row.getSubmittedBy());
-        infoLabel.setStyle("-fx-font-size: 12px;");
+        // Route name
+        Label nameLabel = new Label("Route Name:");
+        nameLabel.setStyle("-fx-font-weight: bold;");
+        TextField nameField = new TextField(row.getRouteName());
         
-        Label feedbackLabel = new Label("Provide feedback to the developer:");
-        feedbackLabel.setStyle("-fx-font-weight: bold;");
+        // Origin
+        Label originLabel = new Label("Origin:");
+        originLabel.setStyle("-fx-font-weight: bold;");
+        TextField originField = new TextField(row.getOrigin());
         
-        TextArea feedbackArea = new TextArea();
-        feedbackArea.setPromptText("Explain why this request is being rejected...");
-        feedbackArea.setPrefRowCount(4);
-        feedbackArea.setWrapText(true);
+        // Destination
+        Label destLabel = new Label("Destination:");
+        destLabel.setStyle("-fx-font-weight: bold;");
+        TextField destField = new TextField(row.getDestination());
         
-        content.getChildren().addAll(infoLabel, feedbackLabel, feedbackArea);
+        // Transport Type
+        Label transportLabel = new Label("Transport Type:");
+        transportLabel.setStyle("-fx-font-weight: bold;");
+        ComboBox<String> transportCombo = new ComboBox<>();
+        transportCombo.getItems().addAll("Bus", "Train", "Both");
+        transportCombo.setValue(row.getTransportType());
+        
+        // Duration
+        Label durationLabel = new Label("Duration (minutes):");
+        durationLabel.setStyle("-fx-font-weight: bold;");
+        TextField durationField = new TextField(String.valueOf(row.getDurationMinutes()));
+        
+        // Price
+        Label priceLabel = new Label("Price (৳):");
+        priceLabel.setStyle("-fx-font-weight: bold;");
+        TextField priceField = new TextField(String.valueOf(row.getPrice()));
+        
+        // Schedule Time
+        Label scheduleLabel = new Label("Schedule Time:");
+        scheduleLabel.setStyle("-fx-font-weight: bold;");
+        TextField scheduleField = new TextField(row.getScheduleTime());
+        
+        // Metadata
+        Label metadataLabel = new Label("Metadata (Optional):");
+        metadataLabel.setStyle("-fx-font-weight: bold;");
+        TextField metadataField = new TextField(row.getMetadata() != null ? row.getMetadata() : "");
+        
+        content.getChildren().addAll(
+            nameLabel, nameField,
+            originLabel, originField,
+            destLabel, destField,
+            transportLabel, transportCombo,
+            durationLabel, durationField,
+            priceLabel, priceField,
+            scheduleLabel, scheduleField,
+            metadataLabel, metadataField
+        );
+        
         dialog.getDialogPane().setContent(content);
         
+        // Validate and convert result
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == rejectButtonType) {
-                return feedbackArea.getText().trim();
+            if (dialogButton == saveButtonType) {
+                try {
+                    String name = nameField.getText().trim();
+                    String origin = originField.getText().trim();
+                    String dest = destField.getText().trim();
+                    String transport = transportCombo.getValue();
+                    int duration = Integer.parseInt(durationField.getText().trim());
+                    double price = Double.parseDouble(priceField.getText().trim());
+                    String schedule = scheduleField.getText().trim();
+                    String metadata = metadataField.getText().trim();
+                    
+                    // Validate required fields
+                    if (name.isEmpty() || origin.isEmpty() || dest.isEmpty() || transport == null || schedule.isEmpty()) {
+                        showError("Please fill in all required fields.");
+                        return null;
+                    }
+                    
+                    if (duration <= 0 || price <= 0) {
+                        showError("Duration and price must be positive numbers.");
+                        return null;
+                    }
+                    
+                    return new PendingChangeRow(row.getId(), row.getChangeType(), name, origin, dest, 
+                                               transport, duration, price, schedule, metadata.isEmpty() ? null : metadata,
+                                               row.getOriginalRouteId(), row.getSubmittedBy(), row.getSubmittedDate(), row.getNotes());
+                } catch (NumberFormatException e) {
+                    showError("Invalid number format for duration or price.");
+                    return null;
+                }
             }
             return null;
         });
         
-        Optional<String> feedback = dialog.showAndWait();
-        feedback.ifPresent(feedbackText -> {
+        Optional<PendingChangeRow> result = dialog.showAndWait();
+        result.ifPresent(updatedRow -> {
             try {
-                String reviewedBy = AuthenticationManager.getInstance().getCurrentUsername();
-                databaseManager.rejectPendingRoute(row.getId(), 
-                    feedbackText.isEmpty() ? "No feedback provided" : feedbackText, reviewedBy);
-                showSuccess("Change rejected successfully. Feedback sent to developer.");
-                loadPendingChanges();
+                databaseManager.updatePendingRoute(
+                    updatedRow.getId(),
+                    updatedRow.getRouteName(),
+                    updatedRow.getOrigin(),
+                    updatedRow.getDestination(),
+                    updatedRow.getTransportType(),
+                    updatedRow.getDurationMinutes(),
+                    updatedRow.getPrice(),
+                    updatedRow.getScheduleTime(),
+                    updatedRow.getMetadata()
+                );
+                showSuccess("Request updated successfully!");
+                loadMyPendingRequests();
             } catch (SQLException e) {
-                showError("Failed to reject change: " + e.getMessage());
+                showError("Failed to update request: " + e.getMessage());
             }
         });
-    }
-    
-    @FXML
-    private void handleRefresh() {
-        loadPendingChanges();
     }
     
     @FXML
     private void handleBack() {
         NavigationManager.getInstance().navigateToHome();
+    }
+    
+    private void showSuccess(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
     
     private void showError(String message) {
@@ -298,17 +414,7 @@ public class ApiApprovalController {
         });
     }
     
-    private void showSuccess(String message) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText(null);
-            alert.setContentText(message);
-            alert.showAndWait();
-        });
-    }
-    
-    // TableView row class
+    // Row class for pending changes
     public static class PendingChangeRow {
         private final int id;
         private final String changeType;

@@ -179,7 +179,7 @@ public class CreatePlanController {
     
     @FXML
     private void handleBack() {
-        com.travelmanager.util.NavigationManager.goBack();
+        com.travelmanager.util.NavigationManager.getInstance().navigateToHome();
     }
 
     private void updatePlanView() {

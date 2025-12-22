@@ -18,6 +18,20 @@ A smart multi-modal travel schedule management application built with JavaFX.
 -  **Notes/Comments** - Add notes to saved plans
 -  **Single-Window Navigation** - Clean UI with back buttons (no popups)
 
+### Original Features (Legacy/To Be Integrated)
+- ✅ API Integration - Real-time schedule fetching
+- ✅ Create Travel Plans - Build multi-leg journeys
+- ✅ Smart Search - Autocomplete for 14 Bangladesh cities
+- ✅ Filter Options - View All, Bus Only, or Train Only
+- ✅ Date-Based Search - Get schedules for specific dates
+- ✅ Save & Manage - SQLite database persistence
+- ✅ Edit Plans - Add/remove schedules from existing plans
+- ✅ View Details - Complete itinerary with fare breakdown
+- ✅ Calculate Totals - Automatic fare and duration calculation
+- ✅ Plan Validation - Connection point and timing checks
+- ✅ Tight Connection Warnings - Alerts for <30min connections
+- ✅ Notes/Comments - Add notes to saved plans
+
 ---
 
 ##  Quick Start - EASIEST WAY TO RUN
@@ -99,12 +113,19 @@ Before running the application, ensure you have:
 
 ##  Database
 
-- **Type**: SQLite
-- **Location**: data/travel_plans.db
-- **Auto-created**: On first save
-- **Tables**: 
-  - plans - Travel plan metadata
-  - schedules - Individual schedule legs
+- **Type**: SQLite (data/travel_plans.db)
+- **Auto-created on first run**
+- **Tables**:
+  - `users` - Authentication (username, password_hash, role, account status, failed login attempts)
+  - `plans` - Travel plan metadata (name, total_fare, created_date, notes, user_id)
+  - `schedules` - Individual schedule legs (plan_id, origin, destination, type, etc.)
+  - `routes` - API routes data (managed by DEVELOPER/MASTER roles)
+  
+### Security Features
+- Password hashing with unique salt per user (PBKDF2 with HMAC SHA-256)
+- Account lockout after 3 failed login attempts (30-minute timeout)
+- Role-based authorization checks
+- Session management with last login tracking
 
 ---
 
@@ -158,7 +179,13 @@ mvn javafx:run
 
 ##  How to Use
 
-### Creating a Plan
+### First Time Setup
+1. **Run the application** (using START.bat or `mvn javafx:run`)
+2. **Register an account** - Choose role: USER, DEVELOPER, or MASTER
+3. **Wait for approval** - PENDING accounts need MASTER approval (or manually set to APPROVED in database)
+4. **Login** - Use your credentials to access the system
+
+### Creating a Plan (USER/DEVELOPER/MASTER)
 1. Click **\"Create Plan\"** on home screen
 2. Enter start and destination (autocomplete available)
 3. Select date and transport type
@@ -168,14 +195,27 @@ mvn javafx:run
 7. Click **\"Summarize & Save Plan\"**
 8. Enter plan name and save
 
-### Editing a Plan
+### Editing a Plan (DEVELOPER/MASTER)
 1. Go to **\"Saved Plans\"**
 2. Select a plan from the list
 3. Click **\"Edit Plan\"**
 4. Remove unwanted schedules OR add new ones
 5. Click **\"Save Changes\"**
 
-### Viewing Plans
+### Managing Routes (DEVELOPER/MASTER)
+1. Click **\"Edit API\"** on home screen
+2. **View Routes** - See all bus/train routes
+3. **Add Route** - Fill origin, destination, type, schedule details
+4. **Edit Route** - Modify existing routes
+5. **Delete Route** - Remove outdated routes
+
+### Account Approval (MASTER Only)
+1. Click **\"Pending Application\"** on home screen
+2. **View Details** - Check pending user registrations
+3. **Approve** - Grant access with optional welcome note
+4. **Reject** - Deny access with reason
+
+### Viewing Plans (All Roles)
 1. Go to **\"Saved Plans\"**
 2. Select a plan
 3. Click **\"View Details\"**
@@ -189,50 +229,88 @@ The application uses API providers to fetch bus and train schedules.
 ### Mock Data (Default)
 - Enabled by default for development and testing
 - Generates realistic random schedules
-- No API keys required
-- Works offline
+- No API keys required - works offline
 
-### Real API Integration
-To use real APIs:
-1. Edit `src/main/resources/api-config.properties`
-2. Set `use.mock.data=false`
-3. Configure API endpoints and keys
-4. See `API_INTEGRATION.md` for detailed guide
+### Configuration File
+Edit `src/main/resources/api-config.properties`:
+
+```properties
+# Toggle between mock and real data
+use.mock.data=true
+
+# Bus API Settings
+bus.api.enabled=true
+bus.api.url=http://api.example.com/bus
+bus.api.key=your_api_key_here
+
+# Train API Settings
+train.api.enabled=true
+train.api.url=http://api.example.com/train
+train.api.key=your_api_key_here
+```
+
+### API Infrastructure
+- **ApiClient** - Generic HTTP client with timeout handling
+- **ScheduleApiProvider** - Interface for all providers
+- **ScheduleApiManager** - Singleton coordinator for providers
+- **ApiConfig** - Configuration manager (auto-creates properties file)
+- **Mock Providers** - MockBusApiProvider, MockTrainApiProvider
+
+To switch to real APIs: Set `use.mock.data=false` and configure endpoints/keys.
 
 ---
 
-##  New Features (Latest Update)
+##  Key Features
+
+### Authentication & Security
+- 🔐 **Role-Based Access Control** - Three roles: USER, DEVELOPER, MASTER
+- 🔒 **Secure Authentication** - Password hashing with salt, account lockout after failed attempts
+- 👤 **Registration System** - New users register with PENDING status, MASTER approves/rejects
+- 🛡️ **Session Management** - Secure login/logout with proper session tracking
+
+### Role Capabilities
+- **USER**: Create and view travel plans
+- **DEVELOPER**: Full plan management (create, edit, delete) + API route editor
+- **MASTER**: All developer permissions + account approval + API management
 
 ### API Integration
-- ✅ Complete API infrastructure
-- ✅ Mock providers for development
-- ✅ Configuration-based provider management
-- ✅ Date-based schedule searching
-- ✅ Automatic result caching
+- ✅ Complete API infrastructure with mock providers
+- ✅ Configuration-based provider management (`api-config.properties`)
+- ✅ Date-based schedule searching with automatic caching
 - ✅ Offline fallback support
+- 🔄 **API Routes Management** (DEVELOPER/MASTER only) - Add/edit/delete bus and train routes
 
-### UI/UX Improvements
+### Master Mode Dashboard
+- 📋 **Account Approval** - Review pending registrations, approve/reject with notes
+- 🛠️ **API Management** - Full CRUD operations on routes and API configurations
+
+### UI/UX
 - ✅ Single-window navigation (no popups)
 - ✅ Enhanced back buttons throughout app
-- ✅ Plan validation with warnings
+- ✅ Plan validation with warnings for connection issues
 - ✅ Tight connection alerts (<30 min)
 - ✅ Total journey duration display
 - ✅ Notes/comments on saved plans
-- ✅ Improved form layouts
-
----
-
-##  Documentation
-
-- **API_INTEGRATION.md** - Complete API integration guide
-- **API_SUMMARY.md** - Implementation summary and architecture
-- **README.md** - This file (user guide)
 
 ---
 
 ##  License
 
 This project is licensed under the MIT License.
+
+---
+
+##  Technical Documentation
+
+For detailed implementation guides, see:
+- **API_SUMMARY.md** - Complete API implementation summary and architecture
+- **SECURITY_DOCUMENTATION.md** - Complete authentication architecture, database schema, security best practices
+- **MASTER_MODE_IMPLEMENTATION.md** - Master dashboard implementation, role hierarchy, account approval workflow
+- **ROLE_BASED_FLOW_DIAGRAM.md** - Visual workflow diagrams for role-based access
+- **REGISTRATION_IMPLEMENTATION_SUMMARY.md** - Registration system implementation details
+- **REGISTRATION_SYSTEM_TESTING.md** - Testing procedures and test cases
+- **PENDING_API_CHANGES_IMPLEMENTATION.md** - API change request workflow
+- **IMPLEMENTATION_VERIFICATION.md** - Verification and testing documentation
 
 ---
 

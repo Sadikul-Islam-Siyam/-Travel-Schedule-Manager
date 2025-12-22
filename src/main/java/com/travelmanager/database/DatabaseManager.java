@@ -176,10 +176,38 @@ public class DatabaseManager {
                     original_route_id INTEGER,
                     submitted_by TEXT NOT NULL,
                     submitted_date TEXT NOT NULL,
-                    notes TEXT
+                    notes TEXT,
+                    feedback TEXT,
+                    reviewed_by TEXT,
+                    reviewed_date TEXT
                 )
                 """;
             stmt.execute(createPendingRoutesTable);
+            
+            // Create route history table for tracking all API changes
+            String createRouteHistoryTable = """
+                CREATE TABLE IF NOT EXISTS route_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    route_name TEXT NOT NULL,
+                    origin TEXT,
+                    destination TEXT,
+                    transport_type TEXT,
+                    duration_minutes INTEGER,
+                    price REAL,
+                    schedule_time TEXT,
+                    metadata TEXT,
+                    change_type TEXT NOT NULL,
+                    original_route_id INTEGER,
+                    submitted_by TEXT NOT NULL,
+                    submitted_date TEXT NOT NULL,
+                    reviewed_by TEXT,
+                    reviewed_date TEXT NOT NULL,
+                    status TEXT NOT NULL,
+                    notes TEXT,
+                    feedback TEXT
+                )
+                """;
+            stmt.execute(createRouteHistoryTable);
             
             // Create activity log table for tracking user actions
             String createActivityLogTable = """
@@ -773,7 +801,7 @@ public class DatabaseManager {
     }
     
     // Approve pending route change (Master)
-    public boolean approvePendingRoute(int pendingRouteId) throws SQLException {
+    public boolean approvePendingRoute(int pendingRouteId, String reviewedBy) throws SQLException {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(DB_URL);
@@ -833,7 +861,34 @@ public class DatabaseManager {
                     deleteStmt.executeUpdate();
                 }
                 
-                // Update pending route status to APPROVED and delete
+                // Archive to history
+                String insertHistory = "INSERT INTO route_history (route_name, origin, destination, transport_type, " +
+                                      "duration_minutes, price, schedule_time, metadata, change_type, original_route_id, " +
+                                      "submitted_by, submitted_date, reviewed_by, reviewed_date, status, notes, feedback) " +
+                                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'APPROVED', ?, NULL)";
+                PreparedStatement historyStmt = conn.prepareStatement(insertHistory);
+                historyStmt.setString(1, rs.getString("route_name"));
+                historyStmt.setString(2, rs.getString("origin"));
+                historyStmt.setString(3, rs.getString("destination"));
+                historyStmt.setString(4, rs.getString("transport_type"));
+                historyStmt.setInt(5, rs.getInt("duration_minutes"));
+                historyStmt.setDouble(6, rs.getDouble("price"));
+                historyStmt.setString(7, rs.getString("schedule_time"));
+                historyStmt.setString(8, rs.getString("metadata"));
+                historyStmt.setString(9, rs.getString("change_type"));
+                if (rs.getObject("original_route_id") != null) {
+                    historyStmt.setInt(10, rs.getInt("original_route_id"));
+                } else {
+                    historyStmt.setNull(10, java.sql.Types.INTEGER);
+                }
+                historyStmt.setString(11, rs.getString("submitted_by"));
+                historyStmt.setString(12, rs.getString("submitted_date"));
+                historyStmt.setString(13, reviewedBy);
+                historyStmt.setString(14, LocalDateTime.now().toString());
+                historyStmt.setString(15, rs.getString("notes"));
+                historyStmt.executeUpdate();
+                
+                // Delete from pending routes
                 String deleteQuery = "DELETE FROM pending_routes WHERE id = ?";
                 PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery);
                 deleteStmt.setInt(1, pendingRouteId);
@@ -863,17 +918,207 @@ public class DatabaseManager {
         }
     }
     
-    // Reject pending route change (Master)
+    // Backward compatibility
+    public boolean approvePendingRoute(int pendingRouteId) throws SQLException {
+        return approvePendingRoute(pendingRouteId, "SYSTEM");
+    }
+    
+    // Reject pending route change (Master) with feedback
+    public boolean rejectPendingRoute(int pendingRouteId, String feedback, String reviewedBy) throws SQLException {
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+            conn.setAutoCommit(false);
+            
+            // Get pending route data first
+            String selectQuery = "SELECT * FROM pending_routes WHERE id = ?";
+            PreparedStatement selectStmt = conn.prepareStatement(selectQuery);
+            selectStmt.setInt(1, pendingRouteId);
+            ResultSet rs = selectStmt.executeQuery();
+            
+            if (rs.next()) {
+                // Archive to history
+                String insertHistory = "INSERT INTO route_history (route_name, origin, destination, transport_type, " +
+                                      "duration_minutes, price, schedule_time, metadata, change_type, original_route_id, " +
+                                      "submitted_by, submitted_date, reviewed_by, reviewed_date, status, notes, feedback) " +
+                                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'REJECTED', ?, ?)";
+                PreparedStatement historyStmt = conn.prepareStatement(insertHistory);
+                historyStmt.setString(1, rs.getString("route_name"));
+                historyStmt.setString(2, rs.getString("origin"));
+                historyStmt.setString(3, rs.getString("destination"));
+                historyStmt.setString(4, rs.getString("transport_type"));
+                historyStmt.setInt(5, rs.getInt("duration_minutes"));
+                historyStmt.setDouble(6, rs.getDouble("price"));
+                historyStmt.setString(7, rs.getString("schedule_time"));
+                historyStmt.setString(8, rs.getString("metadata"));
+                historyStmt.setString(9, rs.getString("change_type"));
+                if (rs.getObject("original_route_id") != null) {
+                    historyStmt.setInt(10, rs.getInt("original_route_id"));
+                } else {
+                    historyStmt.setNull(10, java.sql.Types.INTEGER);
+                }
+                historyStmt.setString(11, rs.getString("submitted_by"));
+                historyStmt.setString(12, rs.getString("submitted_date"));
+                historyStmt.setString(13, reviewedBy);
+                historyStmt.setString(14, LocalDateTime.now().toString());
+                historyStmt.setString(15, rs.getString("notes"));
+                historyStmt.setString(16, feedback);
+                historyStmt.executeUpdate();
+            }
+            
+            // Delete from pending
+            String deleteQuery = "DELETE FROM pending_routes WHERE id = ?";
+            PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery);
+            deleteStmt.setInt(1, pendingRouteId);
+            int rowsAffected = deleteStmt.executeUpdate();
+            
+            conn.commit();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            if (conn != null) conn.rollback();
+            throw e;
+        } finally {
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                conn.close();
+            }
+        }
+    }
+    
+    // Backward compatibility - reject without feedback
     public boolean rejectPendingRoute(int pendingRouteId) throws SQLException {
-        String query = "DELETE FROM pending_routes WHERE id = ?";
+        return rejectPendingRoute(pendingRouteId, null, "SYSTEM");
+    }
+    
+    // Withdraw a pending request (Developer)
+    public boolean withdrawPendingRoute(int pendingRouteId, String username) throws SQLException {
+        String query = "DELETE FROM pending_routes WHERE id = ? AND submitted_by = ? AND status = 'PENDING'";
         
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             
             pstmt.setInt(1, pendingRouteId);
+            pstmt.setString(2, username);
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0;
         }
+    }
+    
+    // Update a pending request (Developer)
+    public boolean updatePendingRoute(int pendingRouteId, String username, String routeName, 
+                                     String origin, String destination, String transportType, 
+                                     int durationMinutes, double price, String scheduleTime, 
+                                     String metadata, String notes) throws SQLException {
+        String query = "UPDATE pending_routes SET route_name = ?, origin = ?, destination = ?, " +
+                      "transport_type = ?, duration_minutes = ?, price = ?, schedule_time = ?, " +
+                      "metadata = ?, notes = ? WHERE id = ? AND submitted_by = ? AND status = 'PENDING'";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, routeName);
+            pstmt.setString(2, origin);
+            pstmt.setString(3, destination);
+            pstmt.setString(4, transportType);
+            pstmt.setInt(5, durationMinutes);
+            pstmt.setDouble(6, price);
+            pstmt.setString(7, scheduleTime);
+            pstmt.setString(8, metadata);
+            pstmt.setString(9, notes);
+            pstmt.setInt(10, pendingRouteId);
+            pstmt.setString(11, username);
+            
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        }
+    }
+    
+    // Get route history for a specific user
+    public List<RouteHistoryData> getRouteHistory(String username) throws SQLException {
+        String query = "SELECT * FROM route_history WHERE submitted_by = ? ORDER BY reviewed_date DESC";
+        List<RouteHistoryData> history = new ArrayList<>();
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+                history.add(new RouteHistoryData(
+                    rs.getInt("id"),
+                    rs.getString("route_name"),
+                    rs.getString("origin"),
+                    rs.getString("destination"),
+                    rs.getString("transport_type"),
+                    rs.getInt("duration_minutes"),
+                    rs.getDouble("price"),
+                    rs.getString("schedule_time"),
+                    rs.getString("metadata"),
+                    rs.getString("change_type"),
+                    rs.getObject("original_route_id") != null ? rs.getInt("original_route_id") : null,
+                    rs.getString("submitted_by"),
+                    rs.getString("submitted_date"),
+                    rs.getString("reviewed_by"),
+                    rs.getString("reviewed_date"),
+                    rs.getString("status"),
+                    rs.getString("notes"),
+                    rs.getString("feedback")
+                ));
+            }
+        }
+        return history;
+    }
+    
+    // Get count of unread notifications (rejected requests with feedback)
+    public int getUnreadNotificationsCount(String username) throws SQLException {
+        String query = "SELECT COUNT(*) FROM route_history WHERE submitted_by = ? AND status = 'REJECTED' " +
+                      "AND feedback IS NOT NULL AND reviewed_date > datetime('now', '-7 days')";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+    
+    // Get a specific pending route by ID (for editing)
+    public PendingRouteData getPendingRouteById(int id, String username) throws SQLException {
+        String query = "SELECT * FROM pending_routes WHERE id = ? AND submitted_by = ? AND status = 'PENDING'";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setInt(1, id);
+            pstmt.setString(2, username);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                return new PendingRouteData(
+                    rs.getInt("id"),
+                    rs.getString("route_name"),
+                    rs.getString("origin"),
+                    rs.getString("destination"),
+                    rs.getString("transport_type"),
+                    rs.getInt("duration_minutes"),
+                    rs.getDouble("price"),
+                    rs.getString("schedule_time"),
+                    rs.getString("metadata"),
+                    rs.getString("status"),
+                    rs.getString("change_type"),
+                    rs.getObject("original_route_id") != null ? rs.getInt("original_route_id") : null,
+                    rs.getString("submitted_by"),
+                    rs.getString("submitted_date"),
+                    rs.getString("notes")
+                );
+            }
+        }
+        return null;
     }
     
     // Helper class for pending route data
@@ -930,6 +1175,73 @@ public class DatabaseManager {
         public String getSubmittedBy() { return submittedBy; }
         public String getSubmittedDate() { return submittedDate; }
         public String getNotes() { return notes; }
+    }
+    
+    // Helper class for route history data
+    public static class RouteHistoryData {
+        private int id;
+        private String routeName;
+        private String origin;
+        private String destination;
+        private String transportType;
+        private int durationMinutes;
+        private double price;
+        private String scheduleTime;
+        private String metadata;
+        private String changeType;
+        private Integer originalRouteId;
+        private String submittedBy;
+        private String submittedDate;
+        private String reviewedBy;
+        private String reviewedDate;
+        private String status;
+        private String notes;
+        private String feedback;
+        
+        public RouteHistoryData(int id, String routeName, String origin, String destination,
+                               String transportType, int durationMinutes, double price,
+                               String scheduleTime, String metadata, String changeType,
+                               Integer originalRouteId, String submittedBy, String submittedDate,
+                               String reviewedBy, String reviewedDate, String status, 
+                               String notes, String feedback) {
+            this.id = id;
+            this.routeName = routeName;
+            this.origin = origin;
+            this.destination = destination;
+            this.transportType = transportType;
+            this.durationMinutes = durationMinutes;
+            this.price = price;
+            this.scheduleTime = scheduleTime;
+            this.metadata = metadata;
+            this.changeType = changeType;
+            this.originalRouteId = originalRouteId;
+            this.submittedBy = submittedBy;
+            this.submittedDate = submittedDate;
+            this.reviewedBy = reviewedBy;
+            this.reviewedDate = reviewedDate;
+            this.status = status;
+            this.notes = notes;
+            this.feedback = feedback;
+        }
+        
+        public int getId() { return id; }
+        public String getRouteName() { return routeName; }
+        public String getOrigin() { return origin; }
+        public String getDestination() { return destination; }
+        public String getTransportType() { return transportType; }
+        public int getDurationMinutes() { return durationMinutes; }
+        public double getPrice() { return price; }
+        public String getScheduleTime() { return scheduleTime; }
+        public String getMetadata() { return metadata; }
+        public String getChangeType() { return changeType; }
+        public Integer getOriginalRouteId() { return originalRouteId; }
+        public String getSubmittedBy() { return submittedBy; }
+        public String getSubmittedDate() { return submittedDate; }
+        public String getReviewedBy() { return reviewedBy; }
+        public String getReviewedDate() { return reviewedDate; }
+        public String getStatus() { return status; }
+        public String getNotes() { return notes; }
+        public String getFeedback() { return feedback; }
     }
     
     // Helper class for route data

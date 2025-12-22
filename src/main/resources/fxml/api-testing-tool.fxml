@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.travelmanager.controller.ApiTestingToolController"
+            minHeight="500.0" minWidth="800.0"
+            stylesheets="@../css/styles.css"
+            style="-fx-background-color: linear-gradient(to bottom right, #1a252f, #2c3e50);">
+    
+    <top>
+        <VBox style="-fx-background-color: rgba(44, 62, 80, 0.9); -fx-padding: 20;">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Button text="← Back" onAction="#handleBack" 
+                        style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8 15; -fx-cursor: hand; -fx-background-radius: 5;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="🧪 API Testing Tool" textFill="white">
+                    <font>
+                        <Font name="System Bold" size="24"/>
+                    </font>
+                </Label>
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <VBox spacing="15" style="-fx-padding: 20; -fx-background-color: #ecf0f1;">
+            <!-- Test Query Section -->
+            <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;">
+                <Label text="Test Route Query" style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #2c3e50;"/>
+                <Label text="Test route queries before submitting changes to the API" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+                
+                <GridPane hgap="15" vgap="12" style="-fx-padding: 10 0;">
+                    <Label text="Origin:" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="originField" GridPane.columnIndex="1" GridPane.rowIndex="0" promptText="Enter origin city"/>
+                    
+                    <Label text="Destination:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="destinationField" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Enter destination city"/>
+                    
+                    <Label text="Transport Type:" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="transportTypeCombo" GridPane.columnIndex="1" GridPane.rowIndex="2" prefWidth="200">
+                        <items>
+                            <javafx.collections.FXCollections fx:factory="observableArrayList">
+                                <String fx:value="ALL"/>
+                                <String fx:value="BUS"/>
+                                <String fx:value="TRAIN"/>
+                            </javafx.collections.FXCollections>
+                        </items>
+                    </ComboBox>
+                    
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="120" prefWidth="120"/>
+                        <ColumnConstraints minWidth="300" prefWidth="400"/>
+                    </columnConstraints>
+                </GridPane>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button text="🔍 Search Routes" onAction="#handleSearchRoutes"
+                            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 10 25; -fx-font-size: 14px; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-weight: bold;"/>
+                    <Button text="🔄 Clear" onAction="#handleClear"
+                            style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 10 25; -fx-font-size: 14px; -fx-cursor: hand; -fx-background-radius: 5;"/>
+                </HBox>
+            </VBox>
+            
+            <!-- Results Section -->
+            <VBox VBox.vgrow="ALWAYS" spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Test Results" style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #2c3e50;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="resultCountLabel" text="0 routes found" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+                </HBox>
+                
+                <ScrollPane fx:id="resultsScrollPane" VBox.vgrow="ALWAYS" fitToWidth="true"
+                           style="-fx-background: #f8f9fa; -fx-background-color: #f8f9fa; -fx-border-color: #d0d0d0; -fx-border-radius: 5;">
+                    <VBox fx:id="resultsContainer" spacing="10" style="-fx-padding: 10;"/>
+                </ScrollPane>
+                
+                <Label fx:id="emptyLabel" text="Enter search criteria and click 'Search Routes' to test the API." 
+                       textFill="#95a5a6" style="-fx-font-size: 13px; -fx-font-style: italic;" alignment="CENTER"/>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>

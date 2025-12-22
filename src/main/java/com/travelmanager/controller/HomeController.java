@@ -18,6 +18,7 @@ public class HomeController {
     @FXML private Label welcomeLabel;
     @FXML private Label roleLabel;
     @FXML private HBox masterSection;
+    @FXML private VBox developerSection;
     @FXML private HBox regularUserSection;
     @FXML private VBox statsSection;
     @FXML private Label totalUsersLabel;
@@ -25,6 +26,7 @@ public class HomeController {
     @FXML private Label recentApprovalsLabel;
     @FXML private Label failedLoginsLabel;
     @FXML private Label todayLoginsLabel;
+    @FXML private Label notificationBadge;
 
     @FXML
     public void initialize() {
@@ -37,10 +39,14 @@ public class HomeController {
             String roleText = "Role: ";
             if (auth.getCurrentUser().isMaster()) {
                 roleText += "Master";
-                // Show master-only section, hide regular user section
+                // Show master-only section, hide other sections
                 if (masterSection != null) {
                     masterSection.setVisible(true);
                     masterSection.setManaged(true);
+                }
+                if (developerSection != null) {
+                    developerSection.setVisible(false);
+                    developerSection.setManaged(false);
                 }
                 if (regularUserSection != null) {
                     regularUserSection.setVisible(false);
@@ -50,8 +56,36 @@ public class HomeController {
                 loadStatistics();
             } else if (auth.isDeveloper()) {
                 roleText += "Developer";
+                // Show developer section, hide other sections
+                if (developerSection != null) {
+                    developerSection.setVisible(true);
+                    developerSection.setManaged(true);
+                }
+                if (masterSection != null) {
+                    masterSection.setVisible(false);
+                    masterSection.setManaged(false);
+                }
+                if (regularUserSection != null) {
+                    regularUserSection.setVisible(false);
+                    regularUserSection.setManaged(false);
+                }
+                // Load notification count for developers
+                updateNotificationBadge();
             } else {
                 roleText += "User";
+                // Show regular user section (default behavior)
+                if (regularUserSection != null) {
+                    regularUserSection.setVisible(true);
+                    regularUserSection.setManaged(true);
+                }
+                if (masterSection != null) {
+                    masterSection.setVisible(false);
+                    masterSection.setManaged(false);
+                }
+                if (developerSection != null) {
+                    developerSection.setVisible(false);
+                    developerSection.setManaged(false);
+                }
             }
             roleLabel.setText(roleText);
         }
@@ -101,6 +135,42 @@ public class HomeController {
     @FXML
     private void handleManageUsers() {
         NavigationManager.navigateTo("manage-users");
+    }
+    
+    @FXML
+    private void handleMyPendingRequests() {
+        NavigationManager.navigateTo("my-pending-requests");
+    }
+    
+    @FXML
+    private void handleApiTesting() {
+        NavigationManager.navigateTo("api-testing-tool");
+    }
+    
+    @FXML
+    private void handleRequestHistory() {
+        NavigationManager.navigateTo("request-history");
+    }
+    
+    private void updateNotificationBadge() {
+        try {
+            DatabaseManager dbManager = DatabaseManager.getInstance();
+            String username = AuthenticationManager.getInstance().getCurrentUsername();
+            int count = dbManager.getUnreadNotificationsCount(username);
+            
+            if (notificationBadge != null) {
+                if (count > 0) {
+                    notificationBadge.setText(String.valueOf(count));
+                    notificationBadge.setVisible(true);
+                    notificationBadge.setManaged(true);
+                } else {
+                    notificationBadge.setVisible(false);
+                    notificationBadge.setManaged(false);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error loading notifications: " + e.getMessage());
+        }
     }
     
     private void loadStatistics() {

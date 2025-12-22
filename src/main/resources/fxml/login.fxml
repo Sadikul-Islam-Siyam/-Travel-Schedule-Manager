@@ -9,7 +9,7 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.travelmanager.controller.LoginController"
             fx:id="rootPane"
-            prefHeight="600.0" prefWidth="900.0"
+            minHeight="400.0" minWidth="600.0"
             stylesheets="@../css/styles.css"
             style="-fx-background-color: linear-gradient(to bottom right, #2c3e50, #34495e);">
     
@@ -36,19 +36,19 @@
                 </VBox>
                 
                 <!-- Login Card -->
-                <VBox fx:id="loginCard" alignment="CENTER" spacing="18" maxWidth="420" prefWidth="420" style="-fx-background-color: white; -fx-padding: 35 40; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0, 0, 5);">
+                <VBox fx:id="loginCard" alignment="CENTER" spacing="18" maxWidth="420" minWidth="320" style="-fx-background-color: white; -fx-padding: 35 40; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0, 0, 5);">
                     
                     <Label text="Sign In" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
                     
                     <!-- Username Field -->
-                    <VBox spacing="5" prefWidth="340" maxWidth="340">
+                    <VBox spacing="5" maxWidth="340" HBox.hgrow="ALWAYS">
                         <Label text="Username or Email" style="-fx-font-size: 13px; -fx-text-fill: #34495e; -fx-font-weight: bold;"/>
-                        <TextField fx:id="usernameField" promptText="Enter username or email" 
+                        <TextField fx:id="usernameField" promptText="Enter username or email" maxWidth="340"
                                    style="-fx-font-size: 14px; -fx-padding: 12; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;"/>
                     </VBox>
                     
                     <!-- Password Field with Toggle -->
-                    <VBox spacing="5" prefWidth="340" maxWidth="340">
+                    <VBox spacing="5" maxWidth="340" HBox.hgrow="ALWAYS">
                         <Label text="Password" style="-fx-font-size: 13px; -fx-text-fill: #34495e; -fx-font-weight: bold;"/>
                         <HBox spacing="8" alignment="CENTER_LEFT">
                             <StackPane fx:id="passwordContainer" HBox.hgrow="ALWAYS">
@@ -65,10 +65,10 @@
                         </HBox>
                     </VBox>
                     
-                    <Label fx:id="errorLabel" textFill="#e74c3c" style="-fx-font-size: 13px; -fx-font-weight: bold;" wrapText="true" maxWidth="340" prefWidth="340" minHeight="20"/>
-                    <Label fx:id="infoLabel" textFill="#3498db" style="-fx-font-size: 12px;" wrapText="true" maxWidth="340" prefWidth="340" minHeight="20"/>
+                    <Label fx:id="errorLabel" textFill="#e74c3c" style="-fx-font-size: 13px; -fx-font-weight: bold;" wrapText="true" maxWidth="340" minHeight="20"/>
+                    <Label fx:id="infoLabel" textFill="#3498db" style="-fx-font-size: 12px;" wrapText="true" maxWidth="340" minHeight="20"/>
                     
-                    <Button text="Sign In" onAction="#handleLogin" defaultButton="true" prefWidth="340" maxWidth="340"
+                    <Button text="Sign In" onAction="#handleLogin" defaultButton="true" maxWidth="340" HBox.hgrow="ALWAYS"
                             style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 12 40; -fx-cursor: hand; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);"/>
                     
                     <HBox spacing="5" alignment="CENTER">

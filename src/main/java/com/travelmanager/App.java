@@ -22,6 +22,11 @@ public class App extends Application {
         scene = new Scene(loadFXML("login"), 900, 600);
         stage.setTitle("Smart Multi-Modal Travel Schedule Manager");
         stage.setScene(scene);
+        
+        // Set minimum window size for responsiveness
+        stage.setMinWidth(600);
+        stage.setMinHeight(400);
+        
         stage.setMaximized(true);
         stage.show();
     }
