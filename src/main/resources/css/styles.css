@@ -46,3 +46,88 @@
     -fx-background-color: #ecf0f1;
     -fx-font-weight: bold;
 }
+
+/* Login Page Enhancements */
+.toggle-password-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-font-size: 18px;
+}
+
+.toggle-password-button:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+.validation-icon {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.validation-success {
+    -fx-text-fill: #27ae60;
+}
+
+.validation-error {
+    -fx-text-fill: #e74c3c;
+}
+
+/* Dark Mode Styles */
+.dark-mode {
+    -fx-background-color: #1a1a2e;
+}
+
+.dark-mode .login-card {
+    -fx-background-color: #0f3460;
+}
+
+.dark-mode .label {
+    -fx-text-fill: #ecf0f1;
+}
+
+.dark-mode .text-field {
+    -fx-background-color: #16213e;
+    -fx-text-fill: white;
+    -fx-border-color: #533483;
+}
+
+.dark-mode .text-field:focused {
+    -fx-border-color: #e94560;
+}
+
+.dark-mode-toggle {
+    -fx-background-color: rgba(255,255,255,0.2);
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-background-radius: 20;
+    -fx-border-color: rgba(255,255,255,0.3);
+    -fx-border-radius: 20;
+}
+
+.dark-mode-toggle:hover {
+    -fx-background-color: rgba(255,255,255,0.3);
+}
+
+.dark-mode-toggle:selected {
+    -fx-background-color: rgba(255,255,255,0.4);
+}
+
+/* Enhanced Button Styles */
+.button-primary {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.button-primary:hover {
+    -fx-background-color: #2980b9;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.button-primary:pressed {
+    -fx-background-color: #21618c;
+}

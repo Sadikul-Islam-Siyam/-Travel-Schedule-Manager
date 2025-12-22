@@ -8,9 +8,18 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.travelmanager.controller.LoginController"
+            fx:id="rootPane"
             prefHeight="600.0" prefWidth="900.0"
             stylesheets="@../css/styles.css"
             style="-fx-background-color: linear-gradient(to bottom right, #2c3e50, #34495e);">
+    
+    <top>
+        <!-- Dark Mode Toggle -->
+        <HBox alignment="TOP_RIGHT" style="-fx-padding: 15;">
+            <ToggleButton fx:id="darkModeToggle" text="🌙" onAction="#handleDarkModeToggle"
+                         style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-size: 18px; -fx-padding: 8 15; -fx-cursor: hand; -fx-background-radius: 20; -fx-border-color: rgba(255,255,255,0.3); -fx-border-radius: 20;"/>
+        </HBox>
+    </top>
     
     <center>
         <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background: transparent; -fx-background-color: transparent;" BorderPane.alignment="CENTER">
@@ -27,21 +36,33 @@
                 </VBox>
                 
                 <!-- Login Card -->
-                <VBox alignment="CENTER" spacing="18" maxWidth="420" prefWidth="420" style="-fx-background-color: white; -fx-padding: 35 40; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0, 0, 5);">
+                <VBox fx:id="loginCard" alignment="CENTER" spacing="18" maxWidth="420" prefWidth="420" style="-fx-background-color: white; -fx-padding: 35 40; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0, 0, 5);">
                     
                     <Label text="Sign In" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
                     
+                    <!-- Username Field -->
                     <VBox spacing="5" prefWidth="340" maxWidth="340">
                         <Label text="Username or Email" style="-fx-font-size: 13px; -fx-text-fill: #34495e; -fx-font-weight: bold;"/>
-                        <TextField fx:id="usernameField" promptText="Enter username or email" prefWidth="340" maxWidth="340"
+                        <TextField fx:id="usernameField" promptText="Enter username or email" 
                                    style="-fx-font-size: 14px; -fx-padding: 12; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;"/>
                     </VBox>
                     
+                    <!-- Password Field with Toggle -->
                     <VBox spacing="5" prefWidth="340" maxWidth="340">
                         <Label text="Password" style="-fx-font-size: 13px; -fx-text-fill: #34495e; -fx-font-weight: bold;"/>
-                        <PasswordField fx:id="passwordField" promptText="Enter password" prefWidth="340" maxWidth="340"
-                                       style="-fx-font-size: 14px; -fx-padding: 12; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;"
-                                       onAction="#handleLogin"/>
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <StackPane fx:id="passwordContainer" HBox.hgrow="ALWAYS">
+                                <PasswordField fx:id="passwordField" promptText="Enter password"
+                                               style="-fx-font-size: 14px; -fx-padding: 12 80 12 12; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;"
+                                               onAction="#handleLogin"/>
+                                <TextField fx:id="passwordTextField" promptText="Enter password"
+                                           style="-fx-font-size: 14px; -fx-padding: 12 80 12 12; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;"
+                                           onAction="#handleLogin" visible="false" managed="false"/>
+                                <Button fx:id="togglePasswordButton" text="Show" onAction="#handleTogglePassword"
+                                        style="-fx-background-color: transparent; -fx-text-fill: #3498db; -fx-font-size: 12px; -fx-cursor: hand; -fx-padding: 4 8; -fx-underline: false; -fx-font-weight: 600;"
+                                        StackPane.alignment="CENTER_RIGHT" translateX="-8"/>
+                            </StackPane>
+                        </HBox>
                     </VBox>
                     
                     <Label fx:id="errorLabel" textFill="#e74c3c" style="-fx-font-size: 13px; -fx-font-weight: bold;" wrapText="true" maxWidth="340" prefWidth="340" minHeight="20"/>
