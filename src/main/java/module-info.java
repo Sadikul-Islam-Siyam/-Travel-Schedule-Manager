@@ -1,7 +1,7 @@
 module com.travelmanager {
-    requires javafx.controls;
-    requires javafx.fxml;
-    requires com.google.gson;
+    requires transitive javafx.controls;
+    requires transitive javafx.fxml;
+    requires transitive com.google.gson;
     requires java.sql;
 
     opens com.travelmanager to javafx.fxml;

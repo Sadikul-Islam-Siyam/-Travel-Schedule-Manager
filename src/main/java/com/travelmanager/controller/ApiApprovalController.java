@@ -1,6 +1,7 @@
 package com.travelmanager.controller;
 
 import com.travelmanager.database.DatabaseManager;
+import com.travelmanager.util.AuthenticationManager;
 import com.travelmanager.util.NavigationManager;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;

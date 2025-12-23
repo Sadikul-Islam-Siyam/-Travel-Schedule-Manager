@@ -117,6 +117,32 @@ public class ScheduleApiManager {
     }
     
     /**
+     * Search schedules between origin and destination
+     * @param origin Starting location
+     * @param destination Ending location
+     * @return List of schedules
+     */
+    public List<Schedule> searchSchedules(String origin, String destination) {
+        return fetchAllSchedules(origin, destination, LocalDate.now());
+    }
+    
+    /**
+     * Search schedules by type between origin and destination
+     * @param origin Starting location
+     * @param destination Ending location
+     * @param type Transport type (BUS or TRAIN)
+     * @return List of schedules
+     */
+    public List<Schedule> searchSchedulesByType(String origin, String destination, String type) {
+        if ("BUS".equalsIgnoreCase(type)) {
+            return fetchBusSchedules(origin, destination, LocalDate.now());
+        } else if ("TRAIN".equalsIgnoreCase(type)) {
+            return fetchTrainSchedules(origin, destination, LocalDate.now());
+        }
+        return new ArrayList<>();
+    }
+    
+    /**
      * Reload all providers (useful after configuration changes)
      */
     public void reloadProviders() {

@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MyPendingRequestsController {
@@ -374,6 +375,7 @@ public class MyPendingRequestsController {
             try {
                 databaseManager.updatePendingRoute(
                     updatedRow.getId(),
+                    currentUsername,
                     updatedRow.getRouteName(),
                     updatedRow.getOrigin(),
                     updatedRow.getDestination(),
@@ -381,7 +383,8 @@ public class MyPendingRequestsController {
                     updatedRow.getDurationMinutes(),
                     updatedRow.getPrice(),
                     updatedRow.getScheduleTime(),
-                    updatedRow.getMetadata()
+                    updatedRow.getMetadata(),
+                    updatedRow.getNotes()
                 );
                 showSuccess("Request updated successfully!");
                 loadMyPendingRequests();

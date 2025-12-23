@@ -87,8 +87,8 @@ public class ApiTestingToolController {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         
-        Label typeLabel = new Label(schedule.getTransportType());
-        String typeColor = schedule.getTransportType().equals("BUS") ? "#3498db" : "#e67e22";
+        Label typeLabel = new Label(schedule.getType());
+        String typeColor = schedule.getType().equals("BUS") ? "#3498db" : "#e67e22";
         typeLabel.setStyle("-fx-background-color: " + typeColor + "; -fx-text-fill: white; " +
                           "-fx-padding: 3 8; -fx-background-radius: 3; -fx-font-size: 11px;");
         

@@ -240,12 +240,12 @@ public class DatabaseManager {
         if (rs.next() && rs.getInt(1) == 0) {
             String insertUser = "INSERT INTO users (username, email, password_hash, password_salt, role, full_name, created_date, failed_login_attempts) VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
             
-            // Master Account: username=siyam2207031, password=2207031
+            // Master Account: username=master, password=11111111
             String masterSalt = generateSalt();
             PreparedStatement pstmt = conn.prepareStatement(insertUser);
-            pstmt.setString(1, "siyam2207031");
-            pstmt.setString(2, "siyam2207031@travelmanager.com");
-            pstmt.setString(3, hashPasswordWithSalt("2207031", masterSalt));
+            pstmt.setString(1, "master");
+            pstmt.setString(2, "master@travelmanager.com");
+            pstmt.setString(3, hashPasswordWithSalt("11111111", masterSalt));
             pstmt.setString(4, masterSalt);
             pstmt.setString(5, "MASTER");
             pstmt.setString(6, "Master Account");
