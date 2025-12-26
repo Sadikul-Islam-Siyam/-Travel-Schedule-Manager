@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
@@ -40,61 +39,15 @@
             <TableView fx:id="routesTable" VBox.vgrow="ALWAYS"
                        style="-fx-background-color: white; -fx-background-radius: 10;">
                 <columns>
-                    <TableColumn text="ID" prefWidth="50" style="-fx-alignment: CENTER;">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="id"/>
-                        </cellValueFactory>
-                    </TableColumn>
-                    
-                    <TableColumn text="Route Name" prefWidth="150">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="routeName"/>
-                        </cellValueFactory>
-                    </TableColumn>
-                    
-                    <TableColumn text="Origin" prefWidth="120">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="origin"/>
-                        </cellValueFactory>
-                    </TableColumn>
-                    
-                    <TableColumn text="Destination" prefWidth="120">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="destination"/>
-                        </cellValueFactory>
-                    </TableColumn>
-                    
-                    <TableColumn text="Type" prefWidth="80" style="-fx-alignment: CENTER;">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="transportType"/>
-                        </cellValueFactory>
-                    </TableColumn>
-                    
-                    <TableColumn text="Duration (min)" prefWidth="100" style="-fx-alignment: CENTER;">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="durationMinutes"/>
-                        </cellValueFactory>
-                    </TableColumn>
-                    
-                    <TableColumn text="Price" prefWidth="80" style="-fx-alignment: CENTER;">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="price"/>
-                        </cellValueFactory>
-                    </TableColumn>
-                    
-                    <TableColumn text="Status" prefWidth="80" style="-fx-alignment: CENTER;">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="status"/>
-                        </cellValueFactory>
-                    </TableColumn>
-                    
-                    <TableColumn text="Actions" prefWidth="218" style="-fx-alignment: CENTER;">
-                        <cellFactory>
-                            <callback>
-                                <fx:reference source="actionCellFactory"/>
-                            </callback>
-                        </cellFactory>
-                    </TableColumn>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="50" style="-fx-alignment: CENTER;"/>
+                    <TableColumn fx:id="routeNameColumn" text="Route Name" prefWidth="150"/>
+                    <TableColumn fx:id="originColumn" text="Origin" prefWidth="120"/>
+                    <TableColumn fx:id="destinationColumn" text="Destination" prefWidth="120"/>
+                    <TableColumn fx:id="typeColumn" text="Type" prefWidth="80" style="-fx-alignment: CENTER;"/>
+                    <TableColumn fx:id="durationColumn" text="Duration (min)" prefWidth="100" style="-fx-alignment: CENTER;"/>
+                    <TableColumn fx:id="priceColumn" text="Price" prefWidth="80" style="-fx-alignment: CENTER;"/>
+                    <TableColumn fx:id="statusColumn" text="Status" prefWidth="80" style="-fx-alignment: CENTER;"/>
+                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="218" style="-fx-alignment: CENTER;"/>
                 </columns>
             </TableView>
             

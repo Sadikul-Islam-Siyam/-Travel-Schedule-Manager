@@ -21,6 +21,16 @@ import java.util.Optional;
 
 public class ManageRoutesController {
     @FXML private TableView<RouteRow> routesTable;
+    @FXML private TableColumn<RouteRow, Integer> idColumn;
+    @FXML private TableColumn<RouteRow, String> routeNameColumn;
+    @FXML private TableColumn<RouteRow, String> originColumn;
+    @FXML private TableColumn<RouteRow, String> destinationColumn;
+    @FXML private TableColumn<RouteRow, String> typeColumn;
+    @FXML private TableColumn<RouteRow, Integer> durationColumn;
+    @FXML private TableColumn<RouteRow, Double> priceColumn;
+    @FXML private TableColumn<RouteRow, String> statusColumn;
+    @FXML private TableColumn<RouteRow, Void> actionsColumn;
+    
     @FXML private Label statusLabel;
     @FXML private Label emptyLabel;
     @FXML private VBox formPanel;
@@ -48,11 +58,25 @@ public class ManageRoutesController {
         
         statusLabel.setText("");
         
+        // Setup table columns
+        setupTableColumns();
+        
         // Set default values for combos
         transportTypeCombo.getSelectionModel().selectFirst();
         statusCombo.getSelectionModel().select("ACTIVE");
         
         loadRoutes();
+    }
+    
+    private void setupTableColumns() {
+        idColumn.setCellValueFactory(data -> data.getValue().idProperty.asObject());
+        routeNameColumn.setCellValueFactory(data -> data.getValue().routeNameProperty);
+        originColumn.setCellValueFactory(data -> data.getValue().originProperty);
+        destinationColumn.setCellValueFactory(data -> data.getValue().destinationProperty);
+        typeColumn.setCellValueFactory(data -> data.getValue().transportTypeProperty);
+        durationColumn.setCellValueFactory(data -> data.getValue().durationMinutesProperty.asObject());
+        priceColumn.setCellValueFactory(data -> data.getValue().priceProperty.asObject());
+        statusColumn.setCellValueFactory(data -> data.getValue().statusProperty);
     }
     
     private void loadRoutes() {
@@ -84,9 +108,6 @@ public class ManageRoutesController {
     }
     
     private void setupActionsColumn() {
-        @SuppressWarnings("unchecked")
-        TableColumn<RouteRow, Void> actionsColumn = (TableColumn<RouteRow, Void>) routesTable.getColumns().get(8);
-        
         actionsColumn.setCellFactory(new Callback<TableColumn<RouteRow, Void>, TableCell<RouteRow, Void>>() {
             @Override
             public TableCell<RouteRow, Void> call(TableColumn<RouteRow, Void> param) {
@@ -346,34 +367,34 @@ public class ManageRoutesController {
     
     // Row class for TableView
     public static class RouteRow {
-        private int id;
-        private String routeName;
-        private String origin;
-        private String destination;
-        private String transportType;
-        private int durationMinutes;
-        private double price;
-        private String status;
+        private final javafx.beans.property.SimpleIntegerProperty idProperty;
+        private final javafx.beans.property.SimpleStringProperty routeNameProperty;
+        private final javafx.beans.property.SimpleStringProperty originProperty;
+        private final javafx.beans.property.SimpleStringProperty destinationProperty;
+        private final javafx.beans.property.SimpleStringProperty transportTypeProperty;
+        private final javafx.beans.property.SimpleIntegerProperty durationMinutesProperty;
+        private final javafx.beans.property.SimpleDoubleProperty priceProperty;
+        private final javafx.beans.property.SimpleStringProperty statusProperty;
         
         public RouteRow(int id, String routeName, String origin, String destination,
                        String transportType, int durationMinutes, double price, String status) {
-            this.id = id;
-            this.routeName = routeName;
-            this.origin = origin;
-            this.destination = destination;
-            this.transportType = transportType;
-            this.durationMinutes = durationMinutes;
-            this.price = price;
-            this.status = status;
+            this.idProperty = new javafx.beans.property.SimpleIntegerProperty(id);
+            this.routeNameProperty = new javafx.beans.property.SimpleStringProperty(routeName);
+            this.originProperty = new javafx.beans.property.SimpleStringProperty(origin);
+            this.destinationProperty = new javafx.beans.property.SimpleStringProperty(destination);
+            this.transportTypeProperty = new javafx.beans.property.SimpleStringProperty(transportType);
+            this.durationMinutesProperty = new javafx.beans.property.SimpleIntegerProperty(durationMinutes);
+            this.priceProperty = new javafx.beans.property.SimpleDoubleProperty(price);
+            this.statusProperty = new javafx.beans.property.SimpleStringProperty(status);
         }
         
-        public int getId() { return id; }
-        public String getRouteName() { return routeName; }
-        public String getOrigin() { return origin; }
-        public String getDestination() { return destination; }
-        public String getTransportType() { return transportType; }
-        public int getDurationMinutes() { return durationMinutes; }
-        public double getPrice() { return price; }
-        public String getStatus() { return status; }
+        public int getId() { return idProperty.get(); }
+        public String getRouteName() { return routeNameProperty.get(); }
+        public String getOrigin() { return originProperty.get(); }
+        public String getDestination() { return destinationProperty.get(); }
+        public String getTransportType() { return transportTypeProperty.get(); }
+        public int getDurationMinutes() { return durationMinutesProperty.get(); }
+        public double getPrice() { return priceProperty.get(); }
+        public String getStatus() { return statusProperty.get(); }
     }
 }

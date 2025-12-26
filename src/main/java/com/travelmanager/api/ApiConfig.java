@@ -44,8 +44,9 @@ public class ApiConfig {
         properties.setProperty("train.api.endpoint", "https://api.example.com/train/schedules");
         properties.setProperty("train.api.key", "");
         
-        // Mock data for development
+        // Data source configuration
         properties.setProperty("use.mock.data", "true");
+        properties.setProperty("use.manual.data", "false");
         
         saveConfig();
     }
@@ -95,6 +96,14 @@ public class ApiConfig {
      */
     public static boolean useMockData() {
         return Boolean.parseBoolean(getProperty("use.mock.data", "true"));
+    }
+    
+    /**
+     * Check if manual data should be used
+     * @return true if manual data is enabled
+     */
+    public static boolean useManualData() {
+        return Boolean.parseBoolean(getProperty("use.manual.data", "false"));
     }
     
     /**

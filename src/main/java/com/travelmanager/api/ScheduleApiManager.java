@@ -36,19 +36,29 @@ public class ScheduleApiManager {
      * Initialize all available providers
      */
     private void initializeProviders() {
-        // Add mock providers for development
-        if (ApiConfig.useMockData()) {
+        // Priority 1: Use manual data if enabled (developer managed schedules)
+        if (ApiConfig.useManualData()) {
+            providers.add(new ManualBusApiProvider());
+            providers.add(new ManualTrainApiProvider());
+            System.out.println("Using manual schedule data from JSON file");
+        }
+        // Priority 2: Use mock providers for development
+        else if (ApiConfig.useMockData()) {
             providers.add(new MockBusApiProvider());
             providers.add(new MockTrainApiProvider());
+            System.out.println("Using mock schedule data (random generation)");
         }
-        
-        // TODO: Add real API providers when available
-        // if (ApiConfig.isBusApiEnabled()) {
-        //     providers.add(new RealBusApiProvider());
-        // }
-        // if (ApiConfig.isTrainApiEnabled()) {
-        //     providers.add(new RealTrainApiProvider());
-        // }
+        // Priority 3: Use real API providers when available
+        else {
+            // TODO: Add real API providers when available
+            // if (ApiConfig.isBusApiEnabled()) {
+            //     providers.add(new RealBusApiProvider());
+            // }
+            // if (ApiConfig.isTrainApiEnabled()) {
+            //     providers.add(new RealTrainApiProvider());
+            // }
+            System.out.println("No schedule providers configured - using defaults");
+        }
     }
     
     /**

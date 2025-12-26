@@ -148,6 +148,11 @@ public class HomeController {
     }
     
     @FXML
+    private void handleManageSchedules() {
+        NavigationManager.navigateTo("manage-schedules");
+    }
+    
+    @FXML
     private void handleRequestHistory() {
         NavigationManager.navigateTo("request-history");
     }
