@@ -1316,6 +1316,8 @@ public class DatabaseManager {
         public int getId() { return id; }
         public String getUsername() { return username; }
         public String getEmail() { return email; }
+        public String getPasswordHash() { return passwordHash; }
+        public String getPasswordSalt() { return passwordSalt; }
         public User.Role getRole() { return role; }
         public String getFullName() { return fullName; }
         public String getCreatedDate() { return createdDate; }

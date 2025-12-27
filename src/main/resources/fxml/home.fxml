@@ -131,38 +131,8 @@
                     </VBox>
                 </HBox>
                 
-                <!-- Second row: API Testing, Manage Schedules, and History -->
+                <!-- Second row: Request History -->
                 <HBox alignment="CENTER" spacing="30">
-                    <!-- API Testing Tool Card -->
-                    <VBox alignment="CENTER" spacing="15" styleClass="card" maxWidth="320" minWidth="250"
-                          style="-fx-background-color: white; -fx-padding: 35; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);">
-                        <Label text="🧪" style="-fx-font-size: 42px;"/>
-                        <Label text="API Testing">
-                            <font>
-                                <Font name="System Bold" size="18.0"/>
-                            </font>
-                        </Label>
-                        <Label text="Test route queries" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
-                        <Label text="before submission" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
-                        <Button text="Test API" onAction="#handleApiTesting"
-                                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 10 25; -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 5;"/>
-                    </VBox>
-                    
-                    <!-- Manage Schedules Card -->
-                    <VBox alignment="CENTER" spacing="15" styleClass="card" maxWidth="320" minWidth="250"
-                          style="-fx-background-color: white; -fx-padding: 35; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);">
-                        <Label text="📝" style="-fx-font-size: 42px;"/>
-                        <Label text="Manage Schedules">
-                            <font>
-                                <Font name="System Bold" size="18.0"/>
-                            </font>
-                        </Label>
-                        <Label text="Add, edit, and delete" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
-                        <Label text="bus and train schedules" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
-                        <Button text="Manage Schedules" onAction="#handleManageSchedules"
-                                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-padding: 10 25; -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 5;"/>
-                    </VBox>
-                    
                     <!-- Request History Card -->
                     <VBox alignment="CENTER" spacing="15" styleClass="card" maxWidth="320" minWidth="250"
                           style="-fx-background-color: white; -fx-padding: 35; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);">

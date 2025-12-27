@@ -87,73 +87,72 @@ public class RequestHistoryController {
     }
     
     private VBox createHistoryCard(DatabaseManager.RouteHistoryData record) {
-        VBox card = new VBox(10);
-        card.setPadding(new Insets(15));
-        card.setStyle("-fx-background-color: white; -fx-border-color: #d0d0d0; " +
-                     "-fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5;");
+        VBox card = new VBox(8);
+        card.setPadding(new Insets(12));
+        card.setStyle("-fx-background-color: white; -fx-border-color: #e0e0e0; " +
+                     "-fx-border-radius: 6; -fx-background-radius: 6; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 3, 0, 0, 1);");
         
-        // Header
-        HBox headerBox = new HBox(10);
-        headerBox.setAlignment(Pos.CENTER_LEFT);
+        // Main row with all info
+        HBox mainRow = new HBox(12);
+        mainRow.setAlignment(Pos.CENTER_LEFT);
+        
+        // Info section (left)
+        VBox infoBox = new VBox(3);
         
         Label routeNameLabel = new Label(record.getRouteName());
-        routeNameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #2c3e50;");
-        routeNameLabel.setWrapText(true);
+        routeNameLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
         
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+        // Build info line
+        StringBuilder infoBuilder = new StringBuilder();
+        if (!record.getChangeType().equals("DELETE")) {
+            infoBuilder.append(record.getOrigin()).append(" → ").append(record.getDestination()).append(" • ");
+        }
+        infoBuilder.append("Submitted: ").append(formatDate(record.getSubmittedDate()))
+                   .append(" • Reviewed: ").append(formatDate(record.getReviewedDate()))
+                   .append(" by ").append(record.getReviewedBy());
         
+        Label infoLabel = new Label(infoBuilder.toString());
+        infoLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #7f8c8d;");
+        
+        infoBox.getChildren().addAll(routeNameLabel, infoLabel);
+        
+        Region spacer1 = new Region();
+        HBox.setHgrow(spacer1, Priority.ALWAYS);
+        
+        // Change type badge
         Label changeTypeLabel = new Label(record.getChangeType());
         String changeColor = record.getChangeType().equals("ADD") ? "#27ae60" : 
                             (record.getChangeType().equals("DELETE") ? "#e74c3c" : "#f39c12");
         changeTypeLabel.setStyle("-fx-background-color: " + changeColor + "; -fx-text-fill: white; " +
-                                "-fx-padding: 4 10; -fx-background-radius: 3; -fx-font-size: 11px; -fx-font-weight: bold;");
+                               "-fx-padding: 3 8; -fx-background-radius: 3; -fx-font-size: 10px; -fx-font-weight: bold;");
         
+        // Status badge
         Label statusBadge = new Label(record.getStatus());
         String statusColor = record.getStatus().equals("APPROVED") ? "#27ae60" : "#e74c3c";
         statusBadge.setStyle("-fx-background-color: " + statusColor + "; -fx-text-fill: white; " +
-                            "-fx-padding: 4 10; -fx-background-radius: 3; -fx-font-size: 11px; -fx-font-weight: bold;");
+                            "-fx-padding: 3 8; -fx-background-radius: 3; -fx-font-size: 10px; -fx-font-weight: bold;");
         
-        headerBox.getChildren().addAll(routeNameLabel, spacer, changeTypeLabel, statusBadge);
+        mainRow.getChildren().addAll(infoBox, spacer1, changeTypeLabel, statusBadge);
+        card.getChildren().add(mainRow);
         
-        // Route details
-        if (!record.getChangeType().equals("DELETE")) {
-            Label routeLabel = new Label("📍 " + record.getOrigin() + " → " + record.getDestination());
-            routeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
-            card.getChildren().add(routeLabel);
-        }
-        
-        // Dates
-        HBox datesBox = new HBox(20);
-        
-        Label submittedLabel = new Label("Submitted: " + formatDate(record.getSubmittedDate()));
-        submittedLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #95a5a6;");
-        
-        Label reviewedLabel = new Label("Reviewed: " + formatDate(record.getReviewedDate()) + 
-                                       " by " + record.getReviewedBy());
-        reviewedLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #95a5a6;");
-        
-        datesBox.getChildren().addAll(submittedLabel, reviewedLabel);
-        
-        // Feedback section
+        // Feedback section (if exists, displayed below main row)
         if (record.getFeedback() != null && !record.getFeedback().isEmpty()) {
-            VBox feedbackBox = new VBox(5);
-            feedbackBox.setPadding(new Insets(10));
+            HBox feedbackBox = new HBox(8);
+            feedbackBox.setPadding(new Insets(8));
             feedbackBox.setStyle("-fx-background-color: #fff3cd; -fx-border-color: #ffc107; " +
                                "-fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;");
             
-            Label feedbackTitle = new Label("💬 Master Feedback:");
-            feedbackTitle.setStyle("-fx-font-weight: bold; -fx-font-size: 12px; -fx-text-fill: #856404;");
+            Label feedbackIcon = new Label("💬");
+            feedbackIcon.setStyle("-fx-font-size: 12px;");
             
             Label feedbackText = new Label(record.getFeedback());
-            feedbackText.setStyle("-fx-font-size: 12px; -fx-text-fill: #856404;");
+            feedbackText.setStyle("-fx-font-size: 11px; -fx-text-fill: #856404;");
             feedbackText.setWrapText(true);
+            HBox.setHgrow(feedbackText, Priority.ALWAYS);
             
-            feedbackBox.getChildren().addAll(feedbackTitle, feedbackText);
+            feedbackBox.getChildren().addAll(feedbackIcon, feedbackText);
             card.getChildren().add(feedbackBox);
         }
-        
-        card.getChildren().addAll(headerBox, datesBox);
         
         return card;
     }

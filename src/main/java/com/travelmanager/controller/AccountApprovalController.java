@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings("unused") // Reserved for future cell factory implementations
 public class AccountApprovalController {
     @FXML private VBox accountsContainer;
     @FXML private Label statusLabel;
@@ -77,63 +78,59 @@ public class AccountApprovalController {
     }
     
     private VBox createAccountCard(PendingUserRow user) {
-        VBox card = new VBox(10);
-        card.setPadding(new Insets(15));
+        VBox card = new VBox(8);
+        card.setPadding(new Insets(12, 15, 12, 15));
         card.setStyle("-fx-background-color: white; -fx-border-color: #d0d0d0; " +
-                     "-fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5;");
+                     "-fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;");
         
-        // Header with username and role badge
-        HBox headerBox = new HBox(10);
-        headerBox.setAlignment(Pos.CENTER_LEFT);
+        // Single row: Name + Role + Metadata + Buttons
+        HBox mainRow = new HBox(12);
+        mainRow.setAlignment(Pos.CENTER_LEFT);
         
-        Label usernameLabel = new Label(user.getUsername());
-        usernameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #2c3e50;");
+        // Left: Name and Email
+        VBox infoBox = new VBox(3);
+        Label nameLabel = new Label(user.getFullName());
+        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #2c3e50;");
         
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+        Label usernameEmailLabel = new Label(user.getUsername() + " • " + user.getEmail());
+        usernameEmailLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #7f8c8d;");
         
+        infoBox.getChildren().addAll(nameLabel, usernameEmailLabel);
+        
+        Region spacer1 = new Region();
+        HBox.setHgrow(spacer1, Priority.ALWAYS);
+        
+        // Role badge
         Label roleLabel = new Label(user.getRole());
         String roleColor = user.getRole().equals("MASTER") ? "#e74c3c" : 
                           (user.getRole().equals("DEVELOPER") ? "#f39c12" : "#3498db");
         roleLabel.setStyle("-fx-background-color: " + roleColor + "; -fx-text-fill: white; " +
-                          "-fx-padding: 4 10; -fx-background-radius: 3; -fx-font-size: 11px; -fx-font-weight: bold;");
+                          "-fx-padding: 3 8; -fx-background-radius: 3; -fx-font-size: 10px; -fx-font-weight: bold;");
         
-        Label idLabel = new Label("#" + user.getId());
-        idLabel.setStyle("-fx-text-fill: #95a5a6; -fx-font-size: 11px;");
+        // Status label (Pending)
+        Label statusLabel = new Label("⏳ PENDING");
+        statusLabel.setStyle("-fx-text-fill: #f39c12; -fx-font-size: 10px; -fx-font-weight: bold;");
         
-        headerBox.getChildren().addAll(usernameLabel, spacer, roleLabel, idLabel);
+        Region spacer2 = new Region();
         
-        // Full name
-        Label fullNameLabel = new Label("👤 " + user.getFullName());
-        fullNameLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
-        
-        // Email
-        Label emailLabel = new Label("✉ " + user.getEmail());
-        emailLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #7f8c8d;");
-        
-        // Created date
-        Label dateLabel = new Label("📅 Registered: " + user.getCreatedDate());
-        dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #95a5a6; -fx-font-style: italic;");
-        
-        // Action buttons
-        HBox buttonBox = new HBox(10);
+        // Action buttons (compact)
+        HBox buttonBox = new HBox(6);
         buttonBox.setAlignment(Pos.CENTER_RIGHT);
-        buttonBox.setPadding(new Insets(5, 0, 0, 0));
         
         Button approveBtn = new Button("✓ Approve");
-        approveBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 12px; " +
-                           "-fx-padding: 8 20; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-weight: bold;");
+        approveBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 11px; " +
+                           "-fx-padding: 5 12; -fx-cursor: hand; -fx-background-radius: 3;");
         approveBtn.setOnAction(e -> handleApprove(user));
         
         Button rejectBtn = new Button("✗ Reject");
-        rejectBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 12px; " +
-                          "-fx-padding: 8 20; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-weight: bold;");
+        rejectBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 11px; " +
+                          "-fx-padding: 5 12; -fx-cursor: hand; -fx-background-radius: 3;");
         rejectBtn.setOnAction(e -> handleReject(user));
         
         buttonBox.getChildren().addAll(approveBtn, rejectBtn);
         
-        // Add all elements to card
-        card.getChildren().addAll(headerBox, fullNameLabel, emailLabel, dateLabel, buttonBox);
+        mainRow.getChildren().addAll(infoBox, spacer1, roleLabel, statusLabel, spacer2, buttonBox);
+        card.getChildren().add(mainRow);
         
         return card;
     }

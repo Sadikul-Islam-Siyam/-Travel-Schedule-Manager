@@ -3,6 +3,7 @@ package com.travelmanager.controller;
 import com.travelmanager.database.DatabaseManager;
 import com.travelmanager.model.Route;
 import com.travelmanager.model.Schedule;
+// Reserved for future session validation in plan management
 import com.travelmanager.util.AuthenticationManager;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -20,6 +21,7 @@ import java.util.Optional;
 /**
  * Controller for viewing saved plans
  */
+@SuppressWarnings("unused") // Reserved import for session validation
 public class SavedPlansController {
 
     @FXML

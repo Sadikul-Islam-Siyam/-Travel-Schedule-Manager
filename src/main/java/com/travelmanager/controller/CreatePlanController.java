@@ -5,7 +5,10 @@ import com.travelmanager.model.Schedule;
 import com.travelmanager.model.TrainSchedule;
 import com.travelmanager.service.ScheduleService;
 import com.travelmanager.util.AutoCompletePopup;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -31,8 +34,7 @@ public class CreatePlanController {
     @FXML private RadioButton busRadio;
     @FXML private RadioButton trainRadio;
     @FXML private RadioButton allRadio;
-    @FXML private VBox scheduleContainer;
-    @FXML private ScrollPane scheduleScrollPane;
+    @FXML private ListView<Schedule> scheduleListView;
     @FXML private Label searchResultCountLabel;
     
     @FXML private VBox planContainer;
@@ -46,11 +48,17 @@ public class CreatePlanController {
     private ScheduleService scheduleService;
     private List<Schedule> currentPlan;
     private List<String> allLocations;
-    private Schedule selectedSchedule;
+    private Schedule selectedSchedule; // Reserved for schedule selection feature
+    // AutoComplete popups attach listeners automatically, no direct access needed
+    @SuppressWarnings("unused")
     private AutoCompletePopup startAutoComplete;
+    @SuppressWarnings("unused")
     private AutoCompletePopup destAutoComplete;
     private ToggleGroup transportTypeGroup;
     private List<Schedule> lastSearchResults;
+    
+    public Schedule getSelectedSchedule() { return selectedSchedule; }
+    public void setSelectedSchedule(Schedule schedule) { this.selectedSchedule = schedule; }
 
     public void setSchedules(List<Schedule> schedules) {
         if (schedules != null && !schedules.isEmpty()) {
@@ -92,6 +100,20 @@ public class CreatePlanController {
         // Set default date to today
         datePicker.setValue(LocalDate.now());
         
+        // Setup ListView with custom cell factory
+        scheduleListView.setCellFactory(param -> new ScheduleListCell());
+        scheduleListView.setPlaceholder(new Label("No schedules found. Search to see available routes."));
+        
+        // Handle selection in ListView
+        scheduleListView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 1) {
+                Schedule selectedSchedule = scheduleListView.getSelectionModel().getSelectedItem();
+                if (selectedSchedule != null) {
+                    handleScheduleSelection(selectedSchedule);
+                }
+            }
+        });
+        
         // Initial button state
         summarizeButton.setDisable(true);
     }
@@ -114,7 +136,7 @@ public class CreatePlanController {
         
         // Show loading indicator
         searchResultCountLabel.setText("Searching schedules...");
-        scheduleContainer.getChildren().clear();
+        scheduleListView.getItems().clear();
         
         List<Schedule> results;
         
@@ -167,7 +189,7 @@ public class CreatePlanController {
     private void handleReset() {
         currentPlan.clear();
         lastSearchResults.clear();
-        scheduleContainer.getChildren().clear();
+        scheduleListView.getItems().clear();
         searchResultCountLabel.setText("");
         updatePlanView();
         startField.clear();
@@ -310,131 +332,105 @@ public class CreatePlanController {
     }
     
     private void displaySearchResults(List<Schedule> results) {
-        scheduleContainer.getChildren().clear();
         searchResultCountLabel.setText(results.size() + " Result" + (results.size() != 1 ? "s" : ""));
         
-        if (results.isEmpty()) {
-            Label emptyLabel = new Label("No schedules found. Try different search criteria.");
-            emptyLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #7f8c8d; -fx-padding: 20;");
-            scheduleContainer.getChildren().add(emptyLabel);
+        ObservableList<Schedule> scheduleList = FXCollections.observableArrayList(results);
+        scheduleListView.setItems(scheduleList);
+    }
+    
+    private void handleScheduleSelection(Schedule schedule) {
+        // Check if this schedule is already in the plan
+        if (currentPlan.contains(schedule)) {
+            showAlert("This schedule is already in your travel plan.");
             return;
         }
-        
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM");
-        
-        for (Schedule s : results) {
-            // Create card for each schedule
-            VBox card = new VBox(5);
-            card.setStyle("-fx-background-color: white; -fx-padding: 12; -fx-border-color: #d0d0d0; " +
-                         "-fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;");
+        currentPlan.add(schedule);
+        updatePlanView();
+        startField.setText(schedule.getDestination());
+        destinationField.clear();
+        // Clear search results after selection
+        scheduleListView.getItems().clear();
+        searchResultCountLabel.setText("");
+        lastSearchResults.clear();
+        summarizeButton.setDisable(false);
+    }
+    
+    /**
+     * Custom ListCell for displaying Schedule items in compact format
+     */
+    private class ScheduleListCell extends ListCell<Schedule> {
+        @Override
+        protected void updateItem(Schedule schedule, boolean empty) {
+            super.updateItem(schedule, empty);
             
-            // Add hover effect
-            card.setOnMouseEntered(e -> card.setStyle("-fx-background-color: #f0f8ff; -fx-padding: 12; -fx-border-color: #3498db; " +
-                         "-fx-border-width: 2; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;"));
-            card.setOnMouseExited(e -> card.setStyle("-fx-background-color: white; -fx-padding: 12; -fx-border-color: #d0d0d0; " +
-                         "-fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;"));
+            if (empty || schedule == null) {
+                setGraphic(null);
+                setStyle("");
+                return;
+            }
             
-            // Click to add to plan
-            card.setOnMouseClicked(e -> {
-                // Check if this schedule is already in the plan
-                if (currentPlan.contains(s)) {
-                    showAlert("This schedule is already in your travel plan.");
-                    return;
-                }
-                currentPlan.add(s);
-                updatePlanView();
-                startField.setText(s.getDestination());
-                destinationField.clear();
-                // Clear search results after selection
-                scheduleContainer.getChildren().clear();
-                searchResultCountLabel.setText("");
-                lastSearchResults.clear();
-                summarizeButton.setDisable(false);
-            });
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
             
-            // Type badge and header
-            HBox header = new HBox(10);
-            header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+            // Main container
+            HBox mainRow = new HBox(12);
+            mainRow.setAlignment(Pos.CENTER_LEFT);
+            mainRow.setStyle("-fx-padding: 8; -fx-background-color: white; -fx-cursor: hand;");
             
-            Label typeLabel = new Label(s.getType());
+            // Type badge
+            Label typeLabel = new Label(schedule.getType());
             typeLabel.setStyle("-fx-background-color: " + 
-                              (s instanceof BusSchedule ? "#3498db" : "#e74c3c") + 
-                              "; -fx-text-fill: white; -fx-padding: 3 10; -fx-background-radius: 3; -fx-font-size: 11px; -fx-font-weight: bold;");
+                              (schedule instanceof BusSchedule ? "#3498db" : "#e74c3c") + 
+                              "; -fx-text-fill: white; -fx-padding: 3 8; -fx-background-radius: 3; -fx-font-size: 10px; -fx-font-weight: bold;");
+            typeLabel.setMinWidth(50);
             
-            header.getChildren().add(typeLabel);
+            // Info section
+            VBox infoBox = new VBox(3);
+            HBox.setHgrow(infoBox, Priority.ALWAYS);
             
-            // Transport name/company
-            String transportName = "";
-            if (s instanceof BusSchedule) {
-                BusSchedule bus = (BusSchedule) s;
+            // Transport name
+            String transportName;
+            if (schedule instanceof BusSchedule) {
+                BusSchedule bus = (BusSchedule) schedule;
                 transportName = bus.getBusCompany() + " (" + bus.getBusType() + ")";
-            } else if (s instanceof TrainSchedule) {
-                TrainSchedule train = (TrainSchedule) s;
+            } else if (schedule instanceof TrainSchedule) {
+                TrainSchedule train = (TrainSchedule) schedule;
                 transportName = train.getTrainName() + " (" + train.getTrainNumber() + ")";
+            } else {
+                transportName = "Unknown";
             }
             Label nameLabel = new Label(transportName);
-            nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #2c3e50;");
-            nameLabel.setWrapText(true);
+            nameLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
             
-            // Route
-            HBox routeBox = new HBox(8);
-            routeBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-            Label originLabel = new Label(s.getOrigin());
-            originLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #27ae60; -fx-font-weight: bold;");
-            Label arrowLabel = new Label("→");
-            arrowLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #95a5a6;");
-            Label destLabel = new Label(s.getDestination());
-            destLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #e74c3c; -fx-font-weight: bold;");
-            routeBox.getChildren().addAll(originLabel, arrowLabel, destLabel);
-            
-            // Time info
-            HBox timeBox = new HBox(15);
-            timeBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-            
-            VBox departBox = new VBox(2);
-            Label departLabelTitle = new Label("Departure");
-            departLabelTitle.setStyle("-fx-font-size: 10px; -fx-text-fill: #7f8c8d;");
-            Label departTime = new Label(s.getDepartureTime().format(dateFormatter) + " " + s.getDepartureTime().format(timeFormatter));
-            departTime.setStyle("-fx-font-size: 12px; -fx-text-fill: #2c3e50; -fx-font-weight: bold;");
-            departBox.getChildren().addAll(departLabelTitle, departTime);
-            
-            VBox arriveBox = new VBox(2);
-            Label arriveLabelTitle = new Label("Arrival");
-            arriveLabelTitle.setStyle("-fx-font-size: 10px; -fx-text-fill: #7f8c8d;");
-            Label arriveTime = new Label(s.getArrivalTime().format(dateFormatter) + " " + s.getArrivalTime().format(timeFormatter));
-            arriveTime.setStyle("-fx-font-size: 12px; -fx-text-fill: #2c3e50; -fx-font-weight: bold;");
-            arriveBox.getChildren().addAll(arriveLabelTitle, arriveTime);
-            
-            timeBox.getChildren().addAll(departBox, arriveBox);
-            
-            // Calculate duration
-            long minutes = Duration.between(s.getDepartureTime(), s.getArrivalTime()).toMinutes();
+            // Route and time in one line
+            long minutes = Duration.between(schedule.getDepartureTime(), schedule.getArrivalTime()).toMinutes();
             long hours = minutes / 60;
             long mins = minutes % 60;
-            String durationStr = hours + "h " + mins + "m";
             
-            // Bottom info bar
-            HBox bottomBox = new HBox(15);
-            bottomBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-            bottomBox.setStyle("-fx-padding: 8 0 0 0;");
+            String detailsText = String.format("%s → %s • %s-%s • %dh %dm", 
+                schedule.getOrigin(), 
+                schedule.getDestination(),
+                schedule.getDepartureTime().format(timeFormatter),
+                schedule.getArrivalTime().format(timeFormatter),
+                hours, mins);
+            Label detailsLabel = new Label(detailsText);
+            detailsLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #7f8c8d;");
             
-            Label fareLabel = new Label("৳" + String.format("%.2f", s.getFare()));
-            fareLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #27ae60;");
+            infoBox.getChildren().addAll(nameLabel, detailsLabel);
             
-            Label durationLabel = new Label("⏱ " + durationStr);
-            durationLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #7f8c8d;");
+            // Fare label
+            Label fareLabel = new Label("৳" + String.format("%.0f", schedule.getFare()));
+            fareLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #27ae60;");
+            fareLabel.setMinWidth(70);
+            fareLabel.setAlignment(Pos.CENTER_RIGHT);
             
-            Region spacer = new Region();
-            HBox.setHgrow(spacer, Priority.ALWAYS);
+            mainRow.getChildren().addAll(typeLabel, infoBox, fareLabel);
             
-            Label clickHint = new Label("Click to add ➜");
-            clickHint.setStyle("-fx-font-size: 11px; -fx-text-fill: #3498db; -fx-font-weight: bold;");
+            // Hover effect
+            mainRow.setOnMouseEntered(e -> mainRow.setStyle("-fx-padding: 8; -fx-background-color: #e3f2fd; -fx-cursor: hand;"));
+            mainRow.setOnMouseExited(e -> mainRow.setStyle("-fx-padding: 8; -fx-background-color: white; -fx-cursor: hand;"));
             
-            bottomBox.getChildren().addAll(fareLabel, durationLabel, spacer, clickHint);
-            
-            card.getChildren().addAll(header, nameLabel, routeBox, timeBox, bottomBox);
-            scheduleContainer.getChildren().add(card);
+            setGraphic(mainRow);
+            setStyle("-fx-padding: 0; -fx-background-color: transparent;");
         }
     }
 

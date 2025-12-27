@@ -14,11 +14,13 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 import java.sql.SQLException;
+// Reserved for future timestamp formatting features
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings("unused") // Reserved imports for future timestamp features
 public class ManageRoutesController {
     @FXML private TableView<RouteRow> routesTable;
     @FXML private TableColumn<RouteRow, Integer> idColumn;
@@ -57,6 +59,10 @@ public class ManageRoutesController {
         routesList = FXCollections.observableArrayList();
         
         statusLabel.setText("");
+        
+        // Initialize ComboBoxes
+        transportTypeCombo.getItems().addAll("BUS", "TRAIN", "FLIGHT", "FERRY");
+        statusCombo.getItems().addAll("ACTIVE", "INACTIVE", "MAINTENANCE");
         
         // Setup table columns
         setupTableColumns();

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 import com.travelmanager.model.BusSchedule;
+// Reserved for polymorphic schedule handling
 import com.travelmanager.model.Schedule;
 import com.travelmanager.model.TrainSchedule;
 
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
  * Manages manual schedule data stored in JSON format
  * Handles loading, saving, adding, editing, and deleting schedules
  */
+@SuppressWarnings("unused") // Reserved import for polymorphic schedule handling
 public class ScheduleDataManager {
     
     private static final String DATA_FILE = "schedules-data.json";
@@ -235,12 +237,13 @@ public class ScheduleDataManager {
     
     /**
      * Inner class to hold schedule data structure
+     * Made public for Gson accessibility
      */
-    private static class ScheduleData {
-        List<BusSchedule> busSchedules;
-        List<TrainSchedule> trainSchedules;
+    public static class ScheduleData {
+        public List<BusSchedule> busSchedules;
+        public List<TrainSchedule> trainSchedules;
         
-        ScheduleData() {
+        public ScheduleData() {
             this.busSchedules = new ArrayList<>();
             this.trainSchedules = new ArrayList<>();
         }

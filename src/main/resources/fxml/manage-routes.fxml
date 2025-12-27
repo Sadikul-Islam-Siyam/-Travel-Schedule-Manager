@@ -87,16 +87,7 @@
             
             <VBox spacing="5">
                 <Label text="Transport Type *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #34495e;"/>
-                <ComboBox fx:id="transportTypeCombo" promptText="Select type" prefWidth="300">
-                    <items>
-                        <javafx.collections.FXCollections fx:factory="observableArrayList">
-                            <String fx:value="BUS"/>
-                            <String fx:value="TRAIN"/>
-                            <String fx:value="FLIGHT"/>
-                            <String fx:value="FERRY"/>
-                        </javafx.collections.FXCollections>
-                    </items>
-                </ComboBox>
+                <ComboBox fx:id="transportTypeCombo" promptText="Select type" prefWidth="300"/>
             </VBox>
             
             <VBox spacing="5">
@@ -116,15 +107,7 @@
             
             <VBox spacing="5">
                 <Label text="Status" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #34495e;"/>
-                <ComboBox fx:id="statusCombo" promptText="Select status" prefWidth="300">
-                    <items>
-                        <javafx.collections.FXCollections fx:factory="observableArrayList">
-                            <String fx:value="ACTIVE"/>
-                            <String fx:value="INACTIVE"/>
-                            <String fx:value="MAINTENANCE"/>
-                        </javafx.collections.FXCollections>
-                    </items>
-                </ComboBox>
+                <ComboBox fx:id="statusCombo" promptText="Select status" prefWidth="300"/>
             </VBox>
             
             <VBox spacing="5">

@@ -1,10 +1,11 @@
 package com.travelmanager.controller;
 
-import com.travelmanager.api.ManualScheduleService;
 import com.travelmanager.api.ScheduleDataManager;
+import com.travelmanager.exception.ValidationException;
 import com.travelmanager.model.BusSchedule;
 import com.travelmanager.model.Schedule;
 import com.travelmanager.model.TrainSchedule;
+import com.travelmanager.service.ScheduleManagementService;
 import com.travelmanager.util.NavigationManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -61,7 +62,7 @@ public class ManageSchedulesController {
     
     @FXML private Button saveButton;
     
-    private ManualScheduleService scheduleService;
+    private ScheduleManagementService scheduleManagementService;
     private ScheduleDataManager dataManager;
     private ObservableList<ScheduleRow> scheduleData;
     private boolean isEditMode = false;
@@ -69,7 +70,7 @@ public class ManageSchedulesController {
     
     @FXML
     public void initialize() {
-        scheduleService = ManualScheduleService.getInstance();
+        scheduleManagementService = new ScheduleManagementService();
         dataManager = ScheduleDataManager.getInstance();
         scheduleData = FXCollections.observableArrayList();
         
@@ -100,6 +101,12 @@ public class ManageSchedulesController {
     }
     
     private void setupForm() {
+        // Initialize ComboBoxes with items
+        filterTypeCombo.getItems().addAll("ALL", "BUS", "TRAIN");
+        scheduleTypeCombo.getItems().addAll("BUS", "TRAIN");
+        busTypeCombo.getItems().addAll("AC", "Non-AC", "Sleeper", "Deluxe", "AC Sleeper");
+        trainClassCombo.getItems().addAll("AC", "First Class", "Snigdha", "S_Chair", "Shovan");
+        
         // Set default values
         scheduleTypeCombo.setValue("BUS");
         updateFormFieldsVisibility("BUS");
@@ -249,18 +256,12 @@ public class ManageSchedulesController {
             String scheduleId = selected.idProperty.get();
             String type = selected.typeProperty.get();
             
-            boolean deleted = false;
-            if ("BUS".equals(type)) {
-                deleted = scheduleService.deleteBusSchedule(scheduleId);
-            } else if ("TRAIN".equals(type)) {
-                deleted = scheduleService.deleteTrainSchedule(scheduleId);
-            }
-            
-            if (deleted) {
+            try {
+                scheduleManagementService.deleteSchedule(scheduleId, type);
                 showAlert(Alert.AlertType.INFORMATION, "Success", "Schedule deleted successfully!");
                 loadSchedules();
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Error", "Failed to delete schedule.");
+            } catch (ValidationException e) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to delete schedule: " + e.getMessage());
             }
         }
     }
@@ -268,7 +269,7 @@ public class ManageSchedulesController {
     @FXML
     private void handleSave() {
         try {
-            // Validate inputs
+            // Validate inputs first (basic UI validation)
             if (!validateInputs()) {
                 return;
             }
@@ -293,45 +294,39 @@ public class ManageSchedulesController {
             
             String scheduleType = scheduleTypeCombo.getValue();
             
-            // Save based on type
-            boolean success = false;
+            // Create schedule object based on type
+            Schedule schedule;
             if ("BUS".equals(scheduleType)) {
                 String company = companyField.getText().trim();
                 String busType = busTypeCombo.getValue();
-                
-                if (isEditMode) {
-                    success = scheduleService.updateBusSchedule(scheduleId, origin, destination,
-                        departureTime, arrivalTime, fare, seats, company, busType);
-                } else {
-                    scheduleService.createBusSchedule(scheduleId, origin, destination,
-                        departureTime, arrivalTime, fare, seats, company, busType);
-                    success = true;
-                }
+                schedule = new BusSchedule(scheduleId, origin, destination,
+                    departureTime, arrivalTime, fare, seats, company, busType);
             } else if ("TRAIN".equals(scheduleType)) {
                 String trainName = trainNameField.getText().trim();
                 String trainClass = trainClassCombo.getValue();
-                
-                if (isEditMode) {
-                    success = scheduleService.updateTrainSchedule(scheduleId, origin, destination,
-                        departureTime, arrivalTime, fare, seats, trainName, trainClass);
-                } else {
-                    scheduleService.createTrainSchedule(scheduleId, origin, destination,
-                        departureTime, arrivalTime, fare, seats, trainName, trainClass);
-                    success = true;
-                }
+                schedule = new TrainSchedule(scheduleId, origin, destination,
+                    departureTime, arrivalTime, fare, seats, trainName, "", trainClass);
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Invalid schedule type");
+                return;
             }
             
-            if (success) {
-                showAlert(Alert.AlertType.INFORMATION, "Success", 
-                    isEditMode ? "Schedule updated successfully!" : "Schedule created successfully!");
-                loadSchedules();
-                handleClearForm();
+            // Save or update using service (includes validation)
+            if (isEditMode) {
+                scheduleManagementService.updateSchedule(schedule);
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Schedule updated successfully!");
             } else {
-                showAlert(Alert.AlertType.ERROR, "Error", "Failed to save schedule.");
+                scheduleManagementService.addSchedule(schedule);
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Schedule created successfully!");
             }
+            
+            loadSchedules();
+            handleClearForm();
             
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter valid numbers for time, fare, and seats.");
+        } catch (ValidationException e) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Error", "An error occurred: " + e.getMessage());
             e.printStackTrace();

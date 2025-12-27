@@ -72,89 +72,67 @@ public class ApiApprovalController {
     }
     
     private VBox createChangeCard(PendingChangeRow row) {
-        VBox card = new VBox(10);
-        card.setPadding(new Insets(15));
+        VBox card = new VBox(8);
+        card.setPadding(new Insets(12, 15, 12, 15));
         card.setStyle("-fx-background-color: white; -fx-border-color: #d0d0d0; " +
-                     "-fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5;");
+                     "-fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;");
         
-        // Header with route name and change type badge
-        HBox headerBox = new HBox(10);
-        headerBox.setAlignment(Pos.CENTER_LEFT);
+        // Single compact row: Route Name + Details + Type Badge + Buttons
+        HBox mainRow = new HBox(12);
+        mainRow.setAlignment(Pos.CENTER_LEFT);
         
+        // Left: Route Name and Origin → Destination
+        VBox infoBox = new VBox(3);
         Label routeNameLabel = new Label(row.getRouteName());
-        routeNameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #2c3e50;");
-        routeNameLabel.setWrapText(true);
+        routeNameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #2c3e50;");
         
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+        String detailsText = "";
+        if (!row.getChangeType().equals("DELETE")) {
+            detailsText = row.getOrigin() + " → " + row.getDestination() + " • " + 
+                         row.getTransportType() + " • " + row.getDurationMinutes() + "min • ৳" + 
+                         String.format("%.0f", row.getPrice());
+        } else {
+            detailsText = "Deletion request";
+        }
+        Label detailsLabel = new Label(detailsText);
+        detailsLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #7f8c8d;");
         
+        infoBox.getChildren().addAll(routeNameLabel, detailsLabel);
+        
+        Region spacer1 = new Region();
+        HBox.setHgrow(spacer1, Priority.ALWAYS);
+        
+        // Change type badge
         Label changeTypeLabel = new Label(row.getChangeType());
         String changeColor = row.getChangeType().equals("ADD") ? "#27ae60" : 
                             (row.getChangeType().equals("DELETE") ? "#e74c3c" : "#f39c12");
         changeTypeLabel.setStyle("-fx-background-color: " + changeColor + "; -fx-text-fill: white; " +
-                                "-fx-padding: 4 10; -fx-background-radius: 3; -fx-font-size: 11px; -fx-font-weight: bold;");
+                                "-fx-padding: 3 8; -fx-background-radius: 3; -fx-font-size: 10px; -fx-font-weight: bold;");
         
-        Label idLabel = new Label("#" + row.getId());
-        idLabel.setStyle("-fx-text-fill: #95a5a6; -fx-font-size: 11px;");
+        // Submitted by
+        Label submittedLabel = new Label("by " + row.getSubmittedBy());
+        submittedLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #95a5a6;");
         
-        headerBox.getChildren().addAll(routeNameLabel, spacer, changeTypeLabel, idLabel);
+        Region spacer2 = new Region();
         
-        // Route details (origin and destination)
-        if (!row.getChangeType().equals("DELETE")) {
-            Label routeLabel = new Label("📍 " + row.getOrigin() + " → " + row.getDestination());
-            routeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
-            card.getChildren().add(routeLabel);
-        }
-        
-        // Additional info row
-        HBox infoBox = new HBox(20);
-        infoBox.setAlignment(Pos.CENTER_LEFT);
-        
-        if (!row.getChangeType().equals("DELETE")) {
-            Label typeLabel = new Label("🚌 " + row.getTransportType());
-            typeLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #555;");
-            
-            Label durationLabel = new Label("⏱ " + row.getDurationMinutes() + " min");
-            durationLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #555;");
-            
-            Label priceLabel = new Label("৳" + String.format("%.2f", row.getPrice()));
-            priceLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #27ae60; -fx-font-weight: bold;");
-            
-            infoBox.getChildren().addAll(typeLabel, durationLabel, priceLabel);
-        }
-        
-        // Submission info
-        Label submissionLabel = new Label("Submitted by: " + row.getSubmittedBy() + " • " + row.getSubmittedDate());
-        submissionLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #95a5a6; -fx-font-style: italic;");
-        
-        // Action buttons
-        HBox buttonBox = new HBox(10);
+        // Action buttons (compact)
+        HBox buttonBox = new HBox(6);
         buttonBox.setAlignment(Pos.CENTER_RIGHT);
-        buttonBox.setPadding(new Insets(5, 0, 0, 0));
-        
-        Button detailsBtn = new Button("Details");
-        detailsBtn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 12px; " +
-                           "-fx-padding: 6 15; -fx-cursor: hand; -fx-background-radius: 4;");
-        detailsBtn.setOnAction(e -> showDetailsDialog(row));
         
         Button approveBtn = new Button("✓ Approve");
-        approveBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 12px; " +
-                           "-fx-padding: 8 20; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-weight: bold;");
+        approveBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 11px; " +
+                           "-fx-padding: 5 12; -fx-cursor: hand; -fx-background-radius: 3;");
         approveBtn.setOnAction(e -> handleApprove(row));
         
         Button rejectBtn = new Button("✗ Reject");
-        rejectBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 12px; " +
-                          "-fx-padding: 8 20; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-weight: bold;");
+        rejectBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 11px; " +
+                          "-fx-padding: 5 12; -fx-cursor: hand; -fx-background-radius: 3;");
         rejectBtn.setOnAction(e -> handleReject(row));
         
-        buttonBox.getChildren().addAll(detailsBtn, approveBtn, rejectBtn);
+        buttonBox.getChildren().addAll(approveBtn, rejectBtn);
         
-        // Add all elements to card
-        card.getChildren().addAll(headerBox);
-        if (infoBox.getChildren().size() > 0) {
-            card.getChildren().add(infoBox);
-        }
-        card.getChildren().addAll(submissionLabel, buttonBox);
+        mainRow.getChildren().addAll(infoBox, spacer1, changeTypeLabel, submittedLabel, spacer2, buttonBox);
+        card.getChildren().add(mainRow);
         
         return card;
     }
@@ -169,6 +147,7 @@ public class ApiApprovalController {
         }
     }
     
+    @SuppressWarnings("unused")
     private void showDetailsDialog(PendingChangeRow row) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Change Details");
@@ -181,7 +160,9 @@ public class ApiApprovalController {
         
         if ("DELETE".equals(row.getChangeType())) {
             details.append("Route to Delete:\n");
-            details.append("  ID: ").append(row.getOriginalRouteId()).append("\n");
+            if (row.getOriginalRouteId() != null) {
+                details.append("  ID: ").append(row.getOriginalRouteId()).append("\n");
+            }
             details.append("  Name: ").append(row.getRouteName()).append("\n");
         } else {
             details.append("Route Name: ").append(row.getRouteName()).append("\n");
@@ -196,7 +177,7 @@ public class ApiApprovalController {
                 details.append("Metadata: ").append(row.getMetadata()).append("\n");
             }
             
-            if ("UPDATE".equals(row.getChangeType())) {
+            if ("UPDATE".equals(row.getChangeType()) && row.getOriginalRouteId() != null) {
                 details.append("\nOriginal Route ID: ").append(row.getOriginalRouteId()).append("\n");
             }
         }
@@ -321,7 +302,7 @@ public class ApiApprovalController {
         private final double price;
         private final String scheduleTime;
         private final String metadata;
-        private final int originalRouteId;
+        private final Integer originalRouteId;
         private final String submittedBy;
         private final String submittedDate;
         private final String notes;
@@ -329,7 +310,7 @@ public class ApiApprovalController {
         public PendingChangeRow(int id, String changeType, String routeName, String origin, 
                                String destination, String transportType, int durationMinutes,
                                double price, String scheduleTime, String metadata,
-                               int originalRouteId, String submittedBy, String submittedDate, String notes) {
+                               Integer originalRouteId, String submittedBy, String submittedDate, String notes) {
             this.id = id;
             this.changeType = changeType;
             this.routeName = routeName;
@@ -357,7 +338,7 @@ public class ApiApprovalController {
         public double getPrice() { return price; }
         public String getScheduleTime() { return scheduleTime; }
         public String getMetadata() { return metadata; }
-        public int getOriginalRouteId() { return originalRouteId; }
+        public Integer getOriginalRouteId() { return originalRouteId; }
         public String getSubmittedBy() { return submittedBy; }
         public String getSubmittedDate() { return submittedDate; }
         public String getNotes() { return notes; }

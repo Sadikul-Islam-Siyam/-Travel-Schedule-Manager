@@ -56,7 +56,10 @@ public class EditPlanController {
     private ScheduleService scheduleService;
     private ToggleGroup transportTypeGroup;
     private List<String> allLocations;
+    // AutoComplete popups attach listeners automatically, no direct access needed
+    @SuppressWarnings("unused")
     private AutoCompletePopup startAutoComplete;
+    @SuppressWarnings("unused")
     private AutoCompletePopup destAutoComplete;
 
     public void setPlanData(String planName, Route route) {

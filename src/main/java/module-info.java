@@ -14,4 +14,7 @@ module com.travelmanager {
     exports com.travelmanager.service;
     exports com.travelmanager.util;
     exports com.travelmanager.database;
+    exports com.travelmanager.domain;
+    exports com.travelmanager.exception;
+    exports com.travelmanager.api;
 }

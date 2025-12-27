@@ -76,10 +76,8 @@
                         <Label text="Available Schedules" style="-fx-font-weight: bold; -fx-font-size: 14px;" HBox.hgrow="ALWAYS"/>
                         <Label fx:id="searchResultCountLabel" style="-fx-text-fill: #3498db; -fx-font-size: 12px; -fx-font-weight: bold;"/>
                     </HBox>
-                    <ScrollPane fx:id="scheduleScrollPane" VBox.vgrow="ALWAYS" fitToWidth="true"
-                               style="-fx-background: #f8f9fa; -fx-background-color: #f8f9fa; -fx-border-color: #e0e0e0; -fx-border-radius: 5;">
-                        <VBox fx:id="scheduleContainer" spacing="8" style="-fx-padding: 10;"/>
-                    </ScrollPane>
+                    <ListView fx:id="scheduleListView" VBox.vgrow="ALWAYS" 
+                              style="-fx-background-color: #f8f9fa; -fx-border-color: #e0e0e0; -fx-border-radius: 5;"/>
                 </VBox>
             </VBox>
             

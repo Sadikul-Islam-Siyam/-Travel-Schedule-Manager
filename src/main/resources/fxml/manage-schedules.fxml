@@ -37,15 +37,7 @@
                 
                 <!-- Filter Controls -->
                 <HBox spacing="10">
-                    <ComboBox fx:id="filterTypeCombo" promptText="Filter Type" prefWidth="150">
-                        <items>
-                            <javafx.collections.FXCollections fx:factory="observableArrayList">
-                                <String fx:value="ALL"/>
-                                <String fx:value="BUS"/>
-                                <String fx:value="TRAIN"/>
-                            </javafx.collections.FXCollections>
-                        </items>
-                    </ComboBox>
+                    <ComboBox fx:id="filterTypeCombo" promptText="Filter Type" prefWidth="150"/>
                     <TextField fx:id="searchField" promptText="Search route..." HBox.hgrow="ALWAYS"/>
                     <Button text="🔄" onAction="#handleRefresh" style="-fx-font-size: 14px;"/>
                 </HBox>
@@ -77,14 +69,7 @@
                     <VBox spacing="12" style="-fx-padding: 5;">
                         <!-- Schedule Type -->
                         <Label text="Schedule Type *" style="-fx-font-weight: bold;"/>
-                        <ComboBox fx:id="scheduleTypeCombo" prefWidth="200">
-                            <items>
-                                <javafx.collections.FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="BUS"/>
-                                    <String fx:value="TRAIN"/>
-                                </javafx.collections.FXCollections>
-                            </items>
-                        </ComboBox>
+                        <ComboBox fx:id="scheduleTypeCombo" prefWidth="200"/>
                         
                         <Separator/>
                         
@@ -143,43 +128,25 @@
                             <Label text="Company Name *"/>
                             <TextField fx:id="companyField" promptText="e.g., Green Line"/>
                             <Label text="Bus Type *"/>
-                            <ComboBox fx:id="busTypeCombo" prefWidth="200">
-                                <items>
-                                    <javafx.collections.FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="AC"/>
-                                        <String fx:value="Non-AC"/>
-                                        <String fx:value="Sleeper"/>
-                                        <String fx:value="Deluxe"/>
-                                        <String fx:value="AC Sleeper"/>
-                                    </javafx.collections.FXCollections>
-                                </items>
-                            </ComboBox>
+                            <ComboBox fx:id="busTypeCombo" prefWidth="200"/>
                         </VBox>
                         
                         <VBox fx:id="trainFieldsContainer" spacing="10" managed="false" visible="false">
                             <Label text="Train Details" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
                             <Label text="Train Name *"/>
-                            <TextField fx:id="trainNameField" promptText="e.g., Subarna Express"/>
+                            <TextField fx:id="trainNameField" promptText="e.g., Suborno Express"/>
                             <Label text="Train Class *"/>
-                            <ComboBox fx:id="trainClassCombo" prefWidth="200">
-                                <items>
-                                    <javafx.collections.FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="AC"/>
-                                        <String fx:value="First Class"/>
-                                        <String fx:value="Snigdha"/>
-                                        <String fx:value="S_Chair"/>
-                                        <String fx:value="Shovan"/>
-                                    </javafx.collections.FXCollections>
-                                </items>
-                            </ComboBox>
+                            <ComboBox fx:id="trainClassCombo" prefWidth="200"/>
                         </VBox>
                         
+                        <Separator/>
+                        
                         <!-- Action Buttons -->
-                        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 15 0 0 0;">
-                            <Button fx:id="saveButton" text="Save Schedule" onAction="#handleSave" 
-                                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-weight: bold;"/>
+                        <HBox spacing="10" alignment="CENTER">
+                            <Button fx:id="saveButton" text="Save Schedule" onAction="#handleSaveSchedule" 
+                                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 10 20; -fx-cursor: hand; -fx-background-radius: 5;"/>
                             <Button text="Clear Form" onAction="#handleClearForm" 
-                                    style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20; -fx-cursor: hand; -fx-background-radius: 5;"/>
+                                    style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 10 20; -fx-cursor: hand; -fx-background-radius: 5;"/>
                         </HBox>
                     </VBox>
                 </ScrollPane>

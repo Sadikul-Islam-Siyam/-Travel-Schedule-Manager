@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings("unused") // Reserved import for future table-based implementation
 public class ManageUsersController {
     @FXML private VBox usersContainer;
     @FXML private Label statusLabel;
