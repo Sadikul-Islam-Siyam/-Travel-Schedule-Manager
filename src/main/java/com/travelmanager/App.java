@@ -1,5 +1,6 @@
 package com.travelmanager;
 
+import com.travelmanager.api.rest.RestApiServer;
 import com.travelmanager.util.NavigationManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,9 +16,13 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
+    private RestApiServer apiServer;
 
     @Override
     public void start(Stage stage) throws IOException {
+        // Start the embedded REST API server
+        startRestApiServer();
+        
         NavigationManager.setPrimaryStage(stage);
         scene = new Scene(loadFXML("login"), 900, 600);
         stage.setTitle("Smart Multi-Modal Travel Schedule Manager");
@@ -28,7 +33,36 @@ public class App extends Application {
         stage.setMinHeight(400);
         
         stage.setMaximized(true);
+        
+        // Ensure API server stops when JavaFX app closes
+        stage.setOnCloseRequest(event -> {
+            stopRestApiServer();
+        });
+        
         stage.show();
+    }
+    
+    /**
+     * Start the embedded REST API server
+     */
+    private void startRestApiServer() {
+        try {
+            apiServer = RestApiServer.getInstance(8080);
+            apiServer.start();
+        } catch (Exception e) {
+            System.err.println("Warning: Failed to start REST API server");
+            e.printStackTrace();
+            // Continue with JavaFX app even if API server fails
+        }
+    }
+    
+    /**
+     * Stop the embedded REST API server
+     */
+    private void stopRestApiServer() {
+        if (apiServer != null && apiServer.isRunning()) {
+            apiServer.stop();
+        }
     }
 
     static void setRoot(String fxml) throws IOException {

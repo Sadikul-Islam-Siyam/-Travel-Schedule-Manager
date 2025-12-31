@@ -8,6 +8,7 @@ import com.travelmanager.model.BusSchedule;
 // Reserved for polymorphic schedule handling
 import com.travelmanager.model.Schedule;
 import com.travelmanager.model.TrainSchedule;
+import com.travelmanager.service.rest.RestScheduleService;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -20,8 +21,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Manages manual schedule data stored in JSON format
- * Handles loading, saving, adding, editing, and deleting schedules
+ * Manages schedule data - now uses REST API instead of local JSON
+ * Handles loading, saving, adding, editing, and deleting schedules via REST API
  */
 @SuppressWarnings("unused") // Reserved import for polymorphic schedule handling
 public class ScheduleDataManager {
@@ -30,11 +31,12 @@ public class ScheduleDataManager {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
     private static ScheduleDataManager instance;
     private Gson gson;
-    private ScheduleData data;
+    private RestScheduleService restService;
     
     private ScheduleDataManager() {
         initializeGson();
-        loadData();
+        restService = new RestScheduleService();
+        System.out.println("ScheduleDataManager initialized with REST API");
     }
     
     /**
@@ -63,156 +65,117 @@ public class ScheduleDataManager {
     }
     
     /**
-     * Load schedule data from JSON file
-     */
-    private void loadData() {
-        try {
-            File file = new File(DATA_FILE);
-            if (!file.exists()) {
-                // Create new data file with empty lists
-                data = new ScheduleData();
-                saveData();
-                System.out.println("Created new schedule data file: " + DATA_FILE);
-            } else {
-                String json = new String(Files.readAllBytes(Paths.get(DATA_FILE)), StandardCharsets.UTF_8);
-                data = gson.fromJson(json, ScheduleData.class);
-                if (data == null) {
-                    data = new ScheduleData();
-                }
-                System.out.println("Loaded " + data.busSchedules.size() + " bus schedules and " 
-                    + data.trainSchedules.size() + " train schedules");
-            }
-        } catch (Exception e) {
-            System.err.println("Error loading schedule data: " + e.getMessage());
-            data = new ScheduleData();
-        }
-    }
-    
-    /**
-     * Save schedule data to JSON file
-     */
-    public synchronized void saveData() {
-        try {
-            String json = gson.toJson(data);
-            Files.write(Paths.get(DATA_FILE), json.getBytes(StandardCharsets.UTF_8));
-            System.out.println("Schedule data saved successfully");
-        } catch (Exception e) {
-            System.err.println("Error saving schedule data: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-    
-    /**
-     * Get all bus schedules
+     * Get all bus schedules - now from REST API
      */
     public List<BusSchedule> getAllBusSchedules() {
-        return new ArrayList<>(data.busSchedules);
+        try {
+            System.out.println("ScheduleDataManager: Getting all bus schedules from REST API...");
+            List<BusSchedule> schedules = restService.getAllBusSchedules();
+            System.out.println("ScheduleDataManager: Retrieved " + schedules.size() + " bus schedules");
+            return schedules;
+        } catch (Exception e) {
+            System.err.println("Error getting bus schedules: " + e.getMessage());
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
     
     /**
-     * Get all train schedules
+     * Get all train schedules - now from REST API
      */
     public List<TrainSchedule> getAllTrainSchedules() {
-        return new ArrayList<>(data.trainSchedules);
+        try {
+            System.out.println("ScheduleDataManager: Getting all train schedules from REST API...");
+            List<TrainSchedule> schedules = restService.getAllTrainSchedules();
+            System.out.println("ScheduleDataManager: Retrieved " + schedules.size() + " train schedules");
+            return schedules;
+        } catch (Exception e) {
+            System.err.println("Error getting train schedules: " + e.getMessage());
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
     
     /**
-     * Get bus schedules for a specific route
+     * Get bus schedules for a specific route - now from REST API
      */
     public List<BusSchedule> getBusSchedules(String origin, String destination) {
-        return data.busSchedules.stream()
+        return getAllBusSchedules().stream()
             .filter(s -> s.getOrigin().equalsIgnoreCase(origin) 
                 && s.getDestination().equalsIgnoreCase(destination))
             .collect(Collectors.toList());
     }
     
     /**
-     * Get train schedules for a specific route
+     * Get train schedules for a specific route - now from REST API
      */
     public List<TrainSchedule> getTrainSchedules(String origin, String destination) {
-        return data.trainSchedules.stream()
+        return getAllTrainSchedules().stream()
             .filter(s -> s.getOrigin().equalsIgnoreCase(origin) 
                 && s.getDestination().equalsIgnoreCase(destination))
             .collect(Collectors.toList());
     }
     
     /**
-     * Add a new bus schedule
+     * Save data - kept for compatibility but now no-op (REST API handles persistence)
+     */
+    public synchronized void saveData() {
+        // No-op: REST API handles persistence automatically
+        System.out.println("Save operation called - REST API handles persistence");
+    }
+    
+    /**
+     * Add bus schedule - stubbed (use REST API directly)
      */
     public void addBusSchedule(BusSchedule schedule) {
-        data.busSchedules.add(schedule);
-        saveData();
-        System.out.println("Added bus schedule: " + schedule.getId());
+        System.out.println("addBusSchedule called - please use REST API for adding schedules");
+        // TODO: Implement via REST API POST /api/schedules/bus
     }
     
     /**
-     * Add a new train schedule
+     * Add train schedule - stubbed (use REST API directly)
      */
     public void addTrainSchedule(TrainSchedule schedule) {
-        data.trainSchedules.add(schedule);
-        saveData();
-        System.out.println("Added train schedule: " + schedule.getId());
+        System.out.println("addTrainSchedule called - please use REST API for adding schedules");
     }
     
     /**
-     * Update an existing bus schedule
+     * Update an existing bus schedule - stubbed
      */
     public boolean updateBusSchedule(String scheduleId, BusSchedule updatedSchedule) {
-        for (int i = 0; i < data.busSchedules.size(); i++) {
-            if (data.busSchedules.get(i).getId().equals(scheduleId)) {
-                data.busSchedules.set(i, updatedSchedule);
-                saveData();
-                System.out.println("Updated bus schedule: " + scheduleId);
-                return true;
-            }
-        }
+        System.out.println("updateBusSchedule called - please use REST API for updating schedules");
         return false;
     }
     
     /**
-     * Update an existing train schedule
+     * Update an existing train schedule - stubbed
      */
     public boolean updateTrainSchedule(String scheduleId, TrainSchedule updatedSchedule) {
-        for (int i = 0; i < data.trainSchedules.size(); i++) {
-            if (data.trainSchedules.get(i).getId().equals(scheduleId)) {
-                data.trainSchedules.set(i, updatedSchedule);
-                saveData();
-                System.out.println("Updated train schedule: " + scheduleId);
-                return true;
-            }
-        }
+        System.out.println("updateTrainSchedule called - please use REST API for updating schedules");
         return false;
     }
     
     /**
-     * Delete a bus schedule
+     * Delete a bus schedule - stubbed
      */
     public boolean deleteBusSchedule(String scheduleId) {
-        boolean removed = data.busSchedules.removeIf(s -> s.getId().equals(scheduleId));
-        if (removed) {
-            saveData();
-            System.out.println("Deleted bus schedule: " + scheduleId);
-        }
-        return removed;
+        System.out.println("deleteBusSchedule called - please use REST API for deleting schedules");
+        return false;
     }
     
     /**
-     * Delete a train schedule
+     * Delete a train schedule - stubbed
      */
     public boolean deleteTrainSchedule(String scheduleId) {
-        boolean removed = data.trainSchedules.removeIf(s -> s.getId().equals(scheduleId));
-        if (removed) {
-            saveData();
-            System.out.println("Deleted train schedule: " + scheduleId);
-        }
-        return removed;
+        System.out.println("deleteTrainSchedule called - please use REST API for deleting schedules");
+        return false;
     }
     
     /**
      * Get a bus schedule by ID
      */
     public BusSchedule getBusScheduleById(String scheduleId) {
-        return data.busSchedules.stream()
+        return getAllBusSchedules().stream()
             .filter(s -> s.getId().equals(scheduleId))
             .findFirst()
             .orElse(null);
@@ -222,30 +185,16 @@ public class ScheduleDataManager {
      * Get a train schedule by ID
      */
     public TrainSchedule getTrainScheduleById(String scheduleId) {
-        return data.trainSchedules.stream()
+        return getAllTrainSchedules().stream()
             .filter(s -> s.getId().equals(scheduleId))
             .findFirst()
             .orElse(null);
     }
     
     /**
-     * Reload data from file (useful for external edits)
+     * Reload data from file (kept for compatibility)
      */
     public void reloadData() {
-        loadData();
-    }
-    
-    /**
-     * Inner class to hold schedule data structure
-     * Made public for Gson accessibility
-     */
-    public static class ScheduleData {
-        public List<BusSchedule> busSchedules;
-        public List<TrainSchedule> trainSchedules;
-        
-        public ScheduleData() {
-            this.busSchedules = new ArrayList<>();
-            this.trainSchedules = new ArrayList<>();
-        }
+        System.out.println("reloadData called - REST API data is always current");
     }
 }

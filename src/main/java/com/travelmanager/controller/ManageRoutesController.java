@@ -1,9 +1,11 @@
 package com.travelmanager.controller;
 
-import com.travelmanager.database.DatabaseManager;
-import com.travelmanager.database.DatabaseManager.RouteData;
-import com.travelmanager.util.AuthenticationManager;
+import com.travelmanager.api.ScheduleDataManager;
+import com.travelmanager.model.BusSchedule;
+import com.travelmanager.model.Schedule;
+import com.travelmanager.model.TrainSchedule;
 import com.travelmanager.util.NavigationManager;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,14 +15,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-import java.sql.SQLException;
-// Reserved for future timestamp formatting features
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
-@SuppressWarnings("unused") // Reserved imports for future timestamp features
 public class ManageRoutesController {
     @FXML private TableView<RouteRow> routesTable;
     @FXML private TableColumn<RouteRow, Integer> idColumn;
@@ -49,19 +46,20 @@ public class ManageRoutesController {
     @FXML private Label formErrorLabel;
     @FXML private Button saveButton;
     
-    private DatabaseManager databaseManager;
+    private ScheduleDataManager dataManager;
     private ObservableList<RouteRow> routesList;
     private RouteRow editingRoute = null;
     
     @FXML
     public void initialize() {
-        databaseManager = DatabaseManager.getInstance();
+        System.out.println("ManageRoutesController: Initializing...");
+        dataManager = ScheduleDataManager.getInstance();
         routesList = FXCollections.observableArrayList();
         
         statusLabel.setText("");
         
         // Initialize ComboBoxes
-        transportTypeCombo.getItems().addAll("BUS", "TRAIN", "FLIGHT", "FERRY");
+        transportTypeCombo.getItems().addAll("BUS", "TRAIN");
         statusCombo.getItems().addAll("ACTIVE", "INACTIVE", "MAINTENANCE");
         
         // Setup table columns
@@ -86,31 +84,48 @@ public class ManageRoutesController {
     }
     
     private void loadRoutes() {
-        try {
-            List<RouteData> routes = databaseManager.getAllRoutes();
-            routesList.clear();
-            
-            for (RouteData route : routes) {
-                routesList.add(new RouteRow(
-                    route.getId(),
-                    route.getRouteName(),
-                    route.getOrigin(),
-                    route.getDestination(),
-                    route.getTransportType(),
-                    route.getDurationMinutes(),
-                    route.getPrice(),
-                    route.getStatus()
-                ));
-            }
-            
-            routesTable.setItems(routesList);
-            emptyLabel.setVisible(routesList.isEmpty());
-            setupActionsColumn();
-            
-        } catch (SQLException e) {
-            showStatus("Error loading routes: " + e.getMessage(), true);
-            e.printStackTrace();
+        System.out.println("ManageRoutesController: Loading routes from REST API...");
+        routesList.clear();
+        
+        // Load bus schedules from REST API
+        List<BusSchedule> busSchedules = dataManager.getAllBusSchedules();
+        System.out.println("ManageRoutesController: Loaded " + busSchedules.size() + " bus schedules");
+        int id = 1;
+        for (BusSchedule bus : busSchedules) {
+            long duration = java.time.Duration.between(bus.getDepartureTime(), bus.getArrivalTime()).toMinutes();
+            routesList.add(new RouteRow(
+                id++,
+                bus.getId(),
+                bus.getOrigin(),
+                bus.getDestination(),
+                "BUS",
+                (int) duration,
+                bus.getFare(),
+                "ACTIVE"
+            ));
         }
+        
+        // Load train schedules from REST API
+        List<TrainSchedule> trainSchedules = dataManager.getAllTrainSchedules();
+        System.out.println("ManageRoutesController: Loaded " + trainSchedules.size() + " train schedules");
+        for (TrainSchedule train : trainSchedules) {
+            long duration = java.time.Duration.between(train.getDepartureTime(), train.getArrivalTime()).toMinutes();
+            routesList.add(new RouteRow(
+                id++,
+                train.getId(),
+                train.getOrigin(),
+                train.getDestination(),
+                "TRAIN",
+                (int) duration,
+                train.getFare(),
+                "ACTIVE"
+            ));
+        }
+        
+        System.out.println("ManageRoutesController: Total routes loaded: " + routesList.size());
+        routesTable.setItems(routesList);
+        emptyLabel.setVisible(routesList.isEmpty());
+        setupActionsColumn();
     }
     
     private void setupActionsColumn() {
@@ -162,170 +177,43 @@ public class ManageRoutesController {
     }
     
     private void handleEditRoute(RouteRow route) {
-        try {
-            editingRoute = route;
-            formTitle.setText("Edit Route");
-            saveButton.setText("Update Route");
-            
-            // Load route data from database
-            List<RouteData> routes = databaseManager.getAllRoutes();
-            for (RouteData rd : routes) {
-                if (rd.getId() == route.getId()) {
-                    routeNameField.setText(rd.getRouteName());
-                    originField.setText(rd.getOrigin());
-                    destinationField.setText(rd.getDestination());
-                    transportTypeCombo.setValue(rd.getTransportType());
-                    durationField.setText(String.valueOf(rd.getDurationMinutes()));
-                    priceField.setText(String.format("%.2f", rd.getPrice()));
-                    scheduleTimeField.setText(rd.getScheduleTime() != null ? rd.getScheduleTime() : "");
-                    statusCombo.setValue(rd.getStatus());
-                    metadataField.setText(rd.getMetadata() != null ? rd.getMetadata() : "");
-                    break;
-                }
-            }
-            
-            showForm();
-        } catch (SQLException e) {
-            showStatus("Error loading route data: " + e.getMessage(), true);
-            e.printStackTrace();
-        }
+        showStatus("Edit functionality - Use REST API endpoints to modify schedules", false);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Edit Route");
+        alert.setHeaderText("Route: " + route.getRouteName());
+        alert.setContentText("To edit this route, use the REST API directly:\n\n" +
+                           "Bus: PUT /api/schedules/bus/{busName}\n" +
+                           "Train: PUT /api/schedules/train/{trainName}\n\n" +
+                           "Route Details:\n" +
+                           "Type: " + route.getTransportType() + "\n" +
+                           "Origin: " + route.getOrigin() + "\n" +
+                           "Destination: " + route.getDestination() + "\n" +
+                           "Fare: ৳" + String.format("%.2f", route.getPrice()));
+        alert.showAndWait();
     }
     
     private void handleDeleteRoute(RouteRow route) {
-        AuthenticationManager auth = AuthenticationManager.getInstance();
-        
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmAlert.setTitle("Delete Route");
         confirmAlert.setHeaderText("Delete route: " + route.getRouteName() + "?");
-        
-        if (auth.getCurrentUser().isMaster()) {
-            confirmAlert.setContentText("This action cannot be undone.");
-        } else {
-            confirmAlert.setContentText("This will submit a deletion request for master approval.");
-        }
-        
-        Optional<ButtonType> result = confirmAlert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean success;
-            
-            if (auth.getCurrentUser().isMaster()) {
-                // Master: Direct deletion
-                success = databaseManager.deleteRoute(route.getId());
-                if (success) {
-                    showStatus("Route deleted successfully: " + route.getRouteName(), false);
-                    loadRoutes();
-                } else {
-                    showStatus("Failed to delete route", true);
-                }
-            } else {
-                // Developer: Submit deletion request
-                success = databaseManager.submitPendingRoute(
-                    route.getRouteName(), route.getOrigin(), route.getDestination(),
-                    route.getTransportType(), route.getDurationMinutes(), route.getPrice(),
-                    "", "", "DELETE", route.getId(), auth.getCurrentUser().getUsername(),
-                    "Route deletion request"
-                );
-                if (success) {
-                    showStatus("Deletion request submitted: " + route.getRouteName(), false);
-                } else {
-                    showStatus("Failed to submit deletion request", true);
-                }
-            }
-        }
+        confirmAlert.setContentText("To delete this route, use the REST API:\n\n" +
+                                   "Bus: DELETE /api/schedules/bus/{busName}\n" +
+                                   "Train: DELETE /api/schedules/train/{trainName}\n\n" +
+                                   "This feature is coming soon!");
+        confirmAlert.showAndWait();
     }
     
     @FXML
     private void handleSaveRoute() {
-        formErrorLabel.setText("");
-        
-        // Validate inputs
-        String routeName = routeNameField.getText().trim();
-        String origin = originField.getText().trim();
-        String destination = destinationField.getText().trim();
-        String transportType = transportTypeCombo.getValue();
-        String durationStr = durationField.getText().trim();
-        String priceStr = priceField.getText().trim();
-        String scheduleTime = scheduleTimeField.getText().trim();
-        String status = statusCombo.getValue();
-        String metadata = metadataField.getText().trim();
-        
-        if (routeName.isEmpty() || origin.isEmpty() || destination.isEmpty() || 
-            transportType == null || durationStr.isEmpty() || priceStr.isEmpty()) {
-            formErrorLabel.setText("Please fill in all required fields (*)");
-            return;
-        }
-        
-        int duration;
-        double price;
-        try {
-            duration = Integer.parseInt(durationStr);
-            price = Double.parseDouble(priceStr);
-            
-            if (duration <= 0 || price < 0) {
-                formErrorLabel.setText("Duration must be positive, price cannot be negative");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            formErrorLabel.setText("Invalid duration or price format");
-            return;
-        }
-        
-        boolean success;
-        AuthenticationManager auth = AuthenticationManager.getInstance();
-        
-        if (editingRoute == null) {
-            // Create new route
-            if (auth.getCurrentUser().isMaster()) {
-                // Master: Direct to live routes table
-                success = databaseManager.createRoute(routeName, origin, destination, transportType,
-                                                     duration, price, scheduleTime, metadata);
-                if (success) {
-                    showStatus("Route created successfully: " + routeName, false);
-                } else {
-                    showStatus("Failed to create route", true);
-                }
-            } else {
-                // Developer: Submit for approval
-                success = databaseManager.submitPendingRoute(routeName, origin, destination, transportType,
-                                                            duration, price, scheduleTime, metadata, 
-                                                            "CREATE", null, auth.getCurrentUser().getUsername(),
-                                                            "New route submission");
-                if (success) {
-                    showStatus("Route submitted for approval: " + routeName, false);
-                } else {
-                    showStatus("Failed to submit route", true);
-                }
-            }
-        } else {
-            // Update existing route
-            if (auth.getCurrentUser().isMaster()) {
-                // Master: Direct update to live routes
-                success = databaseManager.updateRoute(editingRoute.getId(), routeName, origin, destination,
-                                                     transportType, duration, price, scheduleTime, metadata, status);
-                if (success) {
-                    showStatus("Route updated successfully: " + routeName, false);
-                } else {
-                    showStatus("Failed to update route", true);
-                }
-            } else {
-                // Developer: Submit update for approval
-                success = databaseManager.submitPendingRoute(routeName, origin, destination, transportType,
-                                                            duration, price, scheduleTime, metadata,
-                                                            "UPDATE", editingRoute.getId(), 
-                                                            auth.getCurrentUser().getUsername(),
-                                                            "Route update request");
-                if (success) {
-                    showStatus("Update submitted for approval: " + routeName, false);
-                } else {
-                    showStatus("Failed to submit update", true);
-                }
-            }
-        }
-        
-        if (success) {
-            loadRoutes();
-            handleCloseForm();
-        }
+        showStatus("Add/Edit functionality via REST API - Coming soon!", false);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Add New Route");
+        alert.setContentText("To add new routes, use the REST API:\n\n" +
+                           "Bus: POST /api/schedules/bus\n" +
+                           "Train: POST /api/schedules/train\n\n" +
+                           "Feature coming soon in UI!");
+        alert.showAndWait();
+        handleCloseForm();
     }
     
     @FXML

@@ -37,6 +37,20 @@
             <version>2.10.1</version>
         </dependency>
 
+        <!-- Javalin - Embedded REST Server -->
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin</artifactId>
+            <version>5.6.3</version>
+        </dependency>
+
+        <!-- SLF4J Simple Logger (for Javalin) -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+
         <!-- SQLite Database -->
         <dependency>
             <groupId>org.xerial</groupId>
@@ -50,13 +64,6 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.10.1</version>
             <scope>test</scope>
-        </dependency>
-
-        <!-- SLF4J NOP (no operation) Logger - using 1.7.36 to match sqlite-jdbc dependency -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-nop</artifactId>
-            <version>1.7.36</version>
         </dependency>
     </dependencies>
 

@@ -1,6 +1,6 @@
 package com.travelmanager.controller;
 
-import com.travelmanager.api.ScheduleApiManager;
+import com.travelmanager.service.ScheduleService;
 import com.travelmanager.model.Schedule;
 import com.travelmanager.util.NavigationManager;
 import javafx.fxml.FXML;
@@ -12,6 +12,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -24,11 +25,11 @@ public class ApiTestingToolController {
     @FXML private Label resultCountLabel;
     @FXML private Label emptyLabel;
     
-    private ScheduleApiManager apiManager;
+    private ScheduleService scheduleService;
     
     @FXML
     public void initialize() {
-        apiManager = ScheduleApiManager.getInstance();
+        scheduleService = new ScheduleService();
         transportTypeCombo.setValue("ALL");
         emptyLabel.setVisible(true);
     }
@@ -46,9 +47,11 @@ public class ApiTestingToolController {
         
         List<Schedule> results;
         if ("ALL".equals(transportType)) {
-            results = apiManager.searchSchedules(origin, destination);
+            results = scheduleService.searchSchedules(origin, destination);
+        } else if ("BUS".equals(transportType)) {
+            results = scheduleService.searchBusSchedules(origin, destination, LocalDate.now());
         } else {
-            results = apiManager.searchSchedulesByType(origin, destination, transportType);
+            results = scheduleService.searchTrainSchedules(origin, destination, LocalDate.now());
         }
         
         displayResults(results);

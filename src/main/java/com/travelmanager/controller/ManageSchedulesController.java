@@ -131,10 +131,13 @@ public class ManageSchedulesController {
     }
     
     private void loadSchedules() {
+        System.out.println("ManageSchedulesController: Loading schedules...");
         scheduleData.clear();
         
         // Load bus schedules
-        for (BusSchedule bus : dataManager.getAllBusSchedules()) {
+        List<BusSchedule> busSchedules = dataManager.getAllBusSchedules();
+        System.out.println("ManageSchedulesController: Got " + busSchedules.size() + " bus schedules");
+        for (BusSchedule bus : busSchedules) {
             scheduleData.add(new ScheduleRow(
                 bus.getId(),
                 "BUS",
@@ -145,7 +148,9 @@ public class ManageSchedulesController {
         }
         
         // Load train schedules
-        for (TrainSchedule train : dataManager.getAllTrainSchedules()) {
+        List<TrainSchedule> trainSchedules = dataManager.getAllTrainSchedules();
+        System.out.println("ManageSchedulesController: Got " + trainSchedules.size() + " train schedules");
+        for (TrainSchedule train : trainSchedules) {
             scheduleData.add(new ScheduleRow(
                 train.getId(),
                 "TRAIN",
@@ -155,6 +160,7 @@ public class ManageSchedulesController {
             ));
         }
         
+        System.out.println("ManageSchedulesController: Total schedules loaded: " + scheduleData.size());
         updateScheduleCount();
         applyFilter();
     }

@@ -1,25 +1,26 @@
 package com.travelmanager.service;
 
-import com.travelmanager.api.ScheduleApiManager;
 import com.travelmanager.model.Schedule;
+import com.travelmanager.service.rest.RestScheduleService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Service class for managing schedules
+ * Now uses REST API instead of direct file access
  */
 public class ScheduleService {
-    private ScheduleApiManager apiManager;
+    private RestScheduleService restService;
     private List<Schedule> cachedSchedules;
 
     public ScheduleService() {
-        this.apiManager = ScheduleApiManager.getInstance();
+        this.restService = new RestScheduleService();
         this.cachedSchedules = new ArrayList<>();
     }
 
     /**
-     * Search schedules from API providers
+     * Search schedules from REST API
      * @param origin Starting location
      * @param destination Ending location
      * @param date Travel date
@@ -27,12 +28,13 @@ public class ScheduleService {
      */
     public List<Schedule> searchSchedules(String origin, String destination, LocalDate date) {
         try {
-            List<Schedule> results = apiManager.fetchAllSchedules(origin, destination, date);
+            List<Schedule> results = restService.searchSchedules(origin, destination, date);
             // Cache results for offline use
-            cachedSchedules.addAll(results);
+            cachedSchedules = new ArrayList<>(results);
             return results;
         } catch (Exception e) {
             System.err.println("Error searching schedules: " + e.getMessage());
+            e.printStackTrace();
             // Fall back to cached schedules if available
             return searchCachedSchedules(origin, destination);
         }
@@ -47,7 +49,7 @@ public class ScheduleService {
      */
     public List<Schedule> searchBusSchedules(String origin, String destination, LocalDate date) {
         try {
-            return apiManager.fetchBusSchedules(origin, destination, date);
+            return restService.searchBusSchedules(origin, destination, date);
         } catch (Exception e) {
             System.err.println("Error searching bus schedules: " + e.getMessage());
             return new ArrayList<>();
@@ -63,7 +65,7 @@ public class ScheduleService {
      */
     public List<Schedule> searchTrainSchedules(String origin, String destination, LocalDate date) {
         try {
-            return apiManager.fetchTrainSchedules(origin, destination, date);
+            return restService.searchTrainSchedules(origin, destination, date);
         } catch (Exception e) {
             System.err.println("Error searching train schedules: " + e.getMessage());
             return new ArrayList<>();
