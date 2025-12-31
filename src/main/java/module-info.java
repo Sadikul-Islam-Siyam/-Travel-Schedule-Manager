@@ -6,7 +6,7 @@ module com.travelmanager {
     requires java.net.http;
     
     // Javalin dependencies
-    requires io.javalin;
+    requires transitive io.javalin;
     requires org.slf4j;
     requires org.eclipse.jetty.server;
     requires org.eclipse.jetty.util;

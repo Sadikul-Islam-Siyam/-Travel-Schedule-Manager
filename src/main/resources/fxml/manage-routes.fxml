@@ -40,7 +40,7 @@
                        style="-fx-background-color: white; -fx-background-radius: 10;">
                 <columns>
                     <TableColumn fx:id="idColumn" text="ID" prefWidth="50" style="-fx-alignment: CENTER;"/>
-                    <TableColumn fx:id="routeNameColumn" text="Route Name" prefWidth="150"/>
+                    <TableColumn fx:id="routeNameColumn" text="Bus / Train Service" prefWidth="150"/>
                     <TableColumn fx:id="originColumn" text="Origin" prefWidth="120"/>
                     <TableColumn fx:id="destinationColumn" text="Destination" prefWidth="120"/>
                     <TableColumn fx:id="typeColumn" text="Type" prefWidth="80" style="-fx-alignment: CENTER;"/>

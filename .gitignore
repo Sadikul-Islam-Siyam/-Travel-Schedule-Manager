@@ -45,6 +45,14 @@ out/
 Thumbs.db
 
 # Application data
-data/*.json
 data/*.db
+data/*.db-journal
 !data/.gitkeep
+!data/bus_schedules.json
+!data/train_schedules.json
+
+# Root level config (use src/main/resources instead)
+api-config.properties
+
+# Schedule data
+schedules-data.json

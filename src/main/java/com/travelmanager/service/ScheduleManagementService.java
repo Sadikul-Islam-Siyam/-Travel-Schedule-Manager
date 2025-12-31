@@ -5,8 +5,6 @@ import com.travelmanager.exception.ValidationException;
 import com.travelmanager.model.BusSchedule;
 import com.travelmanager.model.Schedule;
 import com.travelmanager.model.TrainSchedule;
-import com.travelmanager.util.CacheManager;
-import com.travelmanager.util.Constants;
 
 import java.util.List;
 
@@ -18,12 +16,10 @@ public class ScheduleManagementService {
     
     private ScheduleDataManager dataManager;
     private ScheduleValidationService validator;
-    private CacheManager cacheManager;
     
     public ScheduleManagementService() {
         this.dataManager = ScheduleDataManager.getInstance();
         this.validator = new ScheduleValidationService();
-        this.cacheManager = CacheManager.getInstance();
     }
     
     /**
@@ -46,8 +42,7 @@ public class ScheduleManagementService {
                 dataManager.addTrainSchedule((TrainSchedule) schedule);
             }
             
-            // Invalidate cache
-            invalidateCache();
+            System.out.println("Schedule added successfully: " + schedule.getId());
             
         } catch (Exception e) {
             throw new ValidationException("Failed to add schedule: " + e.getMessage(), e);
@@ -74,8 +69,7 @@ public class ScheduleManagementService {
                 dataManager.updateTrainSchedule(schedule.getId(), (TrainSchedule) schedule);
             }
             
-            // Invalidate cache
-            invalidateCache();
+            System.out.println("Schedule updated successfully: " + schedule.getId());
             
         } catch (Exception e) {
             throw new ValidationException("Failed to update schedule: " + e.getMessage(), e);
@@ -99,8 +93,7 @@ public class ScheduleManagementService {
                 throw new ValidationException("Invalid schedule type: " + type);
             }
             
-            // Invalidate cache
-            invalidateCache();
+            System.out.println("Schedule deleted successfully: " + scheduleId);
             
         } catch (Exception e) {
             throw new ValidationException("Failed to delete schedule: " + e.getMessage(), e);
@@ -126,14 +119,6 @@ public class ScheduleManagementService {
         }
         
         return false;
-    }
-    
-    /**
-     * Invalidate all schedule-related cache
-     */
-    private void invalidateCache() {
-        cacheManager.invalidatePrefix(Constants.CACHE_SCHEDULE_PREFIX);
-        cacheManager.invalidatePrefix(Constants.CACHE_ROUTE_PREFIX);
     }
     
     /**

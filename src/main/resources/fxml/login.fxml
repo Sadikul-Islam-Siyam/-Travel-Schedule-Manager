@@ -26,7 +26,7 @@
             <VBox alignment="CENTER" spacing="20" style="-fx-padding: 30 20;">
                 <!-- Logo/Title Section -->
                 <VBox alignment="CENTER" spacing="10" style="-fx-padding: 0 0 15 0;">
-                    <Label text="🚌 🚂" style="-fx-font-size: 42px;"/>
+                    <Label text="" style="-fx-font-size: 42px;"/>
                     <Label text="Travel Schedule Manager" textFill="white">
                         <font>
                             <Font name="System Bold" size="28.0"/>
@@ -77,7 +77,7 @@
                                    style="-fx-font-size: 12px; -fx-text-fill: #3498db; -fx-font-weight: bold; -fx-underline: true;"/>
                     </HBox>
                     
-                    <Hyperlink text="❓ Need help with account setup? Click here" onAction="#handleHelp"
+                    <Hyperlink text="Need help with account setup? Click here" onAction="#handleHelp"
                                style="-fx-font-size: 11px; -fx-text-fill: #95a5a6; -fx-underline: true;"/>
                 </VBox>
                 

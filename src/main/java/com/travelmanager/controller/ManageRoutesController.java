@@ -2,10 +2,8 @@ package com.travelmanager.controller;
 
 import com.travelmanager.api.ScheduleDataManager;
 import com.travelmanager.model.BusSchedule;
-import com.travelmanager.model.Schedule;
 import com.travelmanager.model.TrainSchedule;
 import com.travelmanager.util.NavigationManager;
-import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,7 +13,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ManageRoutesController {
@@ -48,7 +45,6 @@ public class ManageRoutesController {
     
     private ScheduleDataManager dataManager;
     private ObservableList<RouteRow> routesList;
-    private RouteRow editingRoute = null;
     
     @FXML
     public void initialize() {
@@ -169,7 +165,6 @@ public class ManageRoutesController {
     
     @FXML
     private void handleAddRoute() {
-        editingRoute = null;
         formTitle.setText("Add New Route");
         saveButton.setText("Save Route");
         clearForm();

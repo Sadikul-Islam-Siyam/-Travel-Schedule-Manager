@@ -40,12 +40,12 @@
                     
                     <HBox spacing="10" alignment="CENTER_LEFT">
                         <Label text="Start:" minWidth="80"/>
-                        <TextField fx:id="startField" promptText="Type to search... (e.g., Dh)" HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="startField" promptText="Type to search" HBox.hgrow="ALWAYS"/>
                     </HBox>
                     
                     <HBox spacing="10" alignment="CENTER_LEFT">
                         <Label text="Destination:" minWidth="80"/>
-                        <TextField fx:id="destinationField" promptText="Type to search... (e.g., Ch)" HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="destinationField" promptText="Type to search" HBox.hgrow="ALWAYS"/>
                     </HBox>
                     
                     <HBox spacing="10" alignment="CENTER_LEFT">

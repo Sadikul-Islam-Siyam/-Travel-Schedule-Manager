@@ -1,0 +1,72 @@
+[
+  {
+    "trainName": "SUBARNA EXPRESS (702)",
+    "start": "Dhaka",
+    "destination": "Chittagong",
+    "startTime": "14:50",
+    "arrivalTime": "20:50",
+    "fare": 420.0,
+    "duration": "6:00h",
+    "offDay": "No off day"
+  },
+  {
+    "trainName": "TURNA EXPRESS (726)",
+    "start": "Dhaka",
+    "destination": "Chittagong",
+    "startTime": "23:00",
+    "arrivalTime": "05:50",
+    "fare": 380.0,
+    "duration": "6:50h",
+    "offDay": "No off day"
+  },
+  {
+    "trainName": "PARABAT EXPRESS (710)",
+    "start": "Dhaka",
+    "destination": "Sylhet",
+    "startTime": "06:40",
+    "arrivalTime": "14:40",
+    "fare": 350.0,
+    "duration": "8:00h",
+    "offDay": "No off day"
+  },
+  {
+    "trainName": "UPABAN EXPRESS (740)",
+    "start": "Dhaka",
+    "destination": "Sylhet",
+    "startTime": "21:30",
+    "arrivalTime": "05:45",
+    "fare": 350.0,
+    "duration": "8:15h",
+    "offDay": "No off day"
+  },
+  {
+    "trainName": "SILK CITY EXPRESS (752)",
+    "start": "Dhaka",
+    "destination": "Rajshahi",
+    "startTime": "09:00",
+    "arrivalTime": "16:20",
+    "fare": 390.0,
+    "duration": "7:20h",
+    "offDay": "No off day"
+  },
+  {
+    "trainName": "RANGPUR EXPRESS (772)",
+    "start": "Dhaka",
+    "destination": "Rangpur",
+    "startTime": "09:00",
+    "arrivalTime": "19:00",
+    "fare": 450.0,
+    "duration": "10:00h",
+    "offDay": "Monday"
+  },
+  {
+    "trainName": "EKOTA EXPRESS (706)",
+    "start": "Dhaka",
+    "destination": "Dinajpur",
+    "startTime": "20:10",
+    "arrivalTime": "07:10",
+    "fare": 480.0,
+    "duration": "11:00h",
+    "offDay": "No off day"
+  }
+]

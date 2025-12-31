@@ -93,13 +93,13 @@
                 
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="Plan Name:" minWidth="100" style="-fx-font-weight: bold;"/>
-                    <TextField fx:id="planNameField" promptText="e.g., Dhaka to Cox's Bazar Trip" 
+                    <TextField fx:id="planNameField" promptText="Dhaka to Cox's Bazar Trip" 
                                HBox.hgrow="ALWAYS" style="-fx-font-size: 14px;"/>
                 </HBox>
                 
                 <VBox spacing="5">
                     <Label text="Notes (Optional):" style="-fx-font-weight: bold;"/>
-                    <TextArea fx:id="notesArea" promptText="Add any notes or comments about this plan (e.g., booking confirmations, special requirements, etc.)"
+                    <TextArea fx:id="notesArea" promptText="Add any notes or comments about this plan"
                              prefRowCount="3" wrapText="true" style="-fx-font-size: 13px;"/>
                 </VBox>
                 
