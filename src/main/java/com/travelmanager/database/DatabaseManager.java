@@ -5,6 +5,10 @@ import com.travelmanager.model.Route;
 import com.travelmanager.model.Schedule;
 import com.travelmanager.model.TrainSchedule;
 import com.travelmanager.model.User;
+import com.travelmanager.storage.BusScheduleStorage;
+import com.travelmanager.storage.TrainScheduleStorage;
+import com.travelmanager.model.rest.BusScheduleDTO;
+import com.travelmanager.model.rest.TrainScheduleDTO;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -815,23 +819,36 @@ public class DatabaseManager {
             
             if (rs.next()) {
                 String changeType = rs.getString("change_type");
+                String routeName = rs.getString("route_name");
+                String origin = rs.getString("origin");
+                String destination = rs.getString("destination");
+                String transportType = rs.getString("transport_type");
+                int durationMinutes = rs.getInt("duration_minutes");
+                double price = rs.getDouble("price");
+                String scheduleTime = rs.getString("schedule_time");
+                String metadata = rs.getString("metadata");
                 
+                // Apply changes to database
                 if ("CREATE".equals(changeType)) {
                     // Insert new route to live routes table
                     String insertQuery = "INSERT INTO routes (route_name, origin, destination, transport_type, " +
                                         "duration_minutes, price, schedule_time, metadata, status, created_date) " +
                                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', ?)";
                     PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
-                    insertStmt.setString(1, rs.getString("route_name"));
-                    insertStmt.setString(2, rs.getString("origin"));
-                    insertStmt.setString(3, rs.getString("destination"));
-                    insertStmt.setString(4, rs.getString("transport_type"));
-                    insertStmt.setInt(5, rs.getInt("duration_minutes"));
-                    insertStmt.setDouble(6, rs.getDouble("price"));
-                    insertStmt.setString(7, rs.getString("schedule_time"));
-                    insertStmt.setString(8, rs.getString("metadata"));
+                    insertStmt.setString(1, routeName);
+                    insertStmt.setString(2, origin);
+                    insertStmt.setString(3, destination);
+                    insertStmt.setString(4, transportType);
+                    insertStmt.setInt(5, durationMinutes);
+                    insertStmt.setDouble(6, price);
+                    insertStmt.setString(7, scheduleTime);
+                    insertStmt.setString(8, metadata);
                     insertStmt.setString(9, LocalDateTime.now().toString());
                     insertStmt.executeUpdate();
+                    
+                    // Write to JSON file for REST API
+                    writeToJsonFile(routeName, origin, destination, transportType, durationMinutes, 
+                                   price, scheduleTime, metadata, "CREATE");
                     
                 } else if ("UPDATE".equals(changeType)) {
                     // Update existing route
@@ -840,17 +857,21 @@ public class DatabaseManager {
                                         "transport_type = ?, duration_minutes = ?, price = ?, schedule_time = ?, " +
                                         "metadata = ?, modified_date = ? WHERE id = ?";
                     PreparedStatement updateStmt = conn.prepareStatement(updateQuery);
-                    updateStmt.setString(1, rs.getString("route_name"));
-                    updateStmt.setString(2, rs.getString("origin"));
-                    updateStmt.setString(3, rs.getString("destination"));
-                    updateStmt.setString(4, rs.getString("transport_type"));
-                    updateStmt.setInt(5, rs.getInt("duration_minutes"));
-                    updateStmt.setDouble(6, rs.getDouble("price"));
-                    updateStmt.setString(7, rs.getString("schedule_time"));
-                    updateStmt.setString(8, rs.getString("metadata"));
+                    updateStmt.setString(1, routeName);
+                    updateStmt.setString(2, origin);
+                    updateStmt.setString(3, destination);
+                    updateStmt.setString(4, transportType);
+                    updateStmt.setInt(5, durationMinutes);
+                    updateStmt.setDouble(6, price);
+                    updateStmt.setString(7, scheduleTime);
+                    updateStmt.setString(8, metadata);
                     updateStmt.setString(9, LocalDateTime.now().toString());
                     updateStmt.setInt(10, originalRouteId);
                     updateStmt.executeUpdate();
+                    
+                    // Update JSON file for REST API
+                    writeToJsonFile(routeName, origin, destination, transportType, durationMinutes, 
+                                   price, scheduleTime, metadata, "UPDATE");
                     
                 } else if ("DELETE".equals(changeType)) {
                     // Delete route from live table
@@ -859,6 +880,9 @@ public class DatabaseManager {
                     PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery);
                     deleteStmt.setInt(1, originalRouteId);
                     deleteStmt.executeUpdate();
+                    
+                    // Delete from JSON file for REST API
+                    deleteFromJsonFile(routeName, transportType);
                 }
                 
                 // Archive to history
@@ -867,15 +891,15 @@ public class DatabaseManager {
                                       "submitted_by, submitted_date, reviewed_by, reviewed_date, status, notes, feedback) " +
                                       "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'APPROVED', ?, NULL)";
                 PreparedStatement historyStmt = conn.prepareStatement(insertHistory);
-                historyStmt.setString(1, rs.getString("route_name"));
-                historyStmt.setString(2, rs.getString("origin"));
-                historyStmt.setString(3, rs.getString("destination"));
-                historyStmt.setString(4, rs.getString("transport_type"));
-                historyStmt.setInt(5, rs.getInt("duration_minutes"));
-                historyStmt.setDouble(6, rs.getDouble("price"));
-                historyStmt.setString(7, rs.getString("schedule_time"));
-                historyStmt.setString(8, rs.getString("metadata"));
-                historyStmt.setString(9, rs.getString("change_type"));
+                historyStmt.setString(1, routeName);
+                historyStmt.setString(2, origin);
+                historyStmt.setString(3, destination);
+                historyStmt.setString(4, transportType);
+                historyStmt.setInt(5, durationMinutes);
+                historyStmt.setDouble(6, price);
+                historyStmt.setString(7, scheduleTime);
+                historyStmt.setString(8, metadata);
+                historyStmt.setString(9, changeType);
                 if (rs.getObject("original_route_id") != null) {
                     historyStmt.setInt(10, rs.getInt("original_route_id"));
                 } else {
@@ -895,6 +919,8 @@ public class DatabaseManager {
                 deleteStmt.executeUpdate();
                 
                 conn.commit();
+                
+                System.out.println("✓ Route " + changeType + " approved and written to JSON file: " + routeName);
                 return true;
             }
             
@@ -916,6 +942,110 @@ public class DatabaseManager {
                 conn.close();
             }
         }
+    }
+    
+    /**
+     * Write approved route to JSON file for REST API consumption
+     */
+    private void writeToJsonFile(String routeName, String origin, String destination, 
+                                  String transportType, int durationMinutes, double price,
+                                  String scheduleTime, String metadata, String operationType) {
+        try {
+            // Parse schedule time and calculate arrival time
+            String startTime = scheduleTime != null && !scheduleTime.isEmpty() ? scheduleTime : "08:00";
+            String arrivalTime = calculateArrivalTime(startTime, durationMinutes);
+            String duration = formatDuration(durationMinutes);
+            
+            if ("BUS".equalsIgnoreCase(transportType)) {
+                BusScheduleStorage busStorage = BusScheduleStorage.getInstance();
+                BusScheduleDTO busDTO = new BusScheduleDTO();
+                busDTO.setBusName(routeName);
+                busDTO.setStart(origin);
+                busDTO.setDestination(destination);
+                busDTO.setStartTime(startTime);
+                busDTO.setArrivalTime(arrivalTime);
+                busDTO.setFare(price);
+                busDTO.setDuration(duration);
+                
+                if ("CREATE".equals(operationType)) {
+                    busStorage.addSchedule(busDTO);
+                } else if ("UPDATE".equals(operationType)) {
+                    busStorage.updateSchedule(routeName, busDTO);
+                }
+                System.out.println("✓ Bus schedule written to JSON: " + routeName);
+                
+            } else if ("TRAIN".equalsIgnoreCase(transportType)) {
+                TrainScheduleStorage trainStorage = TrainScheduleStorage.getInstance();
+                TrainScheduleDTO trainDTO = new TrainScheduleDTO();
+                trainDTO.setTrainName(routeName);
+                trainDTO.setStart(origin);
+                trainDTO.setDestination(destination);
+                trainDTO.setStartTime(startTime);
+                trainDTO.setArrivalTime(arrivalTime);
+                trainDTO.setFare(price);
+                trainDTO.setDuration(duration);
+                trainDTO.setOffDay(metadata != null && !metadata.isEmpty() ? metadata : "No off day");
+                
+                if ("CREATE".equals(operationType)) {
+                    trainStorage.addSchedule(trainDTO);
+                } else if ("UPDATE".equals(operationType)) {
+                    trainStorage.updateSchedule(routeName, trainDTO);
+                }
+                System.out.println("✓ Train schedule written to JSON: " + routeName);
+            }
+        } catch (Exception e) {
+            System.err.println("✗ Error writing to JSON file: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Delete route from JSON file for REST API
+     */
+    private void deleteFromJsonFile(String routeName, String transportType) {
+        try {
+            if ("BUS".equalsIgnoreCase(transportType)) {
+                BusScheduleStorage busStorage = BusScheduleStorage.getInstance();
+                busStorage.deleteSchedule(routeName);
+                System.out.println("✓ Bus schedule deleted from JSON: " + routeName);
+            } else if ("TRAIN".equalsIgnoreCase(transportType)) {
+                TrainScheduleStorage trainStorage = TrainScheduleStorage.getInstance();
+                trainStorage.deleteSchedule(routeName);
+                System.out.println("✓ Train schedule deleted from JSON: " + routeName);
+            }
+        } catch (Exception e) {
+            System.err.println("✗ Error deleting from JSON file: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Calculate arrival time based on departure time and duration
+     */
+    private String calculateArrivalTime(String departureTime, int durationMinutes) {
+        try {
+            String[] parts = departureTime.split(":");
+            int hours = Integer.parseInt(parts[0]);
+            int minutes = Integer.parseInt(parts[1]);
+            
+            minutes += durationMinutes;
+            hours += minutes / 60;
+            minutes = minutes % 60;
+            hours = hours % 24;
+            
+            return String.format("%02d:%02d", hours, minutes);
+        } catch (Exception e) {
+            return "10:00"; // Default fallback
+        }
+    }
+    
+    /**
+     * Format duration in minutes to "H:MMh" format (e.g., 390 minutes -> "6:30h")
+     */
+    private String formatDuration(int durationMinutes) {
+        int hours = durationMinutes / 60;
+        int minutes = durationMinutes % 60;
+        return String.format("%d:%02dh", hours, minutes);
     }
     
     // Backward compatibility

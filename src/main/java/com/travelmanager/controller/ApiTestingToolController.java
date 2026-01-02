@@ -3,6 +3,7 @@ package com.travelmanager.controller;
 import com.travelmanager.service.ScheduleService;
 import com.travelmanager.model.Schedule;
 import com.travelmanager.util.NavigationManager;
+import com.travelmanager.util.AutoCompletePopup;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,6 +15,7 @@ import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 
 public class ApiTestingToolController {
@@ -27,11 +29,34 @@ public class ApiTestingToolController {
     
     private ScheduleService scheduleService;
     
+    // AutoComplete popups
+    @SuppressWarnings("unused")
+    private AutoCompletePopup originAutoComplete;
+    @SuppressWarnings("unused")
+    private AutoCompletePopup destinationAutoComplete;
+    private List<String> allLocations;
+    
     @FXML
     public void initialize() {
         scheduleService = new ScheduleService();
         transportTypeCombo.setValue("ALL");
         emptyLabel.setVisible(true);
+        
+        // Initialize locations list
+        allLocations = Arrays.asList(
+            "Barguna", "Barishal", "Bhola", "Jhalokati", "Patuakhali", "Pirojpur",
+            "Bandarban", "Brahmanbaria", "Chandpur", "Chattogram", "Chittagong", "Cox's Bazar", "Cumilla", "Feni", "Khagrachari", "Lakshmipur", "Noakhali", "Rangamati",
+            "Dhaka", "Faridpur", "Gazipur", "Gopalganj", "Kishoreganj", "Madaripur", "Manikganj", "Munshiganj", "Narayanganj", "Narsingdi", "Rajbari", "Shariatpur", "Tangail",
+            "Bagerhat", "Chuadanga", "Jashore", "Jhenaidah", "Khulna", "Kushtia", "Magura", "Meherpur", "Narail", "Satkhira",
+            "Jamalpur", "Mymensingh", "Netrokona", "Sherpur",
+            "Bogura", "Joypurhat", "Naogaon", "Natore", "Chapai Nawabganj", "Pabna", "Rajshahi", "Sirajganj",
+            "Dinajpur", "Gaibandha", "Kurigram", "Lalmonirhat", "Nilphamari", "Panchagarh", "Rangpur", "Thakurgaon",
+            "Habiganj", "Moulvibazar", "Sunamganj", "Sylhet"
+        );
+        
+        // Setup autocomplete
+        originAutoComplete = new AutoCompletePopup(originField, allLocations);
+        destinationAutoComplete = new AutoCompletePopup(destinationField, allLocations);
     }
     
     @FXML

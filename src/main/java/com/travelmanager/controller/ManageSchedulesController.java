@@ -7,6 +7,7 @@ import com.travelmanager.model.Schedule;
 import com.travelmanager.model.TrainSchedule;
 import com.travelmanager.service.ScheduleManagementService;
 import com.travelmanager.util.NavigationManager;
+import com.travelmanager.util.AutoCompletePopup;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,11 +70,34 @@ public class ManageSchedulesController {
     private boolean isEditMode = false;
     private String editingScheduleId = null;
     
+    // AutoComplete popups
+    @SuppressWarnings("unused")
+    private AutoCompletePopup originAutoComplete;
+    @SuppressWarnings("unused")
+    private AutoCompletePopup destinationAutoComplete;
+    private List<String> allLocations;
+    
     @FXML
     public void initialize() {
         scheduleManagementService = new ScheduleManagementService();
         dataManager = ScheduleDataManager.getInstance();
         scheduleData = FXCollections.observableArrayList();
+        
+        // Initialize locations list
+        allLocations = Arrays.asList(
+            "Barguna", "Barishal", "Bhola", "Jhalokati", "Patuakhali", "Pirojpur",
+            "Bandarban", "Brahmanbaria", "Chandpur", "Chattogram", "Chittagong", "Cox's Bazar", "Cumilla", "Feni", "Khagrachari", "Lakshmipur", "Noakhali", "Rangamati",
+            "Dhaka", "Faridpur", "Gazipur", "Gopalganj", "Kishoreganj", "Madaripur", "Manikganj", "Munshiganj", "Narayanganj", "Narsingdi", "Rajbari", "Shariatpur", "Tangail",
+            "Bagerhat", "Chuadanga", "Jashore", "Jhenaidah", "Khulna", "Kushtia", "Magura", "Meherpur", "Narail", "Satkhira",
+            "Jamalpur", "Mymensingh", "Netrokona", "Sherpur",
+            "Bogura", "Joypurhat", "Naogaon", "Natore", "Chapai Nawabganj", "Pabna", "Rajshahi", "Sirajganj",
+            "Dinajpur", "Gaibandha", "Kurigram", "Lalmonirhat", "Nilphamari", "Panchagarh", "Rangpur", "Thakurgaon",
+            "Habiganj", "Moulvibazar", "Sunamganj", "Sylhet"
+        );
+        
+        // Setup autocomplete
+        originAutoComplete = new AutoCompletePopup(originField, allLocations);
+        destinationAutoComplete = new AutoCompletePopup(destinationField, allLocations);
         
         setupTable();
         setupForm();

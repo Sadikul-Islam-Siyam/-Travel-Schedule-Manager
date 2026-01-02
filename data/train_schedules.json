@@ -68,5 +68,15 @@
     "fare": 480.0,
     "duration": "11:00h",
     "offDay": "No off day"
+  },
+  {
+    "trainName": "Tista EXPRESS (708)",
+    "start": "Dhaka",
+    "destination": "Jamalpur",
+    "startTime": "07:30",
+    "arrivalTime": "11:40",
+    "fare": 210.0,
+    "duration": "05:00h",
+    "offDay": "Monday"
   }
 ]

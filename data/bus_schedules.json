@@ -2,20 +2,11 @@
   {
     "busName": "Hanif Paribahan",
     "start": "Dhaka",
-    "destination": "Chittagong",
+    "destination": "Cumilla",
     "startTime": "08:00",
     "arrivalTime": "14:00",
     "fare": 850.0,
     "duration": "6:00h"
-  },
-  {
-    "busName": "Green Line Paribahan",
-    "start": "Dhaka",
-    "destination": "Cox's Bazar",
-    "startTime": "22:30",
-    "arrivalTime": "08:30",
-    "fare": 1200.0,
-    "duration": "10:00h"
   },
   {
     "busName": "Shyamoli Paribahan",
@@ -34,6 +25,15 @@
     "arrivalTime": "15:00",
     "fare": 700.0,
     "duration": "6:00h"
+  },
+  {
+    "busName": "Green Line Paribahan",
+    "start": "Dhaka",
+    "destination": "Cox\u0027s Bazar",
+    "startTime": "22:30",
+    "arrivalTime": "08:30",
+    "fare": 1200.0,
+    "duration": "10:00h"
   },
   {
     "busName": "Shamoli NR Travels",

@@ -1,9 +1,12 @@
 package com.travelmanager.controller;
 
 import com.travelmanager.api.ScheduleDataManager;
+import com.travelmanager.database.DatabaseManager;
 import com.travelmanager.model.BusSchedule;
 import com.travelmanager.model.TrainSchedule;
+import com.travelmanager.util.AuthenticationManager;
 import com.travelmanager.util.NavigationManager;
+import com.travelmanager.util.AutoCompletePopup;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ManageRoutesController {
@@ -37,22 +41,49 @@ public class ManageRoutesController {
     @FXML private ComboBox<String> transportTypeCombo;
     @FXML private TextField durationField;
     @FXML private TextField priceField;
-    @FXML private TextField scheduleTimeField;
     @FXML private ComboBox<String> statusCombo;
     @FXML private TextArea metadataField;
+    @FXML private TextField departureTimeField;
+    @FXML private TextField arrivalTimeField;
+    @FXML private TextArea notesField;
     @FXML private Label formErrorLabel;
     @FXML private Button saveButton;
     
     private ScheduleDataManager dataManager;
+    private DatabaseManager databaseManager;
     private ObservableList<RouteRow> routesList;
+    private RouteRow editingRoute;
+    private boolean isEditMode = false;
+    // AutoComplete popups for origin and destination fields
+    @SuppressWarnings("unused")
+    private AutoCompletePopup originAutoComplete;
+    @SuppressWarnings("unused")
+    private AutoCompletePopup destinationAutoComplete;
+    private List<String> allLocations;
     
     @FXML
     public void initialize() {
         System.out.println("ManageRoutesController: Initializing...");
         dataManager = ScheduleDataManager.getInstance();
+        databaseManager = DatabaseManager.getInstance();
         routesList = FXCollections.observableArrayList();
         
         statusLabel.setText("");
+        
+        // Initialize locations list - All 64 districts of Bangladesh
+        allLocations = Arrays.asList(
+            "Barguna", "Barishal", "Bhola", "Jhalokati", "Patuakhali", "Pirojpur",
+            "Bandarban", "Brahmanbaria", "Chandpur", "Chattogram", "Chittagong", "Cox's Bazar", "Cumilla", "Feni", "Khagrachari", "Lakshmipur", "Noakhali", "Rangamati",
+            "Dhaka", "Faridpur", "Gazipur", "Gopalganj", "Kishoreganj", "Madaripur", "Manikganj", "Munshiganj", "Narayanganj", "Narsingdi", "Rajbari", "Shariatpur", "Tangail",
+            "Bagerhat", "Chuadanga", "Jashore", "Jhenaidah", "Khulna", "Kushtia", "Magura", "Meherpur", "Narail", "Satkhira",
+            "Jamalpur", "Mymensingh", "Netrokona", "Sherpur",
+            "Bogura", "Joypurhat", "Naogaon", "Natore", "Chapai Nawabganj", "Pabna", "Rajshahi", "Sirajganj",
+            "Dinajpur", "Gaibandha", "Kurigram", "Lalmonirhat", "Nilphamari", "Panchagarh", "Rangpur", "Thakurgaon",
+            "Habiganj", "Moulvibazar", "Sunamganj", "Sylhet"
+        );
+        
+        // Setup autocomplete for origin and destination fields
+        setupAutoComplete();
         
         // Initialize ComboBoxes
         transportTypeCombo.getItems().addAll("BUS", "TRAIN");
@@ -66,6 +97,21 @@ public class ManageRoutesController {
         statusCombo.getSelectionModel().select("ACTIVE");
         
         loadRoutes();
+    }
+    
+    private void setupAutoComplete() {
+        // Setup autocomplete after form fields are initialized
+        // The autocomplete will activate when the form is shown
+        formPanel.visibleProperty().addListener((obs, wasVisible, isNowVisible) -> {
+            if (isNowVisible && originField != null && destinationField != null) {
+                if (originAutoComplete == null) {
+                    originAutoComplete = new AutoCompletePopup(originField, allLocations);
+                }
+                if (destinationAutoComplete == null) {
+                    destinationAutoComplete = new AutoCompletePopup(destinationField, allLocations);
+                }
+            }
+        });
     }
     
     private void setupTableColumns() {
@@ -165,50 +211,196 @@ public class ManageRoutesController {
     
     @FXML
     private void handleAddRoute() {
-        formTitle.setText("Add New Route");
-        saveButton.setText("Save Route");
+        isEditMode = false;
+        editingRoute = null;
+        formTitle.setText("Add New Route (Submit for Approval)");
+        saveButton.setText("Submit for Approval");
         clearForm();
         showForm();
     }
     
     private void handleEditRoute(RouteRow route) {
-        showStatus("Edit functionality - Use REST API endpoints to modify schedules", false);
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Edit Route");
-        alert.setHeaderText("Route: " + route.getRouteName());
-        alert.setContentText("To edit this route, use the REST API directly:\n\n" +
-                           "Bus: PUT /api/schedules/bus/{busName}\n" +
-                           "Train: PUT /api/schedules/train/{trainName}\n\n" +
-                           "Route Details:\n" +
-                           "Type: " + route.getTransportType() + "\n" +
-                           "Origin: " + route.getOrigin() + "\n" +
-                           "Destination: " + route.getDestination() + "\n" +
-                           "Fare: ৳" + String.format("%.2f", route.getPrice()));
-        alert.showAndWait();
+        isEditMode = true;
+        editingRoute = route;
+        formTitle.setText("Edit Route: " + route.getRouteName());
+        saveButton.setText("Submit Edit for Approval");
+        
+        // Populate form with current data
+        routeNameField.setText(route.getRouteName());
+        originField.setText(route.getOrigin());
+        destinationField.setText(route.getDestination());
+        transportTypeCombo.setValue(route.getTransportType());
+        durationField.setText(String.valueOf(route.getDurationMinutes()));
+        priceField.setText(String.valueOf(route.getPrice()));
+        statusCombo.setValue(route.getStatus());
+        
+        // Set times in 24-hour format from route data
+        departureTimeField.setText("08:00"); // Default value in 24-hour format (HH:mm)
+        arrivalTimeField.setText(""); // Will be calculated
+        
+        metadataField.setText("");
+        notesField.setText("");
+        
+        showForm();
     }
     
     private void handleDeleteRoute(RouteRow route) {
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmAlert.setTitle("Delete Route");
-        confirmAlert.setHeaderText("Delete route: " + route.getRouteName() + "?");
-        confirmAlert.setContentText("To delete this route, use the REST API:\n\n" +
-                                   "Bus: DELETE /api/schedules/bus/{busName}\n" +
-                                   "Train: DELETE /api/schedules/train/{trainName}\n\n" +
-                                   "This feature is coming soon!");
-        confirmAlert.showAndWait();
+        confirmAlert.setHeaderText("Submit deletion request for: " + route.getRouteName());
+        confirmAlert.setContentText("This will submit a deletion request to the master for approval.\n\n" +
+                                   "Route Details:\n" +
+                                   "Type: " + route.getTransportType() + "\n" +
+                                   "Route: " + route.getOrigin() + " → " + route.getDestination() + "\n" +
+                                   "Price: ৳" + String.format("%.2f", route.getPrice()) + "\n\n" +
+                                   "Do you want to continue?");
+        
+        confirmAlert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    String currentUser = AuthenticationManager.getInstance().getCurrentUsername();
+                    
+                    // Submit deletion request - find the original route ID from REST API
+                    // For now, use route name as identifier
+                    boolean submitted = databaseManager.submitPendingRoute(
+                        route.getRouteName(),
+                        route.getOrigin(),
+                        route.getDestination(),
+                        route.getTransportType(),
+                        route.getDurationMinutes(),
+                        route.getPrice(),
+                        "", // departure time not needed for deletion
+                        "", // metadata not needed for deletion
+                        "DELETE",
+                        null, // original route ID (would need to be tracked)
+                        currentUser,
+                        "Request to delete route"
+                    );
+                    
+                    if (submitted) {
+                        showStatus("✓ Deletion request submitted successfully. Awaiting master approval.", false);
+                        Alert info = new Alert(Alert.AlertType.INFORMATION);
+                        info.setTitle("Request Submitted");
+                        info.setHeaderText("Deletion Request Submitted");
+                        info.setContentText("Your deletion request for '" + route.getRouteName() + 
+                                          "' has been submitted.\n\nThe route will be removed from the REST API after master approval.");
+                        info.showAndWait();
+                    } else {
+                        showStatus("✗ Failed to submit deletion request", true);
+                    }
+                } catch (Exception e) {
+                    showStatus("✗ Error: " + e.getMessage(), true);
+                    e.printStackTrace();
+                }
+            }
+        });
     }
     
     @FXML
     private void handleSaveRoute() {
-        showStatus("Add/Edit functionality via REST API - Coming soon!", false);
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Add New Route");
-        alert.setContentText("To add new routes, use the REST API:\n\n" +
-                           "Bus: POST /api/schedules/bus\n" +
-                           "Train: POST /api/schedules/train\n\n" +
-                           "Feature coming soon in UI!");
-        alert.showAndWait();
-        handleCloseForm();
+        formErrorLabel.setText("");
+        
+        // Validate required fields
+        if (routeNameField.getText().trim().isEmpty()) {
+            formErrorLabel.setText("⚠ Route name is required");
+            formErrorLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+            return;
+        }
+        
+        if (originField.getText().trim().isEmpty() || destinationField.getText().trim().isEmpty()) {
+            formErrorLabel.setText("⚠ Origin and destination are required");
+            formErrorLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+            return;
+        }
+        
+        if (transportTypeCombo.getValue() == null) {
+            formErrorLabel.setText("⚠ Transport type is required");
+            formErrorLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+            return;
+        }
+        
+        int durationMinutes;
+        double price;
+        
+        try {
+            durationMinutes = Integer.parseInt(durationField.getText().trim());
+            if (durationMinutes <= 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            formErrorLabel.setText("⚠ Duration must be a positive number");
+            formErrorLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+            return;
+        }
+        
+        try {
+            price = Double.parseDouble(priceField.getText().trim());
+            if (price < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            formErrorLabel.setText("⚠ Price must be a valid number");
+            formErrorLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+            return;
+        }
+        
+        // Get form data
+        String routeName = routeNameField.getText().trim();
+        String origin = originField.getText().trim();
+        String destination = destinationField.getText().trim();
+        String transportType = transportTypeCombo.getValue();
+        String departureTime = departureTimeField.getText().trim();
+        String metadata = metadataField.getText().trim();
+        String notes = notesField.getText().trim();
+        
+        // Validate departure time format (24-hour format: HH:mm)
+        if (!departureTime.isEmpty() && !departureTime.matches("^([01]?[0-9]|2[0-3]):[0-5][0-9]$")) {
+            formErrorLabel.setText("⚠ Departure time must be in 24-hour format (HH:mm, e.g., 08:00, 14:30, 23:45)");
+            formErrorLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+            return;
+        }
+        
+        try {
+            String currentUser = AuthenticationManager.getInstance().getCurrentUsername();
+            String changeType = isEditMode ? "UPDATE" : "CREATE";
+            
+            // Submit to pending routes for approval
+            boolean submitted = databaseManager.submitPendingRoute(
+                routeName,
+                origin,
+                destination,
+                transportType,
+                durationMinutes,
+                price,
+                departureTime,
+                metadata,
+                changeType,
+                isEditMode ? editingRoute.getId() : null, // original route ID
+                currentUser,
+                notes.isEmpty() ? (isEditMode ? "Update request" : "New route request") : notes
+            );
+            
+            if (submitted) {
+                showStatus("✓ Route " + changeType.toLowerCase() + " request submitted successfully", false);
+                Alert success = new Alert(Alert.AlertType.INFORMATION);
+                success.setTitle("Request Submitted");
+                success.setHeaderText(isEditMode ? "Edit Request Submitted" : "New Route Request Submitted");
+                success.setContentText("Your request has been submitted for master approval.\n\n" +
+                                      "Route: " + routeName + "\n" +
+                                      "Type: " + transportType + "\n" +
+                                      "Route: " + origin + " → " + destination + "\n\n" +
+                                      "The route will be added/updated in the REST API after approval.");
+                success.showAndWait();
+                handleCloseForm();
+            } else {
+                formErrorLabel.setText("⚠ Failed to submit request. Please try again.");
+                formErrorLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+            }
+        } catch (Exception e) {
+            formErrorLabel.setText("⚠ Error: " + e.getMessage());
+            formErrorLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+            e.printStackTrace();
+        }
     }
     
     @FXML
@@ -242,10 +434,14 @@ public class ManageRoutesController {
         transportTypeCombo.getSelectionModel().selectFirst();
         durationField.clear();
         priceField.clear();
-        scheduleTimeField.clear();
         statusCombo.getSelectionModel().select("ACTIVE");
         metadataField.clear();
+        if (departureTimeField != null) departureTimeField.clear();
+        if (arrivalTimeField != null) arrivalTimeField.clear();
+        if (notesField != null) notesField.clear();
         formErrorLabel.setText("");
+        isEditMode = false;
+        editingRoute = null;
     }
     
     private void showStatus(String message, boolean isError) {
