@@ -1,5 +1,15 @@
 [
   {
+    "trainName": "UPABAN EXPRESS (740)",
+    "start": "Dhaka",
+    "destination": "Sylhet",
+    "startTime": "21:30",
+    "arrivalTime": "05:45",
+    "fare": 350.0,
+    "duration": "8:15h",
+    "offDay": "No off day"
+  },
+  {
     "trainName": "SUBARNA EXPRESS (702)",
     "start": "Dhaka",
     "destination": "Chittagong",
@@ -10,14 +20,24 @@
     "offDay": "No off day"
   },
   {
-    "trainName": "TURNA EXPRESS (726)",
+    "trainName": "EKOTA EXPRESS (706)",
     "start": "Dhaka",
-    "destination": "Chittagong",
-    "startTime": "23:00",
-    "arrivalTime": "05:50",
-    "fare": 380.0,
-    "duration": "6:50h",
+    "destination": "Dinajpur",
+    "startTime": "20:10",
+    "arrivalTime": "07:10",
+    "fare": 480.0,
+    "duration": "11:00h",
     "offDay": "No off day"
+  },
+  {
+    "trainName": "Sundarban EXPRESS (718)",
+    "start": "Dhaka",
+    "destination": "Khulna",
+    "startTime": "08:00",
+    "arrivalTime": "03:40",
+    "fare": 625.0,
+    "duration": "07:40h",
+    "offDay": "Monday"
   },
   {
     "trainName": "PARABAT EXPRESS (710)",
@@ -30,26 +50,6 @@
     "offDay": "No off day"
   },
   {
-    "trainName": "UPABAN EXPRESS (740)",
-    "start": "Dhaka",
-    "destination": "Sylhet",
-    "startTime": "21:30",
-    "arrivalTime": "05:45",
-    "fare": 350.0,
-    "duration": "8:15h",
-    "offDay": "No off day"
-  },
-  {
-    "trainName": "SILK CITY EXPRESS (752)",
-    "start": "Dhaka",
-    "destination": "Rajshahi",
-    "startTime": "09:00",
-    "arrivalTime": "16:20",
-    "fare": 390.0,
-    "duration": "7:20h",
-    "offDay": "No off day"
-  },
-  {
     "trainName": "RANGPUR EXPRESS (772)",
     "start": "Dhaka",
     "destination": "Rangpur",
@@ -58,16 +58,6 @@
     "fare": 450.0,
     "duration": "10:00h",
     "offDay": "Monday"
-  },
-  {
-    "trainName": "EKOTA EXPRESS (706)",
-    "start": "Dhaka",
-    "destination": "Dinajpur",
-    "startTime": "20:10",
-    "arrivalTime": "07:10",
-    "fare": 480.0,
-    "duration": "11:00h",
-    "offDay": "No off day"
   },
   {
     "trainName": "Tista EXPRESS (708)",

@@ -13,7 +13,7 @@
             style="-fx-background-color: linear-gradient(to bottom right, #1a252f, #2c3e50);">
     
     <top>
-        <VBox style="-fx-background-color: rgba(44, 62, 80, 0.9); -fx-padding: 20;">
+        <VBox style="-fx-background-color: rgba(44, 62, 80, 0.9); -fx-padding: 20;" spacing="15">
             <HBox alignment="CENTER_LEFT" spacing="15">
                 <Button text="← Back" onAction="#handleBack" 
                         style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8 15; -fx-cursor: hand; -fx-background-radius: 5;"/>
@@ -28,6 +28,22 @@
                         style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8 15; -fx-cursor: hand; -fx-background-radius: 5;"/>
                 <Button text="🔄 Refresh" onAction="#handleRefresh"
                         style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8 15; -fx-cursor: hand; -fx-background-radius: 5;"/>
+            </HBox>
+            
+            <!-- Transport Type Filter and Search Bar -->
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="Filter by:" textFill="#ecf0f1" style="-fx-font-size: 13px; -fx-font-weight: bold;"/>
+                <Button fx:id="showAllBtn" text="All" onAction="#handleShowAll" 
+                        style="-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 8 20; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-weight: bold;"/>
+                <Button fx:id="showBusBtn" text="🚌 Bus Only" onAction="#handleShowBus" 
+                        style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 8 20; -fx-cursor: hand; -fx-background-radius: 5;"/>
+                <Button fx:id="showTrainBtn" text="🚆 Train Only" onAction="#handleShowTrain" 
+                        style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 8 20; -fx-cursor: hand; -fx-background-radius: 5;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="searchField" promptText="🔍 Search by name, origin, or destination..." prefWidth="320"
+                           style="-fx-background-color: white; -fx-font-size: 12px; -fx-padding: 8 12; -fx-background-radius: 5; -fx-border-radius: 5;"/>
+                <Button text="✕" onAction="#handleClearSearch" 
+                        style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 8 12; -fx-cursor: hand; -fx-background-radius: 5;"/>
             </HBox>
         </VBox>
     </top>

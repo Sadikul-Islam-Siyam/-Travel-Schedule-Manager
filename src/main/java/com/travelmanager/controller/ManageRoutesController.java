@@ -33,6 +33,10 @@ public class ManageRoutesController {
     
     @FXML private Label statusLabel;
     @FXML private Label emptyLabel;
+    @FXML private Button showAllBtn;
+    @FXML private Button showBusBtn;
+    @FXML private Button showTrainBtn;
+    @FXML private TextField searchField;
     @FXML private VBox formPanel;
     @FXML private Label formTitle;
     @FXML private TextField routeNameField;
@@ -52,13 +56,17 @@ public class ManageRoutesController {
     private ScheduleDataManager dataManager;
     private DatabaseManager databaseManager;
     private ObservableList<RouteRow> routesList;
+    private ObservableList<RouteRow> filteredRoutesList;
     private RouteRow editingRoute;
     private boolean isEditMode = false;
+    private String currentFilter = "ALL"; // ALL, BUS, TRAIN
     // AutoComplete popups for origin and destination fields
     @SuppressWarnings("unused")
     private AutoCompletePopup originAutoComplete;
     @SuppressWarnings("unused")
     private AutoCompletePopup destinationAutoComplete;
+    @SuppressWarnings("unused")
+    private AutoCompletePopup searchAutoComplete;
     private List<String> allLocations;
     
     @FXML
@@ -67,8 +75,14 @@ public class ManageRoutesController {
         dataManager = ScheduleDataManager.getInstance();
         databaseManager = DatabaseManager.getInstance();
         routesList = FXCollections.observableArrayList();
+        filteredRoutesList = FXCollections.observableArrayList();
         
         statusLabel.setText("");
+        
+        // Setup search field listener
+        if (searchField != null) {
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> applyFilters());
+        }
         
         // Initialize locations list - All 64 districts of Bangladesh
         allLocations = Arrays.asList(
@@ -100,6 +114,11 @@ public class ManageRoutesController {
     }
     
     private void setupAutoComplete() {
+        // Setup autocomplete for search field immediately
+        if (searchField != null) {
+            searchAutoComplete = new AutoCompletePopup(searchField, allLocations);
+        }
+        
         // Setup autocomplete after form fields are initialized
         // The autocomplete will activate when the form is shown
         formPanel.visibleProperty().addListener((obs, wasVisible, isNowVisible) -> {
@@ -165,8 +184,7 @@ public class ManageRoutesController {
         }
         
         System.out.println("ManageRoutesController: Total routes loaded: " + routesList.size());
-        routesTable.setItems(routesList);
-        emptyLabel.setVisible(routesList.isEmpty());
+        applyFilters();
         setupActionsColumn();
     }
     
@@ -449,6 +467,127 @@ public class ManageRoutesController {
         statusLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: " + 
                            (isError ? "#e74c3c" : "#27ae60") + ";");
     }
+    
+    // ============= FILTER AND SEARCH METHODS =============
+    
+    @FXML
+    private void handleShowAll() {
+        currentFilter = "ALL";
+        updateFilterButtons();
+        applyFilters();
+        showStatus("Showing all routes (" + filteredRoutesList.size() + ")", false);
+    }
+    
+    @FXML
+    private void handleShowBus() {
+        currentFilter = "BUS";
+        updateFilterButtons();
+        applyFilters();
+        showStatus("Showing bus routes only (" + filteredRoutesList.size() + ")", false);
+    }
+    
+    @FXML
+    private void handleShowTrain() {
+        currentFilter = "TRAIN";
+        updateFilterButtons();
+        applyFilters();
+        showStatus("Showing train routes only (" + filteredRoutesList.size() + ")", false);
+    }
+    
+    @FXML
+    private void handleClearSearch() {
+        if (searchField != null) {
+            searchField.clear();
+        }
+    }
+    
+    private void updateFilterButtons() {
+        // Active button style
+        String activeStyle = "-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 8 20; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-weight: bold;";
+        // Inactive button style
+        String inactiveStyle = "-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 8 20; -fx-cursor: hand; -fx-background-radius: 5;";
+        
+        if (showAllBtn != null) {
+            showAllBtn.setStyle(currentFilter.equals("ALL") ? activeStyle : inactiveStyle);
+        }
+        if (showBusBtn != null) {
+            showBusBtn.setStyle(currentFilter.equals("BUS") ? activeStyle : inactiveStyle);
+        }
+        if (showTrainBtn != null) {
+            showTrainBtn.setStyle(currentFilter.equals("TRAIN") ? activeStyle : inactiveStyle);
+        }
+    }
+    
+    private void applyFilters() {
+        filteredRoutesList.clear();
+        
+        String searchText = (searchField != null && searchField.getText() != null) 
+            ? searchField.getText().toLowerCase().trim() 
+            : "";
+        
+        for (RouteRow route : routesList) {
+            // Apply transport type filter
+            boolean matchesFilter = currentFilter.equals("ALL") || 
+                                   route.getTransportType().equalsIgnoreCase(currentFilter);
+            
+            // Apply search filter - search for city name in route name, origin OR destination
+            boolean matchesSearch = false;
+            if (searchText.isEmpty()) {
+                matchesSearch = true;
+            } else {
+                String routeName = route.getRouteName().toLowerCase();
+                String origin = route.getOrigin().toLowerCase();
+                String destination = route.getDestination().toLowerCase();
+                
+                // Match if search text is found in route name
+                if (routeName.contains(searchText)) {
+                    matchesSearch = true;
+                }
+                // Match if city is origin OR destination (connected to this place)
+                else if (origin.contains(searchText) || destination.contains(searchText)) {
+                    matchesSearch = true;
+                }
+                // Also check for partial city name matches
+                else if (cityNameMatches(origin, searchText) || cityNameMatches(destination, searchText)) {
+                    matchesSearch = true;
+                }
+            }
+            
+            if (matchesFilter && matchesSearch) {
+                filteredRoutesList.add(route);
+            }
+        }
+        
+        routesTable.setItems(filteredRoutesList);
+        emptyLabel.setVisible(filteredRoutesList.isEmpty());
+        
+        if (filteredRoutesList.isEmpty() && !searchText.isEmpty()) {
+            emptyLabel.setText("No routes found connected to '" + searchText + "'.");
+        } else if (filteredRoutesList.isEmpty()) {
+            emptyLabel.setText("No routes available. Click 'Add Route' to create one.");
+        }
+    }
+    
+    /**
+     * Helper method to match city names flexibly
+     * Handles variations like "Chittagong/Chattogram", "Cox's Bazar/Coxs Bazar"
+     */
+    private boolean cityNameMatches(String cityName, String searchTerm) {
+        // Normalize both strings for comparison
+        String normalizedCity = cityName.toLowerCase()
+            .replace("'", "")
+            .replace(" ", "")
+            .replace("chattogram", "chittagong");
+        
+        String normalizedSearch = searchTerm.toLowerCase()
+            .replace("'", "")
+            .replace(" ", "")
+            .replace("chattogram", "chittagong");
+        
+        return normalizedCity.contains(normalizedSearch) || normalizedSearch.contains(normalizedCity);
+    }
+    
+    // ============= END FILTER AND SEARCH METHODS =============
     
     // Row class for TableView
     public static class RouteRow {
