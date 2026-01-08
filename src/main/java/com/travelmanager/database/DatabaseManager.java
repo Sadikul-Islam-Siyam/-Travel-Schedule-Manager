@@ -829,7 +829,7 @@ public class DatabaseManager {
                 String metadata = rs.getString("metadata");
                 
                 // Apply changes to database
-                if ("CREATE".equals(changeType)) {
+                if ("CREATE".equals(changeType) || "ADD".equals(changeType)) {
                     // Insert new route to live routes table
                     String insertQuery = "INSERT INTO routes (route_name, origin, destination, transport_type, " +
                                         "duration_minutes, price, schedule_time, metadata, status, created_date) " +
@@ -984,7 +984,76 @@ public class DatabaseManager {
                 trainDTO.setArrivalTime(arrivalTime);
                 trainDTO.setFare(price);
                 trainDTO.setDuration(duration);
-                trainDTO.setOffDay(metadata != null && !metadata.isEmpty() ? metadata : "No off day");
+                
+                // Parse metadata for stops and offDay
+                String offDay = "No off day";
+                if (metadata != null && !metadata.isEmpty()) {
+                    // Extract offDay
+                    if (metadata.contains("offDay:")) {
+                        String[] parts = metadata.split(";");
+                        for (String part : parts) {
+                            if (part.trim().startsWith("offDay:")) {
+                                offDay = part.substring(part.indexOf(":") + 1).trim();
+                            }
+                        }
+                    }
+                    
+                    // Extract and parse stops JSON
+                    if (metadata.contains("stops:")) {
+                        try {
+                            String stopsJsonStr = metadata.substring(metadata.indexOf("stops:") + 6);
+                            if (stopsJsonStr.contains(";")) {
+                                stopsJsonStr = stopsJsonStr.substring(0, stopsJsonStr.indexOf(";"));
+                            }
+                            
+                            // Parse stops JSON manually (simple JSON array parsing)
+                            List<TrainScheduleDTO.TrainStop> stops = new ArrayList<>();
+                            stopsJsonStr = stopsJsonStr.trim();
+                            if (stopsJsonStr.startsWith("[") && stopsJsonStr.endsWith("]")) {
+                                stopsJsonStr = stopsJsonStr.substring(1, stopsJsonStr.length() - 1);
+                                String[] stopObjects = stopsJsonStr.split("\\},\\{");
+                                
+                                for (String stopObj : stopObjects) {
+                                    stopObj = stopObj.replace("{", "").replace("}", "");
+                                    String station = "";
+                                    String arr = "";
+                                    String dep = "";
+                                    double fare = 0;
+                                    
+                                    String[] fields = stopObj.split(",");
+                                    for (String field : fields) {
+                                        field = field.trim();
+                                        if (field.contains("\"station\":")) {
+                                            station = field.substring(field.indexOf(":") + 1).replace("\"", "").trim();
+                                        } else if (field.contains("\"arrivalTime\":")) {
+                                            arr = field.substring(field.indexOf(":") + 1).replace("\"", "").trim();
+                                        } else if (field.contains("\"departureTime\":")) {
+                                            dep = field.substring(field.indexOf(":") + 1).replace("\"", "").trim();
+                                        } else if (field.contains("\"cumulativeFare\":")) {
+                                            String fareStr = field.substring(field.indexOf(":") + 1).trim();
+                                            fare = Double.parseDouble(fareStr);
+                                        }
+                                    }
+                                    
+                                    TrainScheduleDTO.TrainStop stop = new TrainScheduleDTO.TrainStop();
+                                    stop.setStation(station);
+                                    stop.setArrivalTime(arr);
+                                    stop.setDepartureTime(dep);
+                                    stop.setCumulativeFare(fare);
+                                    stops.add(stop);
+                                }
+                            }
+                            
+                            if (!stops.isEmpty()) {
+                                trainDTO.setStops(stops);
+                            }
+                        } catch (Exception e) {
+                            System.err.println("⚠ Warning: Could not parse stops from metadata: " + e.getMessage());
+                        }
+                    }
+                }
+                
+                trainDTO.setOffDay(offDay);
                 
                 if ("CREATE".equals(operationType)) {
                     trainStorage.addSchedule(trainDTO);

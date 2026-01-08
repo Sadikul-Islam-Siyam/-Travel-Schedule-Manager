@@ -142,12 +142,106 @@ public class TrainScheduleStorage {
     /**
      * Search train schedules by start and destination
      * Supports flexible matching for common city name variations
+     * Includes intermediate stops logic
      */
     public List<TrainScheduleDTO> searchRoutes(String start, String destination) {
-        return trainSchedules.values().stream()
-                .filter(schedule -> matchesLocation(schedule.getStart(), start) &&
-                                  matchesLocation(schedule.getDestination(), destination))
-                .toList();
+        List<TrainScheduleDTO> results = new ArrayList<>();
+        
+        for (TrainScheduleDTO schedule : trainSchedules.values()) {
+            // Check if stops array exists and is not empty
+            if (schedule.getStops() != null && !schedule.getStops().isEmpty()) {
+                // Find if both start and destination exist in stops
+                int startIndex = findStopIndex(schedule.getStops(), start);
+                int destIndex = findStopIndex(schedule.getStops(), destination);
+                
+                // Valid route if both stops exist and start comes before destination
+                if (startIndex >= 0 && destIndex > startIndex) {
+                    // Create a customized schedule for this segment
+                    TrainScheduleDTO segmentSchedule = createSegmentSchedule(schedule, startIndex, destIndex);
+                    results.add(segmentSchedule);
+                }
+            } else {
+                // Fallback to old logic if no stops defined
+                if (matchesLocation(schedule.getStart(), start) && 
+                    matchesLocation(schedule.getDestination(), destination)) {
+                    results.add(schedule);
+                }
+            }
+        }
+        
+        return results;
+    }
+    
+    /**
+     * Find the index of a stop in the stops list
+     */
+    private int findStopIndex(List<TrainScheduleDTO.TrainStop> stops, String location) {
+        for (int i = 0; i < stops.size(); i++) {
+            if (matchesLocation(stops.get(i).getStation(), location)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    /**
+     * Create a customized schedule for a specific segment of the route
+     */
+    private TrainScheduleDTO createSegmentSchedule(TrainScheduleDTO originalSchedule, int startIndex, int destIndex) {
+        TrainScheduleDTO segment = new TrainScheduleDTO();
+        segment.setTrainName(originalSchedule.getTrainName());
+        segment.setOffDay(originalSchedule.getOffDay());
+        
+        List<TrainScheduleDTO.TrainStop> stops = originalSchedule.getStops();
+        TrainScheduleDTO.TrainStop startStop = stops.get(startIndex);
+        TrainScheduleDTO.TrainStop destStop = stops.get(destIndex);
+        
+        segment.setStart(startStop.getStation());
+        segment.setDestination(destStop.getStation());
+        segment.setStartTime(startStop.getDepartureTime());
+        segment.setArrivalTime(destStop.getArrivalTime());
+        
+        // Calculate fare for this segment
+        double segmentFare = destStop.getCumulativeFare() - startStop.getCumulativeFare();
+        segment.setFare(segmentFare);
+        
+        // Calculate duration
+        String duration = calculateDuration(startStop.getDepartureTime(), destStop.getArrivalTime());
+        segment.setDuration(duration);
+        
+        // Include only relevant stops for this segment
+        List<TrainScheduleDTO.TrainStop> segmentStops = new ArrayList<>();
+        for (int i = startIndex; i <= destIndex; i++) {
+            segmentStops.add(stops.get(i));
+        }
+        segment.setStops(segmentStops);
+        
+        return segment;
+    }
+    
+    /**
+     * Calculate duration between two times (simple calculation, doesn't handle day overflow perfectly)
+     */
+    private String calculateDuration(String startTime, String endTime) {
+        try {
+            String[] startParts = startTime.split(":");
+            String[] endParts = endTime.split(":");
+            
+            int startMinutes = Integer.parseInt(startParts[0]) * 60 + Integer.parseInt(startParts[1]);
+            int endMinutes = Integer.parseInt(endParts[0]) * 60 + Integer.parseInt(endParts[1]);
+            
+            int durationMinutes = endMinutes - startMinutes;
+            if (durationMinutes < 0) {
+                durationMinutes += 24 * 60; // Add 24 hours if crossing midnight
+            }
+            
+            int hours = durationMinutes / 60;
+            int minutes = durationMinutes % 60;
+            
+            return String.format("%d:%02dh", hours, minutes);
+        } catch (Exception e) {
+            return "N/A";
+        }
     }
     
     /**

@@ -229,12 +229,8 @@ public class ManageRoutesController {
     
     @FXML
     private void handleAddRoute() {
-        isEditMode = false;
-        editingRoute = null;
-        formTitle.setText("Add New Route (Submit for Approval)");
-        saveButton.setText("Submit for Approval");
-        clearForm();
-        showForm();
+        // Navigate to route selection screen
+        NavigationManager.navigateTo("add-route-selection");
     }
     
     private void handleEditRoute(RouteRow route) {

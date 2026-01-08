@@ -7,7 +7,33 @@
     "arrivalTime": "05:45",
     "fare": 350.0,
     "duration": "8:15h",
-    "offDay": "No off day"
+    "offDay": "No off day",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "21:30",
+        "departureTime": "21:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "23:45",
+        "departureTime": "23:50",
+        "cumulativeFare": 150.0
+      },
+      {
+        "station": "Habiganj",
+        "arrivalTime": "02:30",
+        "departureTime": "02:35",
+        "cumulativeFare": 250.0
+      },
+      {
+        "station": "Sylhet",
+        "arrivalTime": "05:45",
+        "departureTime": "05:45",
+        "cumulativeFare": 350.0
+      }
+    ]
   },
   {
     "trainName": "SUBARNA EXPRESS (702)",
@@ -17,7 +43,63 @@
     "arrivalTime": "20:50",
     "fare": 420.0,
     "duration": "6:00h",
-    "offDay": "No off day"
+    "offDay": "No off day",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "14:50",
+        "departureTime": "14:50",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "17:20",
+        "departureTime": "17:30",
+        "cumulativeFare": 180.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "18:45",
+        "departureTime": "18:50",
+        "cumulativeFare": 280.0
+      },
+      {
+        "station": "Chittagong",
+        "arrivalTime": "20:50",
+        "departureTime": "20:50",
+        "cumulativeFare": 420.0
+      }
+    ]
+  },
+  {
+    "trainName": "TISTA EXPRESS(708)",
+    "start": "Jamalpur",
+    "destination": "Dhaka",
+    "startTime": "04:00-08:30",
+    "arrivalTime": "10:00",
+    "fare": 210.0,
+    "duration": "0:00h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Jamalpur",
+        "arrivalTime": "04:00",
+        "departureTime": "04:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Mymensingh",
+        "arrivalTime": "05:00",
+        "departureTime": "05:05",
+        "cumulativeFare": 90.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "08:30",
+        "departureTime": "08:30",
+        "cumulativeFare": 210.0
+      }
+    ]
   },
   {
     "trainName": "EKOTA EXPRESS (706)",
@@ -27,17 +109,105 @@
     "arrivalTime": "07:10",
     "fare": 480.0,
     "duration": "11:00h",
-    "offDay": "No off day"
+    "offDay": "No off day",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "20:10",
+        "departureTime": "20:10",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "21:40",
+        "departureTime": "21:45",
+        "cumulativeFare": 100.0
+      },
+      {
+        "station": "Bogura",
+        "arrivalTime": "00:30",
+        "departureTime": "00:40",
+        "cumulativeFare": 250.0
+      },
+      {
+        "station": "Rangpur",
+        "arrivalTime": "04:50",
+        "departureTime": "05:00",
+        "cumulativeFare": 380.0
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "07:10",
+        "departureTime": "07:10",
+        "cumulativeFare": 480.0
+      }
+    ]
+  },
+  {
+    "trainName": "Tista EXPRESS (707)",
+    "start": "Dhaka",
+    "destination": "Jamalpur",
+    "startTime": "07:30",
+    "arrivalTime": "12:40",
+    "fare": 210.0,
+    "duration": "05:10h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "07:30",
+        "departureTime": "07:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Mymensingh",
+        "arrivalTime": "10:00",
+        "departureTime": "10:10",
+        "cumulativeFare": 150.0
+      },
+      {
+        "station": "Jamalpur",
+        "arrivalTime": "12:40",
+        "departureTime": "12:40",
+        "cumulativeFare": 210.0
+      }
+    ]
   },
   {
     "trainName": "Sundarban EXPRESS (718)",
     "start": "Dhaka",
     "destination": "Khulna",
     "startTime": "08:00",
-    "arrivalTime": "03:40",
+    "arrivalTime": "15:40",
     "fare": 625.0,
     "duration": "07:40h",
-    "offDay": "Monday"
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "08:00",
+        "departureTime": "08:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Faridpur",
+        "arrivalTime": "10:30",
+        "departureTime": "10:40",
+        "cumulativeFare": 200.0
+      },
+      {
+        "station": "Jashore",
+        "arrivalTime": "13:20",
+        "departureTime": "13:30",
+        "cumulativeFare": 420.0
+      },
+      {
+        "station": "Khulna",
+        "arrivalTime": "15:40",
+        "departureTime": "15:40",
+        "cumulativeFare": 625.0
+      }
+    ]
   },
   {
     "trainName": "PARABAT EXPRESS (710)",
@@ -47,7 +217,39 @@
     "arrivalTime": "14:40",
     "fare": 350.0,
     "duration": "8:00h",
-    "offDay": "No off day"
+    "offDay": "No off day",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "06:40",
+        "departureTime": "06:40",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Narsingdi",
+        "arrivalTime": "07:50",
+        "departureTime": "08:00",
+        "cumulativeFare": 80.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "09:30",
+        "departureTime": "09:40",
+        "cumulativeFare": 150.0
+      },
+      {
+        "station": "Habiganj",
+        "arrivalTime": "12:10",
+        "departureTime": "12:20",
+        "cumulativeFare": 250.0
+      },
+      {
+        "station": "Sylhet",
+        "arrivalTime": "14:40",
+        "departureTime": "14:40",
+        "cumulativeFare": 350.0
+      }
+    ]
   },
   {
     "trainName": "RANGPUR EXPRESS (772)",
@@ -57,16 +259,38 @@
     "arrivalTime": "19:00",
     "fare": 450.0,
     "duration": "10:00h",
-    "offDay": "Monday"
-  },
-  {
-    "trainName": "Tista EXPRESS (708)",
-    "start": "Dhaka",
-    "destination": "Jamalpur",
-    "startTime": "07:30",
-    "arrivalTime": "11:40",
-    "fare": 210.0,
-    "duration": "05:00h",
-    "offDay": "Monday"
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "09:00",
+        "departureTime": "09:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Mymensingh",
+        "arrivalTime": "11:30",
+        "departureTime": "11:40",
+        "cumulativeFare": 150.0
+      },
+      {
+        "station": "Jamalpur",
+        "arrivalTime": "13:20",
+        "departureTime": "13:30",
+        "cumulativeFare": 210.0
+      },
+      {
+        "station": "Bogura",
+        "arrivalTime": "15:50",
+        "departureTime": "16:00",
+        "cumulativeFare": 320.0
+      },
+      {
+        "station": "Rangpur",
+        "arrivalTime": "19:00",
+        "departureTime": "19:00",
+        "cumulativeFare": 450.0
+      }
+    ]
   }
 ]

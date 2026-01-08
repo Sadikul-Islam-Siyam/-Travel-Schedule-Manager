@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.travelmanager.controller.AddBusRouteController"
+            minHeight="600.0" minWidth="900.0"
+            stylesheets="@../css/styles.css"
+            style="-fx-background-color: linear-gradient(to bottom right, #1a252f, #2c3e50);">
+    
+    <top>
+        <VBox style="-fx-background-color: rgba(44, 62, 80, 0.9); -fx-padding: 20;">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Button text="← Back" onAction="#handleBack" 
+                        style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8 15; -fx-cursor: hand; -fx-background-radius: 5;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="🚌 Add Bus Route" textFill="white">
+                    <font>
+                        <Font name="System Bold" size="24"/>
+                    </font>
+                </Label>
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <VBox spacing="20" style="-fx-padding: 30;" alignment="TOP_CENTER">
+            <Label fx:id="statusLabel" textFill="white" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            
+            <!-- Form Card -->
+            <VBox spacing="18" style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 30; -fx-max-width: 700;">
+                <Label text="Bus Route Details" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                <Separator/>
+                
+                <GridPane hgap="15" vgap="15">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
+                    
+                    <!-- Row 0: Bus Name -->
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2">
+                        <Label text="Bus Name *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                        <TextField fx:id="busNameField" promptText="e.g., Hanif Paribahan" style="-fx-pref-height: 38;"/>
+                    </VBox>
+                    
+                    <!-- Row 1: Origin and Destination -->
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label text="Origin Station *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                        <TextField fx:id="originField" promptText="e.g., Dhaka" style="-fx-pref-height: 38;"/>
+                    </VBox>
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label text="Destination Station *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                        <TextField fx:id="destinationField" promptText="e.g., Chittagong" style="-fx-pref-height: 38;"/>
+                    </VBox>
+                    
+                    <!-- Row 2: Times -->
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                        <Label text="Departure Time *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                        <TextField fx:id="departureTimeField" promptText="HH:MM (e.g., 08:30)" style="-fx-pref-height: 38;"/>
+                    </VBox>
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label text="Arrival Time *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                        <TextField fx:id="arrivalTimeField" promptText="HH:MM (e.g., 14:30)" style="-fx-pref-height: 38;"/>
+                    </VBox>
+                    
+                    <!-- Row 3: Fare and Duration -->
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                        <Label text="Fare (BDT) *" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                        <TextField fx:id="fareField" promptText="e.g., 850.00" style="-fx-pref-height: 38;"/>
+                    </VBox>
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <Label text="Duration" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                        <TextField fx:id="durationField" promptText="e.g., 6:00h" style="-fx-pref-height: 38;"/>
+                    </VBox>
+                </GridPane>
+                
+                <Separator/>
+                
+                <Label fx:id="errorLabel" textFill="#e74c3c" style="-fx-font-size: 12px; -fx-font-weight: bold;" wrapText="true"/>
+                
+                <HBox spacing="15" alignment="CENTER">
+                    <Button text="✓ Submit for Approval" onAction="#handleSubmit" prefWidth="200"
+                            style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 30; -fx-cursor: hand; -fx-background-radius: 8;"/>
+                    <Button text="Cancel" onAction="#handleBack" prefWidth="120"
+                            style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 12 20; -fx-cursor: hand; -fx-background-radius: 8;"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>
