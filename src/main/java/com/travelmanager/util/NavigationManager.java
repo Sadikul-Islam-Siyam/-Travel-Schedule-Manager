@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Utility class to manage navigation between views with global Help support
@@ -17,6 +19,7 @@ public class NavigationManager {
     private static NavigationManager instance;
     private static String previousPage = "login"; // Previous page for back navigation
     private static String currentPage = "login"; // Current page being displayed
+    private static Map<String, Object> navigationContext = new HashMap<>();
     
     private NavigationManager() {
     }
@@ -30,6 +33,39 @@ public class NavigationManager {
     
     public static void setPrimaryStage(Stage stage) {
         primaryStage = stage;
+    }
+    
+    /**
+     * Store context data for navigation
+     * @param key The context key
+     * @param value The context value
+     */
+    public static void setContext(String key, Object value) {
+        navigationContext.put(key, value);
+    }
+    
+    /**
+     * Retrieve context data
+     * @param key The context key
+     * @return The context value or null if not found
+     */
+    public static Object getContext(String key) {
+        return navigationContext.get(key);
+    }
+    
+    /**
+     * Clear a specific context entry
+     * @param key The context key to clear
+     */
+    public static void clearContext(String key) {
+        navigationContext.remove(key);
+    }
+    
+    /**
+     * Clear all context data
+     */
+    public static void clearAllContext() {
+        navigationContext.clear();
     }
     
     public void navigateToHome() {

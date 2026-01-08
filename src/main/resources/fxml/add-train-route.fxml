@@ -7,28 +7,27 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.travelmanager.controller.AddTrainRouteController"
-            style="-fx-background-color: #f5f6fa;">
+            style="-fx-background-color: linear-gradient(to bottom right, #1a252f, #2c3e50);">
     
     <top>
-        <VBox style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);">
+        <VBox style="-fx-background-color: rgba(44, 62, 80, 0.9); -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);">
             <padding><Insets top="20" right="30" bottom="20" left="30"/></padding>
             
             <HBox alignment="CENTER_LEFT" spacing="15">
                 <Button text="← Back" onAction="#handleBack" 
-                        style="-fx-background-color: transparent; -fx-text-fill: #666; -fx-cursor: hand; -fx-font-size: 14px;"/>
-                <Label text="Add Train Route" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                        style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 14px; -fx-padding: 10 20; -fx-background-radius: 5; -fx-font-weight: bold;"/>
+                <Label text="Add Train Route" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"/>
             </HBox>
         </VBox>
     </top>
     
     <center>
-        <ScrollPane fitToWidth="true" style="-fx-background: #f5f6fa; -fx-background-color: #f5f6fa;">
-            <VBox spacing="20" style="-fx-padding: 30; -fx-background-color: #f5f6fa;">
+        <ScrollPane fitToWidth="true" style="-fx-background: #2c3e50; -fx-background-color: #2c3e50;">
+            <VBox spacing="20" style="-fx-padding: 30; -fx-background-color: transparent;">
                 
                 <!-- Train Overview Section -->
                 <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
                     <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="🚂" style="-fx-font-size: 18px;"/>
                         <Label text="Train Overview" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
                     </HBox>
                     
@@ -90,9 +89,25 @@
                     </VBox>
                     
                     <Button text="+ Add Stop" onAction="#handleAddStop" 
-                            style="-fx-background-color: transparent; -fx-text-fill: #3498db; -fx-cursor: hand; -fx-font-size: 13px; -fx-font-weight: 600; -fx-padding: 10; -fx-border-color: transparent; -fx-background-radius: 6;">
+                            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 13px; -fx-font-weight: 600; -fx-padding: 10 20; -fx-background-radius: 6;">
                         <font><Font name="System Bold" size="13"/></font>
                     </Button>
+                </VBox>
+                
+                <!-- Note to Master Section -->
+                <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="✎" style="-fx-font-size: 18px;"/>
+                        <Label text="Note to Master (Optional)" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                    </HBox>
+                    
+                    <VBox spacing="8">
+                        <Label text="Provide a reason or note to help the master understand why this route should be approved." 
+                               style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" wrapText="true"/>
+                        <TextArea fx:id="noteToMasterField" promptText="e.g., Updated departure times based on new schedule, Added intermediate stop per customer request..." 
+                                  wrapText="true" prefRowCount="3"
+                                  style="-fx-background-color: #f8f9fa; -fx-border-color: #ddd; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 10; -fx-font-size: 13px;"/>
+                    </VBox>
                 </VBox>
                 
                 <!-- Error/Status Labels -->
@@ -105,9 +120,9 @@
     </center>
     
     <bottom>
-        <HBox alignment="CENTER" spacing="15" style="-fx-background-color: white; -fx-padding: 20 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, -2);">
+        <HBox alignment="CENTER" spacing="15" style="-fx-background-color: rgba(44, 62, 80, 0.9); -fx-padding: 20 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, -2);">
             <Button text="Save Draft" 
-                    style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 8; -fx-background-radius: 8; -fx-text-fill: #555; -fx-cursor: hand; -fx-padding: 12 30; -fx-font-size: 14px; -fx-font-weight: 600;"/>
+                    style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 12 30; -fx-font-size: 14px; -fx-font-weight: 600;"/>
             <Button text="✓ Submit for Approval" onAction="#handleSubmit" 
                     style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 12 30; -fx-font-size: 14px; -fx-font-weight: 600;">
                 <font><Font name="System Bold" size="14"/></font>

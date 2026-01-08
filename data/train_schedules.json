@@ -1,5 +1,35 @@
 [
   {
+    "trainName": "JAMUNA EXPRESS(746)",
+    "start": "Dhaka",
+    "destination": "Jamalpur",
+    "startTime": "16:45",
+    "arrivalTime": "22:10",
+    "fare": 210.0,
+    "duration": "0:00h",
+    "offDay": "No off day",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "16:45",
+        "departureTime": "16:45",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Mymensingh",
+        "arrivalTime": "21:00",
+        "departureTime": "21:05",
+        "cumulativeFare": 125.0
+      },
+      {
+        "station": "Jamalpur",
+        "arrivalTime": "22:10",
+        "departureTime": "22:10",
+        "cumulativeFare": 210.0
+      }
+    ]
+  },
+  {
     "trainName": "UPABAN EXPRESS (740)",
     "start": "Dhaka",
     "destination": "Sylhet",
@@ -75,8 +105,8 @@
     "trainName": "TISTA EXPRESS(708)",
     "start": "Jamalpur",
     "destination": "Dhaka",
-    "startTime": "04:00-08:30",
-    "arrivalTime": "10:00",
+    "startTime": "04:00",
+    "arrivalTime": "08:30",
     "fare": 210.0,
     "duration": "0:00h",
     "offDay": "Monday",

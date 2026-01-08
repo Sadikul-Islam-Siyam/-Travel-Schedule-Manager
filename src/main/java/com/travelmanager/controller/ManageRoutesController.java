@@ -234,28 +234,16 @@ public class ManageRoutesController {
     }
     
     private void handleEditRoute(RouteRow route) {
-        isEditMode = true;
-        editingRoute = route;
-        formTitle.setText("Edit Route: " + route.getRouteName());
-        saveButton.setText("Submit Edit for Approval");
-        
-        // Populate form with current data
-        routeNameField.setText(route.getRouteName());
-        originField.setText(route.getOrigin());
-        destinationField.setText(route.getDestination());
-        transportTypeCombo.setValue(route.getTransportType());
-        durationField.setText(String.valueOf(route.getDurationMinutes()));
-        priceField.setText(String.valueOf(route.getPrice()));
-        statusCombo.setValue(route.getStatus());
-        
-        // Set times in 24-hour format from route data
-        departureTimeField.setText("08:00"); // Default value in 24-hour format (HH:mm)
-        arrivalTimeField.setText(""); // Will be calculated
-        
-        metadataField.setText("");
-        notesField.setText("");
-        
-        showForm();
+        // Navigate to the appropriate edit page based on transport type
+        if ("BUS".equals(route.getTransportType())) {
+            // Store route data in NavigationManager context for the bus form
+            NavigationManager.setContext("editRoute", route);
+            NavigationManager.navigateTo("add-bus-route");
+        } else if ("TRAIN".equals(route.getTransportType())) {
+            // Store route data in NavigationManager context for the train form
+            NavigationManager.setContext("editRoute", route);
+            NavigationManager.navigateTo("add-train-route");
+        }
     }
     
     private void handleDeleteRoute(RouteRow route) {

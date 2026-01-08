@@ -1,6 +1,10 @@
 package com.travelmanager.controller;
 
+import com.travelmanager.api.ScheduleDataManager;
 import com.travelmanager.database.DatabaseManager;
+import com.travelmanager.model.TrainSchedule;
+import com.travelmanager.model.rest.TrainScheduleDTO;
+import com.travelmanager.storage.TrainScheduleStorage;
 import com.travelmanager.util.AuthenticationManager;
 import com.travelmanager.util.AutoCompletePopup;
 import com.travelmanager.util.NavigationManager;
@@ -14,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,12 +32,16 @@ public class AddTrainRouteController {
     @FXML private TextField destArrivalField;
     @FXML private TextField destFareField;
     @FXML private VBox stopsContainer;
+    @FXML private TextArea noteToMasterField;
     @FXML private Label statusLabel;
     @FXML private Label errorLabel;
     
     private DatabaseManager databaseManager;
+    private ScheduleDataManager scheduleDataManager;
+    private TrainScheduleStorage trainScheduleStorage;
     private List<StopRowPane> stopRows;
     private List<String> allLocations;
+    private boolean isEditMode = false;
     @SuppressWarnings("unused")
     private AutoCompletePopup startStationAutoComplete;
     @SuppressWarnings("unused")
@@ -41,6 +50,8 @@ public class AddTrainRouteController {
     @FXML
     public void initialize() {
         databaseManager = DatabaseManager.getInstance();
+        scheduleDataManager = ScheduleDataManager.getInstance();
+        trainScheduleStorage = TrainScheduleStorage.getInstance();
         stopRows = new ArrayList<>();
         
         // Initialize locations
@@ -67,6 +78,67 @@ public class AddTrainRouteController {
         
         errorLabel.setText("");
         statusLabel.setText("");
+        
+        // Check if we're in edit mode
+        Object editContext = NavigationManager.getContext("editRoute");
+        if (editContext instanceof ManageRoutesController.RouteRow) {
+            ManageRoutesController.RouteRow route = (ManageRoutesController.RouteRow) editContext;
+            populateFormForEdit(route);
+            NavigationManager.clearContext("editRoute");
+        }
+    }
+    
+    private void populateFormForEdit(ManageRoutesController.RouteRow route) {
+        isEditMode = true;
+        
+        // Fetch the actual train schedule DTO which contains all data including offDay and stops
+        TrainScheduleDTO trainSchedule = trainScheduleStorage.getSchedule(route.getRouteName()).orElse(null);
+        
+        if (trainSchedule != null) {
+            // Use actual data from the schedule DTO
+            trainNameField.setText(trainSchedule.getTrainName());
+            startStationField.setText(trainSchedule.getStart());
+            destStationField.setText(trainSchedule.getDestination());
+            destFareField.setText(String.valueOf(trainSchedule.getFare()));
+            
+            // Set times directly from DTO
+            startDepartureField.setText(trainSchedule.getStartTime());
+            destArrivalField.setText(trainSchedule.getArrivalTime());
+            
+            // Set off day
+            if (trainSchedule.getOffDay() != null && !trainSchedule.getOffDay().isEmpty()) {
+                offDayCombo.setValue(trainSchedule.getOffDay());
+            } else {
+                offDayCombo.getSelectionModel().selectFirst();
+            }
+            
+            // Load intermediate stops if they exist
+            if (trainSchedule.getStops() != null && !trainSchedule.getStops().isEmpty()) {
+                stopRows.clear();
+                for (TrainScheduleDTO.TrainStop stop : trainSchedule.getStops()) {
+                    // Skip origin and destination stops (they're in the main fields)
+                    if (!stop.getStation().equals(trainSchedule.getStart()) && 
+                        !stop.getStation().equals(trainSchedule.getDestination())) {
+                        StopRowPane stopRow = new StopRowPane(stopRows.size());
+                        stopRow.stationField.setText(stop.getStation());
+                        stopRow.arrivalField.setText(stop.getArrivalTime());
+                        stopRow.departureField.setText(stop.getDepartureTime());
+                        stopRow.fareField.setText(String.valueOf(stop.getCumulativeFare()));
+                        stopRows.add(stopRow);
+                    }
+                }
+                updateStopsDisplay();
+            }
+        } else {
+            // Fallback to route row data
+            trainNameField.setText(route.getRouteName());
+            startStationField.setText(route.getOrigin());
+            destStationField.setText(route.getDestination());
+            destFareField.setText(String.valueOf(route.getPrice()));
+        }
+        
+        statusLabel.setText("Editing train: " + route.getRouteName());
+        statusLabel.setStyle("-fx-text-fill: #3498db;");
     }
     
     @FXML
@@ -238,6 +310,13 @@ public class AddTrainRouteController {
         try {
             String currentUser = AuthenticationManager.getInstance().getCurrentUsername();
             
+            // Get note from user
+            String noteToMaster = noteToMasterField.getText().trim();
+            String description = "New train route with " + totalStops + " stops (including " + stopRows.size() + " intermediate)";
+            if (!noteToMaster.isEmpty()) {
+                description = "Note: " + noteToMaster + " | " + description;
+            }
+            
             // Submit with stops data in metadata
             boolean submitted = databaseManager.submitPendingRoute(
                 trainName,
@@ -246,12 +325,12 @@ public class AddTrainRouteController {
                 "TRAIN",
                 0,
                 totalFare,
-                startDeparture + "-" + destArrival,
-                "stops:" + stopsJson.toString() + ";offDay:" + offDay + ";duration:" + duration,
+                startDeparture,
+                "stops:" + stopsJson.toString() + ";offDay:" + offDay + ";duration:" + duration + ";arrivalTime:" + destArrival,
                 "ADD",
                 null,
                 currentUser,
-                "New train route with " + totalStops + " stops (including " + stopRows.size() + " intermediate)"
+                description
             );
             
             if (submitted) {
@@ -277,7 +356,11 @@ public class AddTrainRouteController {
     
     @FXML
     private void handleBack() {
-        NavigationManager.navigateTo("add-route-selection");
+        if (isEditMode) {
+            NavigationManager.navigateTo("manage-routes");
+        } else {
+            NavigationManager.navigateTo("add-route-selection");
+        }
     }
     
     private boolean isValidTimeFormat(String time) {
