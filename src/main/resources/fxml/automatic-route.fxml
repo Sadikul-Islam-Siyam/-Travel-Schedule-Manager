@@ -8,15 +8,15 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.travelmanager.controller.AutomaticRouteController"
-            minHeight="450.0" minWidth="700.0"
+            minHeight="600.0" minWidth="900.0"
             stylesheets="@../css/styles.css">
     
     <top>
         <VBox style="-fx-background-color: #2c3e50; -fx-padding: 15;">
             <HBox alignment="CENTER_LEFT" spacing="15">
                 <Button text="← Back" onAction="#handleBack" 
-                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 10 20; -fx-cursor: hand; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);"/>
-                <Label text="Automatic Route Generation" textFill="white">
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 10 20; -fx-cursor: hand; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 5;"/>
+                <Label text="🤖 Automatic Route Generator" textFill="white">
                     <font>
                         <Font name="System Bold" size="20.0"/>
                     </font>
@@ -26,10 +26,52 @@
     </top>
     
     <center>
-        <VBox alignment="CENTER" spacing="20" BorderPane.alignment="CENTER" style="-fx-background-color: white; -fx-padding: 50;">
-            <Label fx:id="statusLabel" text="Coming Soon..." style="-fx-font-size: 18px; -fx-text-fill: #7f8c8d;"/>
-            <Label text="This feature will automatically generate optimal routes for you" 
-                   style="-fx-font-size: 14px; -fx-text-fill: #95a5a6;"/>
-        </VBox>
+        <ScrollPane fitToWidth="true" style="-fx-background: #ecf0f1;">
+            <VBox spacing="20" style="-fx-padding: 20;">
+                
+                <!-- Search Form -->
+                <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                    <Label text="Find Multi-Leg Routes" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                    <Label text="Automatically generates optimal routes with transfers when no direct connection exists" 
+                           style="-fx-text-fill: #7f8c8d; -fx-wrap-text: true;"/>
+                    
+                    <GridPane hgap="10" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints minWidth="70" prefWidth="70"/>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="200"/>
+                        </columnConstraints>
+                        
+                        <Label text="From:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-size: 13px;"/>
+                        <TextField fx:id="startField" promptText="" GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-pref-height: 32px;"/>
+                        
+                        <Label text="To:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-size: 13px;"/>
+                        <TextField fx:id="destinationField" promptText="" GridPane.rowIndex="1" GridPane.columnIndex="1" style="-fx-pref-height: 32px;"/>
+                        
+                        <Label text="Date:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-size: 13px;"/>
+                        <DatePicker fx:id="datePicker" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="150" style="-fx-pref-height: 32px;"/>
+                        
+                        <Label text="Max Legs:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-size: 13px;"/>
+                        <HBox spacing="10" GridPane.rowIndex="3" GridPane.columnIndex="1" alignment="CENTER_LEFT">
+                            <ComboBox fx:id="maxLegsCombo" prefWidth="150" style="-fx-pref-height: 32px;"/>
+                            <Label text="..." style="-fx-text-fill: #95a5a6; -fx-font-size: 11px;"/>
+                        </HBox>
+                    </GridPane>
+                    
+                    <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                        <Button text="🔍 Generate Routes" onAction="#handleGenerateRoutes" 
+                                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-padding: 10 30; -fx-cursor: hand; -fx-font-size: 13px; -fx-background-radius: 5;"/>
+                        <Button text="Clear" onAction="#handleClear"
+                                style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 10 30; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-size: 13px;"/>
+                    </HBox>
+                </VBox>
+                
+                <!-- Status Label -->
+                <Label fx:id="statusLabel" style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;" wrapText="true"/>
+                
+                <!-- Results List -->
+                <VBox fx:id="resultsContainer" spacing="15"/>
+                
+            </VBox>
+        </ScrollPane>
     </center>
 </BorderPane>
