@@ -150,22 +150,6 @@ public class AddTrainRouteController {
         }
     }
     
-    private void moveStopUp(int index) {
-        if (index > 0 && index < stopRows.size()) {
-            StopRowPane stop = stopRows.remove(index);
-            stopRows.add(index - 1, stop);
-            updateStopsDisplay();
-        }
-    }
-    
-    private void moveStopDown(int index) {
-        if (index >= 0 && index < stopRows.size() - 1) {
-            StopRowPane stop = stopRows.remove(index);
-            stopRows.add(index + 1, stop);
-            updateStopsDisplay();
-        }
-    }
-    
     private void updateStopsDisplay() {
         stopsContainer.getChildren().clear();
         

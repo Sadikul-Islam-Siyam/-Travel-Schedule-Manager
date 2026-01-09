@@ -1,8 +1,6 @@
 package com.travelmanager.controller;
 
-import com.travelmanager.api.ScheduleDataManager;
 import com.travelmanager.database.DatabaseManager;
-import com.travelmanager.model.BusSchedule;
 import com.travelmanager.model.rest.BusScheduleDTO;
 import com.travelmanager.storage.BusScheduleStorage;
 import com.travelmanager.util.AuthenticationManager;
@@ -11,7 +9,6 @@ import com.travelmanager.util.NavigationManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,7 +29,6 @@ public class AddBusRouteController {
     @SuppressWarnings("unused")
     private AutoCompletePopup destinationAutoComplete;
     private DatabaseManager databaseManager;
-    private ScheduleDataManager scheduleDataManager;
     private BusScheduleStorage busScheduleStorage;
     private List<String> allLocations;
     private boolean isEditMode = false;
@@ -41,7 +37,6 @@ public class AddBusRouteController {
     @FXML
     public void initialize() {
         databaseManager = DatabaseManager.getInstance();
-        scheduleDataManager = ScheduleDataManager.getInstance();
         busScheduleStorage = BusScheduleStorage.getInstance();
         
         // Initialize locations list

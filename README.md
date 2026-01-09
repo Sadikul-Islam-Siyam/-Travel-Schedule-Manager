@@ -6,14 +6,15 @@ A comprehensive multi-modal travel schedule management application built with Ja
 
 ### Core Functionality
 - 🔌 **API Integration** - Real-time schedule fetching via REST API (mock & manual data support)
-- 📋 **Multi-Leg Travel Plans** - Create complex journeys with multiple connections
-- 🔍 **Smart Search** - Autocomplete for 14 Bangladesh cities with advanced filtering
+- 📋 **Multi-Leg Travel Plans** - Create complex journeys with multiple connections (up to 3 legs)
+- 🔍 **Smart Search** - Autocomplete for 19 Bangladesh cities with advanced filtering
 - 📅 **Date-Based Search** - Schedule lookup for specific travel dates
 - 💾 **Persistent Storage** - SQLite database with JSON file support
 - ✏️ **Plan Management** - Edit, update, and delete saved travel plans
 - 💰 **Fare Calculation** - Automatic total fare and duration computation
-- ⚠️ **Connection Validation** - Smart checks for timing and connection points
+- ⚠️ **Connection Validation** - Smart checks for timing and connection points (30-min transfer buffer)
 - 📝 **Notes & Comments** - Add custom notes to your travel plans
+- 🚦 **Intelligent Routing** - Automatic route finding with pathfinding algorithm
 
 ### Authentication & Security
 - 🔐 **Role-Based Access Control** - Three role levels (USER, DEVELOPER, MASTER)
@@ -26,9 +27,10 @@ A comprehensive multi-modal travel schedule management application built with Ja
 - 🛠️ **Schedule Management UI** - Add, edit, delete bus and train schedules
 - 🌐 **REST API Server** - Embedded Javalin server on port 8080
 - 📡 **API Testing Tool** - Built-in tool to test API endpoints
-- 🗺️ **Route Management** - CRUD operations for routes and schedules
+- 🗺️ **Route Management** - CRUD operations for routes with approval workflow
 - 👥 **User Management** - Account approval and role administration (MASTER only)
 - 📈 **Request History** - Track API change requests and approvals
+- 🚦 **Multi-Leg Routing** - Advanced pathfinding algorithm with transfer validation
 
 ---
 
@@ -98,11 +100,21 @@ Before running the application, ensure you have:
 2. Select a plan from the list
 3. Click **"View Details"** to see complete itinerary with fare breakdown
 
-#### Automatic Route Finding
+#### Automatic Route Finding (Multi-Leg Pathfinding)
 1. Click **"Automatic Route"** on the home screen
-2. Enter origin, destination, and date
-3. System finds optimal routes automatically
-4. Save suggested routes as plans
+2. Enter origin and destination (autocomplete available for 19 cities)
+3. Select travel date and maximum number of legs (1-3)
+4. Click **"Generate Routes"**
+5. System finds optimal routes using smart pathfinding algorithm:
+   - Finds direct routes and multi-leg journeys with transfers
+   - Validates 30-minute minimum transfer buffer at connection points
+   - Filters by off-days for train schedules (e.g., weekly holidays)
+   - Optimizes routes by total travel time
+6. Review generated journey options with:
+   - Complete route details with departure/arrival times
+   - Transfer point indicators between legs
+   - Total fare and duration breakdown
+7. Click **"💾 Save Plan"** on any journey card to save as a travel plan
 
 ### For DEVELOPER & MASTER Roles
 
@@ -123,12 +135,41 @@ Before running the application, ensure you have:
 7. **Delete** - Select schedule and confirm deletion
 8. Click **🔄 Refresh** to reload data
 
-#### Managing Routes
+#### Managing Routes (Route API Configuration)
 1. Click **"Manage Routes"** on the home screen
-2. View all configured API routes
-3. **Add Route** - Specify origin, destination, type, and details
-4. **Edit Route** - Update existing route information
-5. **Delete Route** - Remove outdated routes
+2. View all configured API routes in the system
+3. **Add New Route** (Developer/Master):
+   - Click **"➕ Add Route"** button
+   - Fill in route details:
+     * Route Name (Bus/Train service name)
+     * Origin and Destination cities
+     * Transport Type (BUS or TRAIN)
+     * Duration (in minutes), Price (in BDT)
+     * Schedule Time, Departure/Arrival Time
+     * Status (ACTIVE, INACTIVE, MAINTENANCE)
+     * Notes for Master (explain why this change is needed)
+   - Click **"Submit for Approval"**
+   - Master must approve before changes are applied to database and JSON files
+4. **Edit Existing Route**:
+   - Select a route from the table
+   - Click **"✏ Edit"** button
+   - Modify necessary fields and add approval notes
+   - Submit for Master approval
+5. **Delete Route**:
+   - Select a route from the table
+   - Click **"🗑 Delete"** button
+   - Confirm deletion request
+   - Master reviews and approves/rejects deletion
+
+**Approval Workflow:**
+- All route changes (Add/Edit/Delete) go through approval workflow
+- Developer submits change → stored in `pending_routes` table
+- Master reviews in **"API Approval"** page
+- Upon approval:
+  - Changes applied to `routes` database table
+  - JSON files updated (`data/bus_schedules.json` or `data/train_schedules.json`)
+  - Change logged in `route_history` table
+- Upon rejection: Developer receives feedback explaining why
 
 #### Testing API
 1. Click **"API Testing Tool"** on the home screen
@@ -637,8 +678,9 @@ mvn test
 
 ## 📚 Supported Cities
 
-The application supports autocomplete for these 14 Bangladesh cities:
+The application supports autocomplete for these 19 Bangladesh cities:
 
+**Major Cities:**
 1. Dhaka
 2. Chittagong
 3. Sylhet
@@ -647,12 +689,21 @@ The application supports autocomplete for these 14 Bangladesh cities:
 6. Barisal
 7. Rangpur
 8. Mymensingh
+
+**Other Cities:**
 9. Comilla
 10. Narayanganj
 11. Cox's Bazar
 12. Jessore
 13. Bogra
 14. Dinajpur
+15. Gazipur
+16. Tangail
+17. Pabna
+18. Faridpur
+19. Manikganj
+
+*Note: Additional cities can be added through the Route Management system*
 
 ---
 

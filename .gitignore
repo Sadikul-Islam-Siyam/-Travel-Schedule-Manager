@@ -47,6 +47,8 @@ Thumbs.db
 # Application data
 data/*.db
 data/*.db-journal
+data/*_backup.json
+data/x.json
 !data/.gitkeep
 !data/bus_schedules.json
 !data/train_schedules.json
@@ -54,5 +56,9 @@ data/*.db-journal
 # Root level config (use src/main/resources instead)
 api-config.properties
 
-# Schedule data
+# Schedule data and scripts
 schedules-data.json
+*.ps1
+
+# Database files at root
+travel_manager.db

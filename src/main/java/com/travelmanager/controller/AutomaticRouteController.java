@@ -10,7 +10,6 @@ import com.travelmanager.util.RouteGraph.RouteEdge;
 import com.travelmanager.service.rest.RestScheduleService;
 import com.travelmanager.database.DatabaseManager;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -210,7 +209,6 @@ public class AutomaticRouteController {
         statusLabel.setText("✅ Found " + routes.size() + " route(s) from " + start + " to " + destination);
         statusLabel.setTextFill(Color.web("#27ae60"));
         
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
         
         for (int i = 0; i < routes.size(); i++) {

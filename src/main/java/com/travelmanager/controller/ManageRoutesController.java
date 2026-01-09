@@ -468,12 +468,6 @@ public class ManageRoutesController {
         clearForm();
     }
     
-    private void showForm() {
-        formPanel.setVisible(true);
-        formPanel.setManaged(true);
-        formErrorLabel.setText("");
-    }
-    
     private void clearForm() {
         routeNameField.clear();
         originField.clear();
