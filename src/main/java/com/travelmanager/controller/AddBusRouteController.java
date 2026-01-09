@@ -36,6 +36,7 @@ public class AddBusRouteController {
     private BusScheduleStorage busScheduleStorage;
     private List<String> allLocations;
     private boolean isEditMode = false;
+    private ManageRoutesController.RouteRow editingRoute = null;
     
     @FXML
     public void initialize() {
@@ -73,34 +74,26 @@ public class AddBusRouteController {
     
     private void populateFormForEdit(ManageRoutesController.RouteRow route) {
         isEditMode = true;
+        editingRoute = route; // Store for later use when submitting
         
-        // Fetch the actual bus schedule from API to get complete data
-        List<BusSchedule> allBuses = scheduleDataManager.getAllBusSchedules();
-        BusSchedule busSchedule = allBuses.stream()
-            .filter(bus -> bus.getId().equals(route.getRouteName()))
-            .findFirst()
-            .orElse(null);
+        // Fetch the actual bus schedule DTO which contains all data including duration
+        BusScheduleDTO busSchedule = busScheduleStorage.getSchedule(route.getRouteName()).orElse(null);
         
         if (busSchedule != null) {
-            // Use actual data from the schedule
-            busNameField.setText(busSchedule.getId());
-            originField.setText(busSchedule.getOrigin());
+            // Use actual data from the schedule DTO
+            busNameField.setText(busSchedule.getBusName());
+            originField.setText(busSchedule.getStart());
             destinationField.setText(busSchedule.getDestination());
             fareField.setText(String.valueOf(busSchedule.getFare()));
             
-            // Format times
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-            departureTimeField.setText(busSchedule.getDepartureTime().format(timeFormatter));
-            arrivalTimeField.setText(busSchedule.getArrivalTime().format(timeFormatter));
+            // Set times directly from DTO
+            departureTimeField.setText(busSchedule.getStartTime());
+            arrivalTimeField.setText(busSchedule.getArrivalTime());
             
-            // Calculate duration from departure and arrival times
-            long durationMinutes = java.time.Duration.between(
-                busSchedule.getDepartureTime(), 
-                busSchedule.getArrivalTime()
-            ).toMinutes();
-            long hours = durationMinutes / 60;
-            long minutes = durationMinutes % 60;
-            durationField.setText(String.format("%d:%02dh", hours, minutes));
+            // Set duration from DTO
+            if (busSchedule.getDuration() != null && !busSchedule.getDuration().isEmpty()) {
+                durationField.setText(busSchedule.getDuration());
+            }
         } else {
             // Fallback to route row data
             busNameField.setText(route.getRouteName());
@@ -176,8 +169,8 @@ public class AddBusRouteController {
                 fare,
                 departureTime,
                 "duration:" + duration + ";arrivalTime:" + arrivalTime,
-                "ADD",
-                null,
+                isEditMode ? "UPDATE" : "ADD",
+                isEditMode && editingRoute != null ? editingRoute.getId() : null,
                 currentUser,
                 description
             );

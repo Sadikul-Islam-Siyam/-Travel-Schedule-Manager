@@ -1,217 +1,2239 @@
 [
   {
-    "trainName": "JAMUNA EXPRESS(746)",
+    "trainName": "Mohanganj Express(789)",
     "start": "Dhaka",
-    "destination": "Jamalpur",
-    "startTime": "16:45",
-    "arrivalTime": "22:10",
-    "fare": 210.0,
-    "duration": "0:00h",
-    "offDay": "No off day",
+    "destination": "Mymensingh",
+    "startTime": "13:15",
+    "arrivalTime": "16:10",
+    "fare": 145.0,
+    "duration": "2:55h",
+    "offDay": "Monday",
     "stops": [
       {
         "station": "Dhaka",
-        "arrivalTime": "16:45",
-        "departureTime": "16:45",
+        "arrivalTime": "13:15",
+        "departureTime": "13:15",
         "cumulativeFare": 0.0
       },
       {
         "station": "Mymensingh",
-        "arrivalTime": "21:00",
-        "departureTime": "21:05",
-        "cumulativeFare": 125.0
-      },
-      {
-        "station": "Jamalpur",
-        "arrivalTime": "22:10",
-        "departureTime": "22:10",
-        "cumulativeFare": 210.0
+        "arrivalTime": "16:10",
+        "departureTime": "16:10",
+        "cumulativeFare": 145.0
       }
     ]
   },
   {
-    "trainName": "UPABAN EXPRESS (740)",
+    "trainName": "Rupsha Express(727)",
+    "start": "Khulna",
+    "destination": "Nilphamari",
+    "startTime": "07:15",
+    "arrivalTime": "17:00",
+    "fare": 450.0,
+    "duration": "9:45h",
+    "offDay": "Thursday",
+    "stops": [
+      {
+        "station": "Khulna",
+        "arrivalTime": "07:15",
+        "departureTime": "07:15",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Jashore",
+        "arrivalTime": "08:28",
+        "departureTime": "08:28",
+        "cumulativeFare": 56.25
+      },
+      {
+        "station": "Chuadanga",
+        "arrivalTime": "09:41",
+        "departureTime": "09:41",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "10:54",
+        "departureTime": "10:54",
+        "cumulativeFare": 168.75
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "12:07",
+        "departureTime": "12:07",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "13:20",
+        "departureTime": "13:20",
+        "cumulativeFare": 281.25
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "14:33",
+        "departureTime": "14:33",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "15:46",
+        "departureTime": "15:46",
+        "cumulativeFare": 393.75
+      },
+      {
+        "station": "Nilphamari",
+        "arrivalTime": "17:00",
+        "departureTime": "17:00",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Chattala Express(801)",
+    "start": "Chattogram",
+    "destination": "Dhaka",
+    "startTime": "06:00",
+    "arrivalTime": "12:40",
+    "fare": 450.0,
+    "duration": "6:40h",
+    "offDay": "Tuesday",
+    "stops": [
+      {
+        "station": "Chattogram",
+        "arrivalTime": "06:00",
+        "departureTime": "06:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "07:20",
+        "departureTime": "07:20",
+        "cumulativeFare": 90.0
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "08:40",
+        "departureTime": "08:40",
+        "cumulativeFare": 180.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "10:00",
+        "departureTime": "10:00",
+        "cumulativeFare": 270.0
+      },
+      {
+        "station": "Narsingdi",
+        "arrivalTime": "11:20",
+        "departureTime": "11:20",
+        "cumulativeFare": 360.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "12:40",
+        "departureTime": "12:40",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Mohonagar Godhuli(722)",
     "start": "Dhaka",
-    "destination": "Sylhet",
-    "startTime": "21:30",
-    "arrivalTime": "05:45",
-    "fare": 350.0,
-    "duration": "8:15h",
-    "offDay": "No off day",
+    "destination": "Chattogram",
+    "startTime": "21:20",
+    "arrivalTime": "03:30",
+    "fare": 450.0,
+    "duration": "6:10h",
+    "offDay": "Sunday",
     "stops": [
       {
         "station": "Dhaka",
-        "arrivalTime": "21:30",
-        "departureTime": "21:30",
+        "arrivalTime": "21:20",
+        "departureTime": "21:20",
         "cumulativeFare": 0.0
       },
       {
         "station": "Brahmanbaria",
-        "arrivalTime": "23:45",
-        "departureTime": "23:50",
-        "cumulativeFare": 150.0
-      },
-      {
-        "station": "Habiganj",
-        "arrivalTime": "02:30",
-        "departureTime": "02:35",
-        "cumulativeFare": 250.0
-      },
-      {
-        "station": "Sylhet",
-        "arrivalTime": "05:45",
-        "departureTime": "05:45",
-        "cumulativeFare": 350.0
-      }
-    ]
-  },
-  {
-    "trainName": "SUBARNA EXPRESS (702)",
-    "start": "Dhaka",
-    "destination": "Chittagong",
-    "startTime": "14:50",
-    "arrivalTime": "20:50",
-    "fare": 420.0,
-    "duration": "6:00h",
-    "offDay": "No off day",
-    "stops": [
-      {
-        "station": "Dhaka",
-        "arrivalTime": "14:50",
-        "departureTime": "14:50",
-        "cumulativeFare": 0.0
+        "arrivalTime": "22:52",
+        "departureTime": "22:52",
+        "cumulativeFare": 112.5
       },
       {
         "station": "Cumilla",
-        "arrivalTime": "17:20",
-        "departureTime": "17:30",
-        "cumulativeFare": 180.0
+        "arrivalTime": "00:25",
+        "departureTime": "00:25",
+        "cumulativeFare": 225.0
       },
       {
         "station": "Feni",
-        "arrivalTime": "18:45",
-        "departureTime": "18:50",
-        "cumulativeFare": 280.0
+        "arrivalTime": "01:57",
+        "departureTime": "01:57",
+        "cumulativeFare": 337.5
       },
       {
-        "station": "Chittagong",
-        "arrivalTime": "20:50",
-        "departureTime": "20:50",
-        "cumulativeFare": 420.0
+        "station": "Chattogram",
+        "arrivalTime": "03:30",
+        "departureTime": "03:30",
+        "cumulativeFare": 450.0
       }
     ]
   },
   {
-    "trainName": "TISTA EXPRESS(708)",
-    "start": "Jamalpur",
+    "trainName": "Kurigram Express(798)",
+    "start": "Kurigram",
     "destination": "Dhaka",
-    "startTime": "04:00",
-    "arrivalTime": "08:30",
-    "fare": 210.0,
-    "duration": "0:00h",
+    "startTime": "07:10",
+    "arrivalTime": "17:05",
+    "fare": 510.0,
+    "duration": "9:55h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Kurigram",
+        "arrivalTime": "07:10",
+        "departureTime": "07:10",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Rangpur",
+        "arrivalTime": "08:49",
+        "departureTime": "08:49",
+        "cumulativeFare": 85.0
+      },
+      {
+        "station": "Bogura",
+        "arrivalTime": "10:28",
+        "departureTime": "10:28",
+        "cumulativeFare": 170.0
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "12:07",
+        "departureTime": "12:07",
+        "cumulativeFare": 255.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "13:46",
+        "departureTime": "13:46",
+        "cumulativeFare": 340.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "15:25",
+        "departureTime": "15:25",
+        "cumulativeFare": 425.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "17:05",
+        "departureTime": "17:05",
+        "cumulativeFare": 510.0
+      }
+    ]
+  },
+  {
+    "trainName": "Dhumketu Express(770)",
+    "start": "Rajshahi",
+    "destination": "Dhaka",
+    "startTime": "23:20",
+    "arrivalTime": "04:40",
+    "fare": 450.0,
+    "duration": "5:20h",
+    "offDay": "Thursday",
+    "stops": [
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "23:20",
+        "departureTime": "23:20",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "00:40",
+        "departureTime": "00:40",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "02:00",
+        "departureTime": "02:00",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "03:20",
+        "departureTime": "03:20",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "04:40",
+        "departureTime": "04:40",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Jayantika Express(718)",
+    "start": "Sylhet",
+    "destination": "Dhaka",
+    "startTime": "12:00",
+    "arrivalTime": "19:15",
+    "fare": 410.0,
+    "duration": "7:15h",
+    "offDay": "Thursday",
+    "stops": [
+      {
+        "station": "Sylhet",
+        "arrivalTime": "12:00",
+        "departureTime": "12:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Moulvibazar",
+        "arrivalTime": "14:25",
+        "departureTime": "14:25",
+        "cumulativeFare": 136.67
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "16:50",
+        "departureTime": "16:50",
+        "cumulativeFare": 273.33
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "19:15",
+        "departureTime": "19:15",
+        "cumulativeFare": 410.0
+      }
+    ]
+  },
+  {
+    "trainName": "Meghna Express(729)",
+    "start": "Chattogram",
+    "destination": "Chandpur",
+    "startTime": "17:15",
+    "arrivalTime": "21:25",
+    "fare": 135.0,
+    "duration": "4:10h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Chattogram",
+        "arrivalTime": "17:15",
+        "departureTime": "17:15",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "18:38",
+        "departureTime": "18:38",
+        "cumulativeFare": 45.0
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "20:01",
+        "departureTime": "20:01",
+        "cumulativeFare": 90.0
+      },
+      {
+        "station": "Chandpur",
+        "arrivalTime": "21:25",
+        "departureTime": "21:25",
+        "cumulativeFare": 135.0
+      }
+    ]
+  },
+  {
+    "trainName": "Chitra Express(763)",
+    "start": "Khulna",
+    "destination": "Dhaka",
+    "startTime": "09:00",
+    "arrivalTime": "18:05",
+    "fare": 505.0,
+    "duration": "9:05h",
     "offDay": "Monday",
     "stops": [
       {
+        "station": "Khulna",
+        "arrivalTime": "09:00",
+        "departureTime": "09:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Jashore",
+        "arrivalTime": "10:49",
+        "departureTime": "10:49",
+        "cumulativeFare": 101.0
+      },
+      {
+        "station": "Chuadanga",
+        "arrivalTime": "12:38",
+        "departureTime": "12:38",
+        "cumulativeFare": 202.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "14:27",
+        "departureTime": "14:27",
+        "cumulativeFare": 303.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "16:16",
+        "departureTime": "16:16",
+        "cumulativeFare": 404.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "18:05",
+        "departureTime": "18:05",
+        "cumulativeFare": 505.0
+      }
+    ]
+  },
+  {
+    "trainName": "Upukul Express(712)",
+    "start": "Dhaka",
+    "destination": "Noakhali",
+    "startTime": "15:10",
+    "arrivalTime": "20:40",
+    "fare": 335.0,
+    "duration": "5:30h",
+    "offDay": "Tuesday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "15:10",
+        "departureTime": "15:10",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "16:32",
+        "departureTime": "16:32",
+        "cumulativeFare": 83.75
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "17:55",
+        "departureTime": "17:55",
+        "cumulativeFare": 167.5
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "19:17",
+        "departureTime": "19:17",
+        "cumulativeFare": 251.25
+      },
+      {
+        "station": "Noakhali",
+        "arrivalTime": "20:40",
+        "departureTime": "20:40",
+        "cumulativeFare": 335.0
+      }
+    ]
+  },
+  {
+    "trainName": "Karatoa Express(714)",
+    "start": "Lalmonirhat",
+    "destination": "Naogaon",
+    "startTime": "16:20",
+    "arrivalTime": "22:40",
+    "fare": 155.0,
+    "duration": "6:20h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Lalmonirhat",
+        "arrivalTime": "16:20",
+        "departureTime": "16:20",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Rangpur",
+        "arrivalTime": "17:55",
+        "departureTime": "17:55",
+        "cumulativeFare": 38.75
+      },
+      {
+        "station": "Gaibandha",
+        "arrivalTime": "19:30",
+        "departureTime": "19:30",
+        "cumulativeFare": 77.5
+      },
+      {
+        "station": "Bogura",
+        "arrivalTime": "21:05",
+        "departureTime": "21:05",
+        "cumulativeFare": 116.25
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "22:40",
+        "departureTime": "22:40",
+        "cumulativeFare": 155.0
+      }
+    ]
+  },
+  {
+    "trainName": "Brahmaputra Express(744)",
+    "start": "Jamalpur",
+    "destination": "Dhaka",
+    "startTime": "07:41",
+    "arrivalTime": "12:15",
+    "fare": 210.0,
+    "duration": "4:34h",
+    "offDay": "None",
+    "stops": [
+      {
         "station": "Jamalpur",
-        "arrivalTime": "04:00",
-        "departureTime": "04:00",
+        "arrivalTime": "07:41",
+        "departureTime": "07:41",
         "cumulativeFare": 0.0
       },
       {
         "station": "Mymensingh",
-        "arrivalTime": "05:00",
-        "departureTime": "05:05",
-        "cumulativeFare": 90.0
+        "arrivalTime": "08:50",
+        "departureTime": "08:55",
+        "cumulativeFare": 65.0
       },
       {
         "station": "Dhaka",
-        "arrivalTime": "08:30",
-        "departureTime": "08:30",
+        "arrivalTime": "12:15",
+        "departureTime": "12:15",
         "cumulativeFare": 210.0
       }
     ]
   },
   {
-    "trainName": "EKOTA EXPRESS (706)",
+    "trainName": "Kapotaksha Express(715)",
+    "start": "Khulna",
+    "destination": "Rajshahi",
+    "startTime": "06:45",
+    "arrivalTime": "12:20",
+    "fare": 310.0,
+    "duration": "5:35h",
+    "offDay": "Friday",
+    "stops": [
+      {
+        "station": "Khulna",
+        "arrivalTime": "06:45",
+        "departureTime": "06:45",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Jashore",
+        "arrivalTime": "07:52",
+        "departureTime": "07:52",
+        "cumulativeFare": 62.0
+      },
+      {
+        "station": "Jhenaidah",
+        "arrivalTime": "08:59",
+        "departureTime": "08:59",
+        "cumulativeFare": 124.0
+      },
+      {
+        "station": "Chuadanga",
+        "arrivalTime": "10:06",
+        "departureTime": "10:06",
+        "cumulativeFare": 186.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "11:13",
+        "departureTime": "11:13",
+        "cumulativeFare": 248.0
+      },
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "12:20",
+        "departureTime": "12:20",
+        "cumulativeFare": 310.0
+      }
+    ]
+  },
+  {
+    "trainName": "Silkcity Express(754)",
+    "start": "Rajshahi",
+    "destination": "Dhaka",
+    "startTime": "07:40",
+    "arrivalTime": "13:10",
+    "fare": 450.0,
+    "duration": "5:30h",
+    "offDay": "Sunday",
+    "stops": [
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "07:40",
+        "departureTime": "07:40",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "09:02",
+        "departureTime": "09:02",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "10:25",
+        "departureTime": "10:25",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "11:47",
+        "departureTime": "11:47",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "13:10",
+        "departureTime": "13:10",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Titumir Express(733)",
+    "start": "Rajshahi",
+    "destination": "Nilphamari",
+    "startTime": "06:20",
+    "arrivalTime": "13:00",
+    "fare": 215.0,
+    "duration": "6:40h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "06:20",
+        "departureTime": "06:20",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "07:40",
+        "departureTime": "07:40",
+        "cumulativeFare": 43.0
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "09:00",
+        "departureTime": "09:00",
+        "cumulativeFare": 86.0
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "10:20",
+        "departureTime": "10:20",
+        "cumulativeFare": 129.0
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "11:40",
+        "departureTime": "11:40",
+        "cumulativeFare": 172.0
+      },
+      {
+        "station": "Nilphamari",
+        "arrivalTime": "13:00",
+        "departureTime": "13:00",
+        "cumulativeFare": 215.0
+      }
+    ]
+  },
+  {
+    "trainName": "Mohonagar Provati(721)",
+    "start": "Chattogram",
+    "destination": "Dhaka",
+    "startTime": "12:30",
+    "arrivalTime": "18:40",
+    "fare": 450.0,
+    "duration": "6:10h",
+    "offDay": "Sunday",
+    "stops": [
+      {
+        "station": "Chattogram",
+        "arrivalTime": "12:30",
+        "departureTime": "12:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "14:02",
+        "departureTime": "14:02",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "15:35",
+        "departureTime": "15:35",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "17:07",
+        "departureTime": "17:07",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "18:40",
+        "departureTime": "18:40",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Egarosindhur Godhuli(749)",
     "start": "Dhaka",
-    "destination": "Dinajpur",
-    "startTime": "20:10",
-    "arrivalTime": "07:10",
-    "fare": 480.0,
-    "duration": "11:00h",
-    "offDay": "No off day",
+    "destination": "Kishoreganj",
+    "startTime": "18:45",
+    "arrivalTime": "22:40",
+    "fare": 180.0,
+    "duration": "3:55h",
+    "offDay": "None",
     "stops": [
       {
         "station": "Dhaka",
-        "arrivalTime": "20:10",
-        "departureTime": "20:10",
+        "arrivalTime": "18:45",
+        "departureTime": "18:45",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Narsingdi",
+        "arrivalTime": "20:42",
+        "departureTime": "20:42",
+        "cumulativeFare": 90.0
+      },
+      {
+        "station": "Kishoreganj",
+        "arrivalTime": "22:40",
+        "departureTime": "22:40",
+        "cumulativeFare": 180.0
+      }
+    ]
+  },
+  {
+    "trainName": "Kalni Express(773)",
+    "start": "Dhaka",
+    "destination": "Sylhet",
+    "startTime": "14:55",
+    "arrivalTime": "21:30",
+    "fare": 410.0,
+    "duration": "6:35h",
+    "offDay": "Friday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "14:55",
+        "departureTime": "14:55",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "17:06",
+        "departureTime": "17:06",
+        "cumulativeFare": 136.67
+      },
+      {
+        "station": "Moulvibazar",
+        "arrivalTime": "19:18",
+        "departureTime": "19:18",
+        "cumulativeFare": 273.33
+      },
+      {
+        "station": "Sylhet",
+        "arrivalTime": "21:30",
+        "departureTime": "21:30",
+        "cumulativeFare": 410.0
+      }
+    ]
+  },
+  {
+    "trainName": "Madhumati Express(756)",
+    "start": "Rajshahi",
+    "destination": "Dhaka",
+    "startTime": "06:40",
+    "arrivalTime": "14:00",
+    "fare": 175.0,
+    "duration": "7:20h",
+    "offDay": "Thursday",
+    "stops": [
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "06:40",
+        "departureTime": "06:40",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "08:30",
+        "departureTime": "08:30",
+        "cumulativeFare": 43.75
+      },
+      {
+        "station": "Rajbari",
+        "arrivalTime": "10:20",
+        "departureTime": "10:20",
+        "cumulativeFare": 87.5
+      },
+      {
+        "station": "Faridpur",
+        "arrivalTime": "12:10",
+        "departureTime": "12:10",
+        "cumulativeFare": 131.25
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "14:00",
+        "departureTime": "14:00",
+        "cumulativeFare": 175.0
+      }
+    ]
+  },
+  {
+    "trainName": "Agnibina(736)",
+    "start": "Jamalpur",
+    "destination": "Dhaka",
+    "startTime": "18:41",
+    "arrivalTime": "18:41",
+    "fare": 210.0,
+    "duration": "0:00h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Jamalpur",
+        "arrivalTime": "18:41",
+        "departureTime": "18:41",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Mymensingh",
+        "arrivalTime": "19:45",
+        "departureTime": "19:48",
+        "cumulativeFare": 65.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "22:55",
+        "departureTime": "22:55",
+        "cumulativeFare": 210.0
+      }
+    ]
+  },
+  {
+    "trainName": "Kurigram Express(797)",
+    "start": "Dhaka",
+    "destination": "Kurigram",
+    "startTime": "20:00",
+    "arrivalTime": "05:10",
+    "fare": 510.0,
+    "duration": "9:10h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "20:00",
+        "departureTime": "20:00",
         "cumulativeFare": 0.0
       },
       {
         "station": "Tangail",
-        "arrivalTime": "21:40",
-        "departureTime": "21:45",
-        "cumulativeFare": 100.0
+        "arrivalTime": "21:31",
+        "departureTime": "21:31",
+        "cumulativeFare": 85.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "23:03",
+        "departureTime": "23:03",
+        "cumulativeFare": 170.0
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "00:35",
+        "departureTime": "00:35",
+        "cumulativeFare": 255.0
       },
       {
         "station": "Bogura",
-        "arrivalTime": "00:30",
-        "departureTime": "00:40",
-        "cumulativeFare": 250.0
+        "arrivalTime": "02:06",
+        "departureTime": "02:06",
+        "cumulativeFare": 340.0
       },
       {
         "station": "Rangpur",
-        "arrivalTime": "04:50",
-        "departureTime": "05:00",
-        "cumulativeFare": 380.0
+        "arrivalTime": "03:38",
+        "departureTime": "03:38",
+        "cumulativeFare": 425.0
       },
       {
-        "station": "Dinajpur",
-        "arrivalTime": "07:10",
-        "departureTime": "07:10",
-        "cumulativeFare": 480.0
+        "station": "Kurigram",
+        "arrivalTime": "05:10",
+        "departureTime": "05:10",
+        "cumulativeFare": 510.0
       }
     ]
   },
   {
-    "trainName": "Tista EXPRESS (707)",
+    "trainName": "Parjotak Express(815)",
+    "start": "Cox\u0027s Bazar",
+    "destination": "Dhaka",
+    "startTime": "19:45",
+    "arrivalTime": "04:20",
+    "fare": 695.0,
+    "duration": "8:35h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Cox\u0027s Bazar",
+        "arrivalTime": "19:45",
+        "departureTime": "19:45",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Chattogram",
+        "arrivalTime": "00:02",
+        "departureTime": "00:02",
+        "cumulativeFare": 347.5
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "04:20",
+        "departureTime": "04:20",
+        "cumulativeFare": 695.0
+      }
+    ]
+  },
+  {
+    "trainName": "Subarna Express(702)",
     "start": "Dhaka",
-    "destination": "Jamalpur",
-    "startTime": "07:30",
-    "arrivalTime": "12:40",
-    "fare": 210.0,
-    "duration": "05:10h",
+    "destination": "Chattogram",
+    "startTime": "16:30",
+    "arrivalTime": "21:25",
+    "fare": 495.0,
+    "duration": "4:55h",
     "offDay": "Monday",
     "stops": [
       {
         "station": "Dhaka",
-        "arrivalTime": "07:30",
-        "departureTime": "07:30",
+        "arrivalTime": "16:30",
+        "departureTime": "16:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Chattogram",
+        "arrivalTime": "21:25",
+        "departureTime": "21:25",
+        "cumulativeFare": 495.0
+      }
+    ]
+  },
+  {
+    "trainName": "Upukul Express(711)",
+    "start": "Noakhali",
+    "destination": "Dhaka",
+    "startTime": "06:00",
+    "arrivalTime": "11:20",
+    "fare": 335.0,
+    "duration": "5:20h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Noakhali",
+        "arrivalTime": "06:00",
+        "departureTime": "06:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "07:20",
+        "departureTime": "07:20",
+        "cumulativeFare": 83.75
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "08:40",
+        "departureTime": "08:40",
+        "cumulativeFare": 167.5
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "10:00",
+        "departureTime": "10:00",
+        "cumulativeFare": 251.25
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "11:20",
+        "departureTime": "11:20",
+        "cumulativeFare": 335.0
+      }
+    ]
+  },
+  {
+    "trainName": "Karatoa Express(713)",
+    "start": "Naogaon",
+    "destination": "Lalmonirhat",
+    "startTime": "09:25",
+    "arrivalTime": "16:00",
+    "fare": 155.0,
+    "duration": "6:35h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Naogaon",
+        "arrivalTime": "09:25",
+        "departureTime": "09:25",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Bogura",
+        "arrivalTime": "11:03",
+        "departureTime": "11:03",
+        "cumulativeFare": 38.75
+      },
+      {
+        "station": "Gaibandha",
+        "arrivalTime": "12:42",
+        "departureTime": "12:42",
+        "cumulativeFare": 77.5
+      },
+      {
+        "station": "Rangpur",
+        "arrivalTime": "14:21",
+        "departureTime": "14:21",
+        "cumulativeFare": 116.25
+      },
+      {
+        "station": "Lalmonirhat",
+        "arrivalTime": "16:00",
+        "departureTime": "16:00",
+        "cumulativeFare": 155.0
+      }
+    ]
+  },
+  {
+    "trainName": "Brahmaputra Express(743)",
+    "start": "Dhaka",
+    "destination": "Jamalpur",
+    "startTime": "18:15",
+    "arrivalTime": "22:39",
+    "fare": 210.0,
+    "duration": "4:24h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "18:15",
+        "departureTime": "18:15",
         "cumulativeFare": 0.0
       },
       {
         "station": "Mymensingh",
-        "arrivalTime": "10:00",
-        "departureTime": "10:10",
-        "cumulativeFare": 150.0
+        "arrivalTime": "21:23",
+        "departureTime": "21:28",
+        "cumulativeFare": 145.0
       },
       {
         "station": "Jamalpur",
-        "arrivalTime": "12:40",
-        "departureTime": "12:40",
+        "arrivalTime": "22:39",
+        "departureTime": "22:39",
         "cumulativeFare": 210.0
       }
     ]
   },
   {
-    "trainName": "Sundarban EXPRESS (718)",
+    "trainName": "Kapotaksha Express(716)",
+    "start": "Rajshahi",
+    "destination": "Khulna",
+    "startTime": "14:30",
+    "arrivalTime": "20:25",
+    "fare": 310.0,
+    "duration": "5:55h",
+    "offDay": "Friday",
+    "stops": [
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "14:30",
+        "departureTime": "14:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "15:41",
+        "departureTime": "15:41",
+        "cumulativeFare": 62.0
+      },
+      {
+        "station": "Chuadanga",
+        "arrivalTime": "16:52",
+        "departureTime": "16:52",
+        "cumulativeFare": 124.0
+      },
+      {
+        "station": "Jhenaidah",
+        "arrivalTime": "18:03",
+        "departureTime": "18:03",
+        "cumulativeFare": 186.0
+      },
+      {
+        "station": "Jashore",
+        "arrivalTime": "19:14",
+        "departureTime": "19:14",
+        "cumulativeFare": 248.0
+      },
+      {
+        "station": "Khulna",
+        "arrivalTime": "20:25",
+        "departureTime": "20:25",
+        "cumulativeFare": 310.0
+      }
+    ]
+  },
+  {
+    "trainName": "Silkcity Express(753)",
+    "start": "Dhaka",
+    "destination": "Rajshahi",
+    "startTime": "14:30",
+    "arrivalTime": "20:20",
+    "fare": 450.0,
+    "duration": "5:50h",
+    "offDay": "Sunday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "14:30",
+        "departureTime": "14:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "15:57",
+        "departureTime": "15:57",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "17:25",
+        "departureTime": "17:25",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "18:52",
+        "departureTime": "18:52",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "20:20",
+        "departureTime": "20:20",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Padma Express(759)",
+    "start": "Dhaka",
+    "destination": "Rajshahi",
+    "startTime": "22:45",
+    "arrivalTime": "04:00",
+    "fare": 450.0,
+    "duration": "5:15h",
+    "offDay": "Tuesday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "22:45",
+        "departureTime": "22:45",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "00:03",
+        "departureTime": "00:03",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "01:22",
+        "departureTime": "01:22",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "02:41",
+        "departureTime": "02:41",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "04:00",
+        "departureTime": "04:00",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Kalni Express(774)",
+    "start": "Sylhet",
+    "destination": "Dhaka",
+    "startTime": "06:15",
+    "arrivalTime": "12:55",
+    "fare": 410.0,
+    "duration": "6:40h",
+    "offDay": "Friday",
+    "stops": [
+      {
+        "station": "Sylhet",
+        "arrivalTime": "06:15",
+        "departureTime": "06:15",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Moulvibazar",
+        "arrivalTime": "08:28",
+        "departureTime": "08:28",
+        "cumulativeFare": 136.67
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "10:41",
+        "departureTime": "10:41",
+        "cumulativeFare": 273.33
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "12:55",
+        "departureTime": "12:55",
+        "cumulativeFare": 410.0
+      }
+    ]
+  },
+  {
+    "trainName": "Bijoy Express(781)",
+    "start": "Chattogram",
+    "destination": "Jamalpur",
+    "startTime": "09:15",
+    "arrivalTime": "18:00",
+    "fare": 375.0,
+    "duration": "8:45h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Chattogram",
+        "arrivalTime": "09:15",
+        "departureTime": "09:15",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "11:00",
+        "departureTime": "11:00",
+        "cumulativeFare": 75.0
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "12:45",
+        "departureTime": "12:45",
+        "cumulativeFare": 150.0
+      },
+      {
+        "station": "Kishoreganj",
+        "arrivalTime": "14:30",
+        "departureTime": "14:30",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Mymensingh",
+        "arrivalTime": "16:15",
+        "departureTime": "16:15",
+        "cumulativeFare": 300.0
+      },
+      {
+        "station": "Jamalpur",
+        "arrivalTime": "18:00",
+        "departureTime": "18:00",
+        "cumulativeFare": 375.0
+      }
+    ]
+  },
+  {
+    "trainName": "Simanta Express(748)",
+    "start": "Nilphamari",
+    "destination": "Khulna",
+    "startTime": "18:30",
+    "arrivalTime": "04:10",
+    "fare": 450.0,
+    "duration": "9:40h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Nilphamari",
+        "arrivalTime": "18:30",
+        "departureTime": "18:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "19:42",
+        "departureTime": "19:42",
+        "cumulativeFare": 56.25
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "20:55",
+        "departureTime": "20:55",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "22:07",
+        "departureTime": "22:07",
+        "cumulativeFare": 168.75
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "23:20",
+        "departureTime": "23:20",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "00:32",
+        "departureTime": "00:32",
+        "cumulativeFare": 281.25
+      },
+      {
+        "station": "Chuadanga",
+        "arrivalTime": "01:45",
+        "departureTime": "01:45",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Jashore",
+        "arrivalTime": "02:57",
+        "departureTime": "02:57",
+        "cumulativeFare": 393.75
+      },
+      {
+        "station": "Khulna",
+        "arrivalTime": "04:10",
+        "departureTime": "04:10",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Rangpur Express(772)",
+    "start": "Rangpur",
+    "destination": "Dhaka",
+    "startTime": "20:00",
+    "arrivalTime": "06:00",
+    "fare": 505.0,
+    "duration": "10:00h",
+    "offDay": "Sunday",
+    "stops": [
+      {
+        "station": "Rangpur",
+        "arrivalTime": "20:00",
+        "departureTime": "20:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Gaibandha",
+        "arrivalTime": "21:25",
+        "departureTime": "21:25",
+        "cumulativeFare": 72.14
+      },
+      {
+        "station": "Bogura",
+        "arrivalTime": "22:51",
+        "departureTime": "22:51",
+        "cumulativeFare": 144.29
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "00:17",
+        "departureTime": "00:17",
+        "cumulativeFare": 216.43
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "01:42",
+        "departureTime": "01:42",
+        "cumulativeFare": 288.57
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "03:08",
+        "departureTime": "03:08",
+        "cumulativeFare": 360.71
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "04:34",
+        "departureTime": "04:34",
+        "cumulativeFare": 432.86
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "06:00",
+        "departureTime": "06:00",
+        "cumulativeFare": 505.0
+      }
+    ]
+  },
+  {
+    "trainName": "Panchagarh Express(793)",
+    "start": "Dhaka",
+    "destination": "Panchagarh",
+    "startTime": "23:30",
+    "arrivalTime": "09:50",
+    "fare": 740.0,
+    "duration": "10:20h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "23:30",
+        "departureTime": "23:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "01:34",
+        "departureTime": "01:34",
+        "cumulativeFare": 148.0
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "03:38",
+        "departureTime": "03:38",
+        "cumulativeFare": 296.0
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "05:42",
+        "departureTime": "05:42",
+        "cumulativeFare": 444.0
+      },
+      {
+        "station": "Thakurgaon",
+        "arrivalTime": "07:46",
+        "departureTime": "07:46",
+        "cumulativeFare": 592.0
+      },
+      {
+        "station": "Panchagarh",
+        "arrivalTime": "09:50",
+        "departureTime": "09:50",
+        "cumulativeFare": 740.0
+      }
+    ]
+  },
+  {
+    "trainName": "Sonar Bangla Express(787)",
+    "start": "Chattogram",
+    "destination": "Dhaka",
+    "startTime": "17:00",
+    "arrivalTime": "21:55",
+    "fare": 495.0,
+    "duration": "4:55h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Chattogram",
+        "arrivalTime": "17:00",
+        "departureTime": "17:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "21:55",
+        "departureTime": "21:55",
+        "cumulativeFare": 495.0
+      }
+    ]
+  },
+  {
+    "trainName": "Nilsagor Express(766)",
+    "start": "Nilphamari",
+    "destination": "Dhaka",
+    "startTime": "20:00",
+    "arrivalTime": "05:25",
+    "fare": 465.0,
+    "duration": "9:25h",
+    "offDay": "Sunday",
+    "stops": [
+      {
+        "station": "Nilphamari",
+        "arrivalTime": "20:00",
+        "departureTime": "20:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "21:34",
+        "departureTime": "21:34",
+        "cumulativeFare": 77.5
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "23:08",
+        "departureTime": "23:08",
+        "cumulativeFare": 155.0
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "00:42",
+        "departureTime": "00:42",
+        "cumulativeFare": 232.5
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "02:16",
+        "departureTime": "02:16",
+        "cumulativeFare": 310.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "03:50",
+        "departureTime": "03:50",
+        "cumulativeFare": 387.5
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "05:25",
+        "departureTime": "05:25",
+        "cumulativeFare": 465.0
+      }
+    ]
+  },
+  {
+    "trainName": "Agnibina(735)",
+    "start": "Dhaka",
+    "destination": "Jamalpur",
+    "startTime": "11:30",
+    "arrivalTime": "15:38",
+    "fare": 210.0,
+    "duration": "4:08h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "11:30",
+        "departureTime": "11:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Mymensingh",
+        "arrivalTime": "14:35",
+        "departureTime": "14:38",
+        "cumulativeFare": 145.0
+      },
+      {
+        "station": "Jamalpur",
+        "arrivalTime": "15:38",
+        "departureTime": "15:38",
+        "cumulativeFare": 210.0
+      }
+    ]
+  },
+  {
+    "trainName": "Turna Express(742)",
+    "start": "Dhaka",
+    "destination": "Chattogram",
+    "startTime": "23:15",
+    "arrivalTime": "05:15",
+    "fare": 450.0,
+    "duration": "6:00h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "23:15",
+        "departureTime": "23:15",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "00:45",
+        "departureTime": "00:45",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "02:15",
+        "departureTime": "02:15",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "03:45",
+        "departureTime": "03:45",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Chattogram",
+        "arrivalTime": "05:15",
+        "departureTime": "05:15",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Udayan Express(724)",
+    "start": "Sylhet",
+    "destination": "Chattogram",
+    "startTime": "22:00",
+    "arrivalTime": "05:35",
+    "fare": 410.0,
+    "duration": "7:35h",
+    "offDay": "Sunday",
+    "stops": [
+      {
+        "station": "Sylhet",
+        "arrivalTime": "22:00",
+        "departureTime": "22:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Moulvibazar",
+        "arrivalTime": "23:31",
+        "departureTime": "23:31",
+        "cumulativeFare": 82.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "01:02",
+        "departureTime": "01:02",
+        "cumulativeFare": 164.0
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "02:33",
+        "departureTime": "02:33",
+        "cumulativeFare": 246.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "04:04",
+        "departureTime": "04:04",
+        "cumulativeFare": 328.0
+      },
+      {
+        "station": "Chattogram",
+        "arrivalTime": "05:35",
+        "departureTime": "05:35",
+        "cumulativeFare": 410.0
+      }
+    ]
+  },
+  {
+    "trainName": "Nilsagor Express(765)",
+    "start": "Dhaka",
+    "destination": "Nilphamari",
+    "startTime": "06:45",
+    "arrivalTime": "16:00",
+    "fare": 465.0,
+    "duration": "9:15h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "06:45",
+        "departureTime": "06:45",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "08:17",
+        "departureTime": "08:17",
+        "cumulativeFare": 77.5
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "09:50",
+        "departureTime": "09:50",
+        "cumulativeFare": 155.0
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "11:22",
+        "departureTime": "11:22",
+        "cumulativeFare": 232.5
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "12:55",
+        "departureTime": "12:55",
+        "cumulativeFare": 310.0
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "14:27",
+        "departureTime": "14:27",
+        "cumulativeFare": 387.5
+      },
+      {
+        "station": "Nilphamari",
+        "arrivalTime": "16:00",
+        "departureTime": "16:00",
+        "cumulativeFare": 465.0
+      }
+    ]
+  },
+  {
+    "trainName": "Jamalpur Express(800)",
+    "start": "Jamalpur",
+    "destination": "Dhaka",
+    "startTime": "19:25",
+    "arrivalTime": "23:55",
+    "fare": 210.0,
+    "duration": "4:30h",
+    "offDay": "Sunday",
+    "stops": [
+      {
+        "station": "Jamalpur",
+        "arrivalTime": "19:25",
+        "departureTime": "19:25",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Mymensingh",
+        "arrivalTime": "20:35",
+        "departureTime": "20:40",
+        "cumulativeFare": 65.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "23:55",
+        "departureTime": "23:55",
+        "cumulativeFare": 210.0
+      }
+    ]
+  },
+  {
+    "trainName": "Dhumketu Express(769)",
+    "start": "Dhaka",
+    "destination": "Rajshahi",
+    "startTime": "06:00",
+    "arrivalTime": "11:40",
+    "fare": 450.0,
+    "duration": "5:40h",
+    "offDay": "Saturday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "06:00",
+        "departureTime": "06:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "07:25",
+        "departureTime": "07:25",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "08:50",
+        "departureTime": "08:50",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "10:15",
+        "departureTime": "10:15",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "11:40",
+        "departureTime": "11:40",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Paharika Express(720)",
+    "start": "Sylhet",
+    "destination": "Chattogram",
+    "startTime": "10:30",
+    "arrivalTime": "18:55",
+    "fare": 410.0,
+    "duration": "8:25h",
+    "offDay": "Saturday",
+    "stops": [
+      {
+        "station": "Sylhet",
+        "arrivalTime": "10:30",
+        "departureTime": "10:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Moulvibazar",
+        "arrivalTime": "12:11",
+        "departureTime": "12:11",
+        "cumulativeFare": 82.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "13:52",
+        "departureTime": "13:52",
+        "cumulativeFare": 164.0
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "15:33",
+        "departureTime": "15:33",
+        "cumulativeFare": 246.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "17:14",
+        "departureTime": "17:14",
+        "cumulativeFare": 328.0
+      },
+      {
+        "station": "Chattogram",
+        "arrivalTime": "18:55",
+        "departureTime": "18:55",
+        "cumulativeFare": 410.0
+      }
+    ]
+  },
+  {
+    "trainName": "Parabat Express(709)",
+    "start": "Dhaka",
+    "destination": "Sylhet",
+    "startTime": "06:30",
+    "arrivalTime": "13:00",
+    "fare": 410.0,
+    "duration": "6:30h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "06:30",
+        "departureTime": "06:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "08:40",
+        "departureTime": "08:40",
+        "cumulativeFare": 136.67
+      },
+      {
+        "station": "Moulvibazar",
+        "arrivalTime": "10:50",
+        "departureTime": "10:50",
+        "cumulativeFare": 273.33
+      },
+      {
+        "station": "Sylhet",
+        "arrivalTime": "13:00",
+        "departureTime": "13:00",
+        "cumulativeFare": 410.0
+      }
+    ]
+  },
+  {
+    "trainName": "Rangpur Express(771)",
+    "start": "Dhaka",
+    "destination": "Rangpur",
+    "startTime": "09:10",
+    "arrivalTime": "19:00",
+    "fare": 505.0,
+    "duration": "9:50h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "09:10",
+        "departureTime": "09:10",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "10:34",
+        "departureTime": "10:34",
+        "cumulativeFare": 72.14
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "11:58",
+        "departureTime": "11:58",
+        "cumulativeFare": 144.29
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "13:22",
+        "departureTime": "13:22",
+        "cumulativeFare": 216.43
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "14:47",
+        "departureTime": "14:47",
+        "cumulativeFare": 288.57
+      },
+      {
+        "station": "Bogura",
+        "arrivalTime": "16:11",
+        "departureTime": "16:11",
+        "cumulativeFare": 360.71
+      },
+      {
+        "station": "Gaibandha",
+        "arrivalTime": "17:35",
+        "departureTime": "17:35",
+        "cumulativeFare": 432.86
+      },
+      {
+        "station": "Rangpur",
+        "arrivalTime": "19:00",
+        "departureTime": "19:00",
+        "cumulativeFare": 505.0
+      }
+    ]
+  },
+  {
+    "trainName": "Sonar Bangla Express(788)",
+    "start": "Dhaka",
+    "destination": "Chattogram",
+    "startTime": "07:00",
+    "arrivalTime": "11:55",
+    "fare": 495.0,
+    "duration": "4:55h",
+    "offDay": "Tuesday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "07:00",
+        "departureTime": "07:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Chattogram",
+        "arrivalTime": "11:55",
+        "departureTime": "11:55",
+        "cumulativeFare": 495.0
+      }
+    ]
+  },
+  {
+    "trainName": "Panchagarh Express(794)",
+    "start": "Panchagarh",
+    "destination": "Dhaka",
+    "startTime": "12:10",
+    "arrivalTime": "22:10",
+    "fare": 740.0,
+    "duration": "10:00h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Panchagarh",
+        "arrivalTime": "12:10",
+        "departureTime": "12:10",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Thakurgaon",
+        "arrivalTime": "14:10",
+        "departureTime": "14:10",
+        "cumulativeFare": 148.0
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "16:10",
+        "departureTime": "16:10",
+        "cumulativeFare": 296.0
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "18:10",
+        "departureTime": "18:10",
+        "cumulativeFare": 444.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "20:10",
+        "departureTime": "20:10",
+        "cumulativeFare": 592.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "22:10",
+        "departureTime": "22:10",
+        "cumulativeFare": 740.0
+      }
+    ]
+  },
+  {
+    "trainName": "Chattala Express(802)",
+    "start": "Dhaka",
+    "destination": "Chattogram",
+    "startTime": "14:15",
+    "arrivalTime": "20:30",
+    "fare": 450.0,
+    "duration": "6:15h",
+    "offDay": "Tuesday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "14:15",
+        "departureTime": "14:15",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Narsingdi",
+        "arrivalTime": "15:30",
+        "departureTime": "15:30",
+        "cumulativeFare": 90.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "16:45",
+        "departureTime": "16:45",
+        "cumulativeFare": 180.0
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "18:00",
+        "departureTime": "18:00",
+        "cumulativeFare": 270.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "19:15",
+        "departureTime": "19:15",
+        "cumulativeFare": 360.0
+      },
+      {
+        "station": "Chattogram",
+        "arrivalTime": "20:30",
+        "departureTime": "20:30",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Rupsha Express(728)",
+    "start": "Nilphamari",
+    "destination": "Khulna",
+    "startTime": "08:30",
+    "arrivalTime": "18:25",
+    "fare": 450.0,
+    "duration": "9:55h",
+    "offDay": "Thursday",
+    "stops": [
+      {
+        "station": "Nilphamari",
+        "arrivalTime": "08:30",
+        "departureTime": "08:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "09:44",
+        "departureTime": "09:44",
+        "cumulativeFare": 56.25
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "10:58",
+        "departureTime": "10:58",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "12:13",
+        "departureTime": "12:13",
+        "cumulativeFare": 168.75
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "13:27",
+        "departureTime": "13:27",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "14:41",
+        "departureTime": "14:41",
+        "cumulativeFare": 281.25
+      },
+      {
+        "station": "Chuadanga",
+        "arrivalTime": "15:56",
+        "departureTime": "15:56",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Jashore",
+        "arrivalTime": "17:10",
+        "departureTime": "17:10",
+        "cumulativeFare": 393.75
+      },
+      {
+        "station": "Khulna",
+        "arrivalTime": "18:25",
+        "departureTime": "18:25",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Bijoy Express(782)",
+    "start": "Jamalpur",
+    "destination": "Chattogram",
+    "startTime": "20:00",
+    "arrivalTime": "05:00",
+    "fare": 375.0,
+    "duration": "9:00h",
+    "offDay": "Tuesday",
+    "stops": [
+      {
+        "station": "Jamalpur",
+        "arrivalTime": "20:00",
+        "departureTime": "20:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Mymensingh",
+        "arrivalTime": "21:48",
+        "departureTime": "21:48",
+        "cumulativeFare": 75.0
+      },
+      {
+        "station": "Kishoreganj",
+        "arrivalTime": "23:36",
+        "departureTime": "23:36",
+        "cumulativeFare": 150.0
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "01:24",
+        "departureTime": "01:24",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "03:12",
+        "departureTime": "03:12",
+        "cumulativeFare": 300.0
+      },
+      {
+        "station": "Chattogram",
+        "arrivalTime": "05:00",
+        "departureTime": "05:00",
+        "cumulativeFare": 375.0
+      }
+    ]
+  },
+  {
+    "trainName": "Padma Express(760)",
+    "start": "Rajshahi",
+    "destination": "Dhaka",
+    "startTime": "16:00",
+    "arrivalTime": "21:15",
+    "fare": 450.0,
+    "duration": "5:15h",
+    "offDay": "Tuesday",
+    "stops": [
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "16:00",
+        "departureTime": "16:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "17:18",
+        "departureTime": "17:18",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "18:37",
+        "departureTime": "18:37",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "19:56",
+        "departureTime": "19:56",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "21:15",
+        "departureTime": "21:15",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Turna Express(741)",
+    "start": "Chattogram",
+    "destination": "Dhaka",
+    "startTime": "23:30",
+    "arrivalTime": "05:10",
+    "fare": 450.0,
+    "duration": "5:40h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Chattogram",
+        "arrivalTime": "23:30",
+        "departureTime": "23:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "00:55",
+        "departureTime": "00:55",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "02:20",
+        "departureTime": "02:20",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "03:45",
+        "departureTime": "03:45",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "05:10",
+        "departureTime": "05:10",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Sundarban Express(726)",
     "start": "Dhaka",
     "destination": "Khulna",
     "startTime": "08:00",
     "arrivalTime": "15:40",
     "fare": 625.0,
-    "duration": "07:40h",
-    "offDay": "Monday",
+    "duration": "7:40h",
+    "offDay": "Wednesday",
     "stops": [
       {
         "station": "Dhaka",
@@ -220,16 +2242,28 @@
         "cumulativeFare": 0.0
       },
       {
-        "station": "Faridpur",
-        "arrivalTime": "10:30",
-        "departureTime": "10:40",
-        "cumulativeFare": 200.0
+        "station": "Tangail",
+        "arrivalTime": "09:32",
+        "departureTime": "09:32",
+        "cumulativeFare": 125.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "11:04",
+        "departureTime": "11:04",
+        "cumulativeFare": 250.0
+      },
+      {
+        "station": "Chuadanga",
+        "arrivalTime": "12:36",
+        "departureTime": "12:36",
+        "cumulativeFare": 375.0
       },
       {
         "station": "Jashore",
-        "arrivalTime": "13:20",
-        "departureTime": "13:30",
-        "cumulativeFare": 420.0
+        "arrivalTime": "14:08",
+        "departureTime": "14:08",
+        "cumulativeFare": 500.0
       },
       {
         "station": "Khulna",
@@ -240,86 +2274,2024 @@
     ]
   },
   {
-    "trainName": "PARABAT EXPRESS (710)",
+    "trainName": "Jayantika Express(717)",
     "start": "Dhaka",
     "destination": "Sylhet",
-    "startTime": "06:40",
-    "arrivalTime": "14:40",
-    "fare": 350.0,
-    "duration": "8:00h",
-    "offDay": "No off day",
+    "startTime": "11:15",
+    "arrivalTime": "19:00",
+    "fare": 410.0,
+    "duration": "7:45h",
+    "offDay": "Tuesday",
     "stops": [
       {
         "station": "Dhaka",
-        "arrivalTime": "06:40",
-        "departureTime": "06:40",
+        "arrivalTime": "11:15",
+        "departureTime": "11:15",
         "cumulativeFare": 0.0
       },
       {
-        "station": "Narsingdi",
-        "arrivalTime": "07:50",
-        "departureTime": "08:00",
-        "cumulativeFare": 80.0
-      },
-      {
         "station": "Brahmanbaria",
-        "arrivalTime": "09:30",
-        "departureTime": "09:40",
-        "cumulativeFare": 150.0
+        "arrivalTime": "13:50",
+        "departureTime": "13:50",
+        "cumulativeFare": 136.67
       },
       {
-        "station": "Habiganj",
-        "arrivalTime": "12:10",
-        "departureTime": "12:20",
-        "cumulativeFare": 250.0
+        "station": "Moulvibazar",
+        "arrivalTime": "16:25",
+        "departureTime": "16:25",
+        "cumulativeFare": 273.33
       },
       {
         "station": "Sylhet",
-        "arrivalTime": "14:40",
-        "departureTime": "14:40",
-        "cumulativeFare": 350.0
+        "arrivalTime": "19:00",
+        "departureTime": "19:00",
+        "cumulativeFare": 410.0
       }
     ]
   },
   {
-    "trainName": "RANGPUR EXPRESS (772)",
+    "trainName": "Chitra Express(764)",
     "start": "Dhaka",
-    "destination": "Rangpur",
-    "startTime": "09:00",
-    "arrivalTime": "19:00",
-    "fare": 450.0,
-    "duration": "10:00h",
+    "destination": "Khulna",
+    "startTime": "19:30",
+    "arrivalTime": "04:40",
+    "fare": 505.0,
+    "duration": "9:10h",
     "offDay": "Monday",
     "stops": [
       {
         "station": "Dhaka",
+        "arrivalTime": "19:30",
+        "departureTime": "19:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "21:20",
+        "departureTime": "21:20",
+        "cumulativeFare": 101.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "23:10",
+        "departureTime": "23:10",
+        "cumulativeFare": 202.0
+      },
+      {
+        "station": "Chuadanga",
+        "arrivalTime": "01:00",
+        "departureTime": "01:00",
+        "cumulativeFare": 303.0
+      },
+      {
+        "station": "Jashore",
+        "arrivalTime": "02:50",
+        "departureTime": "02:50",
+        "cumulativeFare": 404.0
+      },
+      {
+        "station": "Khulna",
+        "arrivalTime": "04:40",
+        "departureTime": "04:40",
+        "cumulativeFare": 505.0
+      }
+    ]
+  },
+  {
+    "trainName": "Udayan Express(723)",
+    "start": "Chattogram",
+    "destination": "Sylhet",
+    "startTime": "21:45",
+    "arrivalTime": "05:45",
+    "fare": 410.0,
+    "duration": "8:00h",
+    "offDay": "Saturday",
+    "stops": [
+      {
+        "station": "Chattogram",
+        "arrivalTime": "21:45",
+        "departureTime": "21:45",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "23:21",
+        "departureTime": "23:21",
+        "cumulativeFare": 82.0
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "00:57",
+        "departureTime": "00:57",
+        "cumulativeFare": 164.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "02:33",
+        "departureTime": "02:33",
+        "cumulativeFare": 246.0
+      },
+      {
+        "station": "Moulvibazar",
+        "arrivalTime": "04:09",
+        "departureTime": "04:09",
+        "cumulativeFare": 328.0
+      },
+      {
+        "station": "Sylhet",
+        "arrivalTime": "05:45",
+        "departureTime": "05:45",
+        "cumulativeFare": 410.0
+      }
+    ]
+  },
+  {
+    "trainName": "Upoban Express(739)",
+    "start": "Dhaka",
+    "destination": "Sylhet",
+    "startTime": "22:00",
+    "arrivalTime": "05:00",
+    "fare": 410.0,
+    "duration": "7:00h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "22:00",
+        "departureTime": "22:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "00:20",
+        "departureTime": "00:20",
+        "cumulativeFare": 136.67
+      },
+      {
+        "station": "Moulvibazar",
+        "arrivalTime": "02:40",
+        "departureTime": "02:40",
+        "cumulativeFare": 273.33
+      },
+      {
+        "station": "Sylhet",
+        "arrivalTime": "05:00",
+        "departureTime": "05:00",
+        "cumulativeFare": 410.0
+      }
+    ]
+  },
+  {
+    "trainName": "Banalata Express(791)",
+    "start": "Dhaka",
+    "destination": "Chapainawabganj",
+    "startTime": "13:30",
+    "arrivalTime": "19:15",
+    "fare": 565.0,
+    "duration": "5:45h",
+    "offDay": "Friday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "13:30",
+        "departureTime": "13:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Chapainawabganj",
+        "arrivalTime": "19:15",
+        "departureTime": "19:15",
+        "cumulativeFare": 565.0
+      }
+    ]
+  },
+  {
+    "trainName": "Jamuna Express(745)",
+    "start": "Dhaka",
+    "destination": "Jamalpur",
+    "startTime": "16:45",
+    "arrivalTime": "22:05",
+    "fare": 210.0,
+    "duration": "5:20h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "16:45",
+        "departureTime": "16:45",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Mymensingh",
+        "arrivalTime": "20:32",
+        "departureTime": "20:37",
+        "cumulativeFare": 145.0
+      },
+      {
+        "station": "Jamalpur",
+        "arrivalTime": "22:05",
+        "departureTime": "22:05",
+        "cumulativeFare": 210.0
+      }
+    ]
+  },
+  {
+    "trainName": "Bangla Bandha Express(804)",
+    "start": "Panchagarh",
+    "destination": "Rajshahi",
+    "startTime": "09:00",
+    "arrivalTime": "17:15",
+    "fare": 275.0,
+    "duration": "8:15h",
+    "offDay": "Friday",
+    "stops": [
+      {
+        "station": "Panchagarh",
         "arrivalTime": "09:00",
         "departureTime": "09:00",
         "cumulativeFare": 0.0
       },
       {
+        "station": "Thakurgaon",
+        "arrivalTime": "10:22",
+        "departureTime": "10:22",
+        "cumulativeFare": 45.83
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "11:45",
+        "departureTime": "11:45",
+        "cumulativeFare": 91.67
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "13:07",
+        "departureTime": "13:07",
+        "cumulativeFare": 137.5
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "14:30",
+        "departureTime": "14:30",
+        "cumulativeFare": 183.33
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "15:52",
+        "departureTime": "15:52",
+        "cumulativeFare": 229.17
+      },
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "17:15",
+        "departureTime": "17:15",
+        "cumulativeFare": 275.0
+      }
+    ]
+  },
+  {
+    "trainName": "Cox\u0027s Bazar Express(813)",
+    "start": "Cox\u0027s Bazar",
+    "destination": "Dhaka",
+    "startTime": "12:30",
+    "arrivalTime": "21:00",
+    "fare": 695.0,
+    "duration": "8:30h",
+    "offDay": "Tuesday",
+    "stops": [
+      {
+        "station": "Cox\u0027s Bazar",
+        "arrivalTime": "12:30",
+        "departureTime": "12:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Chattogram",
+        "arrivalTime": "16:45",
+        "departureTime": "16:45",
+        "cumulativeFare": 347.5
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "21:00",
+        "departureTime": "21:00",
+        "cumulativeFare": 695.0
+      }
+    ]
+  },
+  {
+    "trainName": "Ekota Express(706)",
+    "start": "Panchagarh",
+    "destination": "Dhaka",
+    "startTime": "21:10",
+    "arrivalTime": "07:20",
+    "fare": 740.0,
+    "duration": "10:10h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Panchagarh",
+        "arrivalTime": "21:10",
+        "departureTime": "21:10",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Thakurgaon",
+        "arrivalTime": "22:26",
+        "departureTime": "22:26",
+        "cumulativeFare": 92.5
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "23:42",
+        "departureTime": "23:42",
+        "cumulativeFare": 185.0
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "00:58",
+        "departureTime": "00:58",
+        "cumulativeFare": 277.5
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "02:15",
+        "departureTime": "02:15",
+        "cumulativeFare": 370.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "03:31",
+        "departureTime": "03:31",
+        "cumulativeFare": 462.5
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "04:47",
+        "departureTime": "04:47",
+        "cumulativeFare": 555.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "06:03",
+        "departureTime": "06:03",
+        "cumulativeFare": 647.5
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "07:20",
+        "departureTime": "07:20",
+        "cumulativeFare": 740.0
+      }
+    ]
+  },
+  {
+    "trainName": "Sundarban Express(725)",
+    "start": "Khulna",
+    "destination": "Dhaka",
+    "startTime": "21:45",
+    "arrivalTime": "05:10",
+    "fare": 625.0,
+    "duration": "7:25h",
+    "offDay": "Tuesday",
+    "stops": [
+      {
+        "station": "Khulna",
+        "arrivalTime": "21:45",
+        "departureTime": "21:45",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Jashore",
+        "arrivalTime": "23:14",
+        "departureTime": "23:14",
+        "cumulativeFare": 125.0
+      },
+      {
+        "station": "Chuadanga",
+        "arrivalTime": "00:43",
+        "departureTime": "00:43",
+        "cumulativeFare": 250.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "02:12",
+        "departureTime": "02:12",
+        "cumulativeFare": 375.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "03:41",
+        "departureTime": "03:41",
+        "cumulativeFare": 500.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "05:10",
+        "departureTime": "05:10",
+        "cumulativeFare": 625.0
+      }
+    ]
+  },
+  {
+    "trainName": "Kishorgonj Express(777)",
+    "start": "Dhaka",
+    "destination": "Kishoreganj",
+    "startTime": "10:30",
+    "arrivalTime": "14:10",
+    "fare": 180.0,
+    "duration": "3:40h",
+    "offDay": "Friday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "10:30",
+        "departureTime": "10:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Narsingdi",
+        "arrivalTime": "12:20",
+        "departureTime": "12:20",
+        "cumulativeFare": 90.0
+      },
+      {
+        "station": "Kishoreganj",
+        "arrivalTime": "14:10",
+        "departureTime": "14:10",
+        "cumulativeFare": 180.0
+      }
+    ]
+  },
+  {
+    "trainName": "Tista Express(708)",
+    "start": "Jamalpur",
+    "destination": "Dhaka",
+    "startTime": "15:56",
+    "arrivalTime": "20:30",
+    "fare": 210.0,
+    "duration": "4:34h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Jamalpur",
+        "arrivalTime": "15:56",
+        "departureTime": "15:56",
+        "cumulativeFare": 0.0
+      },
+      {
         "station": "Mymensingh",
-        "arrivalTime": "11:30",
-        "departureTime": "11:40",
-        "cumulativeFare": 150.0
+        "arrivalTime": "17:03",
+        "departureTime": "17:06",
+        "cumulativeFare": 65.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "20:30",
+        "departureTime": "20:30",
+        "cumulativeFare": 210.0
+      }
+    ]
+  },
+  {
+    "trainName": "Parabat Express(710)",
+    "start": "Sylhet",
+    "destination": "Dhaka",
+    "startTime": "16:00",
+    "arrivalTime": "22:40",
+    "fare": 410.0,
+    "duration": "6:40h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Sylhet",
+        "arrivalTime": "16:00",
+        "departureTime": "16:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Moulvibazar",
+        "arrivalTime": "18:13",
+        "departureTime": "18:13",
+        "cumulativeFare": 136.67
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "20:26",
+        "departureTime": "20:26",
+        "cumulativeFare": 273.33
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "22:40",
+        "departureTime": "22:40",
+        "cumulativeFare": 410.0
+      }
+    ]
+  },
+  {
+    "trainName": "Banalata Express(792)",
+    "start": "Chapainawabganj",
+    "destination": "Dhaka",
+    "startTime": "06:00",
+    "arrivalTime": "11:35",
+    "fare": 565.0,
+    "duration": "5:35h",
+    "offDay": "Friday",
+    "stops": [
+      {
+        "station": "Chapainawabganj",
+        "arrivalTime": "06:00",
+        "departureTime": "06:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "11:35",
+        "departureTime": "11:35",
+        "cumulativeFare": 565.0
+      }
+    ]
+  },
+  {
+    "trainName": "Haor Express(776)",
+    "start": "Netrokona",
+    "destination": "Dhaka",
+    "startTime": "08:00",
+    "arrivalTime": "13:55",
+    "fare": 295.0,
+    "duration": "5:55h",
+    "offDay": "Thursday",
+    "stops": [
+      {
+        "station": "Netrokona",
+        "arrivalTime": "08:00",
+        "departureTime": "08:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Kishoreganj",
+        "arrivalTime": "10:57",
+        "departureTime": "10:57",
+        "cumulativeFare": 147.5
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "13:55",
+        "departureTime": "13:55",
+        "cumulativeFare": 295.0
+      }
+    ]
+  },
+  {
+    "trainName": "Paharika Express(719)",
+    "start": "Chattogram",
+    "destination": "Sylhet",
+    "startTime": "07:50",
+    "arrivalTime": "15:55",
+    "fare": 410.0,
+    "duration": "8:05h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Chattogram",
+        "arrivalTime": "07:50",
+        "departureTime": "07:50",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "09:27",
+        "departureTime": "09:27",
+        "cumulativeFare": 82.0
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "11:04",
+        "departureTime": "11:04",
+        "cumulativeFare": 164.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "12:41",
+        "departureTime": "12:41",
+        "cumulativeFare": 246.0
+      },
+      {
+        "station": "Moulvibazar",
+        "arrivalTime": "14:18",
+        "departureTime": "14:18",
+        "cumulativeFare": 328.0
+      },
+      {
+        "station": "Sylhet",
+        "arrivalTime": "15:55",
+        "departureTime": "15:55",
+        "cumulativeFare": 410.0
+      }
+    ]
+  },
+  {
+    "trainName": "Simanta Express(747)",
+    "start": "Khulna",
+    "destination": "Nilphamari",
+    "startTime": "21:15",
+    "arrivalTime": "06:45",
+    "fare": 450.0,
+    "duration": "9:30h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Khulna",
+        "arrivalTime": "21:15",
+        "departureTime": "21:15",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Jashore",
+        "arrivalTime": "22:26",
+        "departureTime": "22:26",
+        "cumulativeFare": 56.25
+      },
+      {
+        "station": "Chuadanga",
+        "arrivalTime": "23:37",
+        "departureTime": "23:37",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "00:48",
+        "departureTime": "00:48",
+        "cumulativeFare": 168.75
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "02:00",
+        "departureTime": "02:00",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "03:11",
+        "departureTime": "03:11",
+        "cumulativeFare": 281.25
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "04:22",
+        "departureTime": "04:22",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "05:33",
+        "departureTime": "05:33",
+        "cumulativeFare": 393.75
+      },
+      {
+        "station": "Nilphamari",
+        "arrivalTime": "06:45",
+        "departureTime": "06:45",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Mohonagar Godhuli(703)",
+    "start": "Chattogram",
+    "destination": "Dhaka",
+    "startTime": "15:00",
+    "arrivalTime": "20:45",
+    "fare": 450.0,
+    "duration": "5:45h",
+    "offDay": "Sunday",
+    "stops": [
+      {
+        "station": "Chattogram",
+        "arrivalTime": "15:00",
+        "departureTime": "15:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "16:26",
+        "departureTime": "16:26",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "17:52",
+        "departureTime": "17:52",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "19:18",
+        "departureTime": "19:18",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "20:45",
+        "departureTime": "20:45",
+        "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Ekota Express(705)",
+    "start": "Dhaka",
+    "destination": "Panchagarh",
+    "startTime": "10:15",
+    "arrivalTime": "21:00",
+    "fare": 740.0,
+    "duration": "10:45h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "10:15",
+        "departureTime": "10:15",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "11:35",
+        "departureTime": "11:35",
+        "cumulativeFare": 92.5
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "12:56",
+        "departureTime": "12:56",
+        "cumulativeFare": 185.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "14:16",
+        "departureTime": "14:16",
+        "cumulativeFare": 277.5
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "15:37",
+        "departureTime": "15:37",
+        "cumulativeFare": 370.0
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "16:58",
+        "departureTime": "16:58",
+        "cumulativeFare": 462.5
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "18:18",
+        "departureTime": "18:18",
+        "cumulativeFare": 555.0
+      },
+      {
+        "station": "Thakurgaon",
+        "arrivalTime": "19:39",
+        "departureTime": "19:39",
+        "cumulativeFare": 647.5
+      },
+      {
+        "station": "Panchagarh",
+        "arrivalTime": "21:00",
+        "departureTime": "21:00",
+        "cumulativeFare": 740.0
+      }
+    ]
+  },
+  {
+    "trainName": "Kishorgonj Express(778)",
+    "start": "Kishoreganj",
+    "destination": "Dhaka",
+    "startTime": "16:00",
+    "arrivalTime": "20:00",
+    "fare": 180.0,
+    "duration": "4:00h",
+    "offDay": "Friday",
+    "stops": [
+      {
+        "station": "Kishoreganj",
+        "arrivalTime": "16:00",
+        "departureTime": "16:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Narsingdi",
+        "arrivalTime": "18:00",
+        "departureTime": "18:00",
+        "cumulativeFare": 90.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "20:00",
+        "departureTime": "20:00",
+        "cumulativeFare": 180.0
+      }
+    ]
+  },
+  {
+    "trainName": "Egarosindhur Provati(738)",
+    "start": "Kishoreganj",
+    "destination": "Dhaka",
+    "startTime": "06:30",
+    "arrivalTime": "10:35",
+    "fare": 180.0,
+    "duration": "4:05h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Kishoreganj",
+        "arrivalTime": "06:30",
+        "departureTime": "06:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Narsingdi",
+        "arrivalTime": "08:32",
+        "departureTime": "08:32",
+        "cumulativeFare": 90.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "10:35",
+        "departureTime": "10:35",
+        "cumulativeFare": 180.0
+      }
+    ]
+  },
+  {
+    "trainName": "Egarosindhur Godhuli(750)",
+    "start": "Kishoreganj",
+    "destination": "Dhaka",
+    "startTime": "12:50",
+    "arrivalTime": "16:45",
+    "fare": 180.0,
+    "duration": "3:55h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Kishoreganj",
+        "arrivalTime": "12:50",
+        "departureTime": "12:50",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Narsingdi",
+        "arrivalTime": "14:47",
+        "departureTime": "14:47",
+        "cumulativeFare": 90.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "16:45",
+        "departureTime": "16:45",
+        "cumulativeFare": 180.0
+      }
+    ]
+  },
+  {
+    "trainName": "Tungipara Express(779)",
+    "start": "Gopalganj",
+    "destination": "Rajshahi",
+    "startTime": "06:30",
+    "arrivalTime": "13:15",
+    "fare": 285.0,
+    "duration": "6:45h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Gopalganj",
+        "arrivalTime": "06:30",
+        "departureTime": "06:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Rajbari",
+        "arrivalTime": "08:45",
+        "departureTime": "08:45",
+        "cumulativeFare": 95.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "11:00",
+        "departureTime": "11:00",
+        "cumulativeFare": 190.0
+      },
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "13:15",
+        "departureTime": "13:15",
+        "cumulativeFare": 285.0
+      }
+    ]
+  },
+  {
+    "trainName": "Drutojan Express(757)",
+    "start": "Dhaka",
+    "destination": "Panchagarh",
+    "startTime": "20:45",
+    "arrivalTime": "07:10",
+    "fare": 740.0,
+    "duration": "10:25h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "20:45",
+        "departureTime": "20:45",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "22:03",
+        "departureTime": "22:03",
+        "cumulativeFare": 92.5
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "23:21",
+        "departureTime": "23:21",
+        "cumulativeFare": 185.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "00:39",
+        "departureTime": "00:39",
+        "cumulativeFare": 277.5
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "01:57",
+        "departureTime": "01:57",
+        "cumulativeFare": 370.0
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "03:15",
+        "departureTime": "03:15",
+        "cumulativeFare": 462.5
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "04:33",
+        "departureTime": "04:33",
+        "cumulativeFare": 555.0
+      },
+      {
+        "station": "Thakurgaon",
+        "arrivalTime": "05:51",
+        "departureTime": "05:51",
+        "cumulativeFare": 647.5
+      },
+      {
+        "station": "Panchagarh",
+        "arrivalTime": "07:10",
+        "departureTime": "07:10",
+        "cumulativeFare": 740.0
+      }
+    ]
+  },
+  {
+    "trainName": "Tista Express(707)",
+    "start": "Dhaka",
+    "destination": "Jamalpur",
+    "startTime": "07:30",
+    "arrivalTime": "11:36",
+    "fare": 210.0,
+    "duration": "4:06h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "07:30",
+        "departureTime": "07:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Mymensingh",
+        "arrivalTime": "10:32",
+        "departureTime": "10:35",
+        "cumulativeFare": 145.0
       },
       {
         "station": "Jamalpur",
-        "arrivalTime": "13:20",
-        "departureTime": "13:30",
+        "arrivalTime": "11:36",
+        "departureTime": "11:36",
         "cumulativeFare": 210.0
+      }
+    ]
+  },
+  {
+    "trainName": "Upoban Express(740)",
+    "start": "Sylhet",
+    "destination": "Dhaka",
+    "startTime": "23:30",
+    "arrivalTime": "05:40",
+    "fare": 410.0,
+    "duration": "6:10h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Sylhet",
+        "arrivalTime": "23:30",
+        "departureTime": "23:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Moulvibazar",
+        "arrivalTime": "01:33",
+        "departureTime": "01:33",
+        "cumulativeFare": 136.67
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "03:36",
+        "departureTime": "03:36",
+        "cumulativeFare": 273.33
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "05:40",
+        "departureTime": "05:40",
+        "cumulativeFare": 410.0
+      }
+    ]
+  },
+  {
+    "trainName": "Madhumati Express(755)",
+    "start": "Dhaka",
+    "destination": "Rajshahi",
+    "startTime": "15:00",
+    "arrivalTime": "22:30",
+    "fare": 175.0,
+    "duration": "7:30h",
+    "offDay": "Thursday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "15:00",
+        "departureTime": "15:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Faridpur",
+        "arrivalTime": "16:52",
+        "departureTime": "16:52",
+        "cumulativeFare": 43.75
+      },
+      {
+        "station": "Rajbari",
+        "arrivalTime": "18:45",
+        "departureTime": "18:45",
+        "cumulativeFare": 87.5
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "20:37",
+        "departureTime": "20:37",
+        "cumulativeFare": 131.25
+      },
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "22:30",
+        "departureTime": "22:30",
+        "cumulativeFare": 175.0
+      }
+    ]
+  },
+  {
+    "trainName": "Lalmoni Express(751)",
+    "start": "Dhaka",
+    "destination": "Lalmonirhat",
+    "startTime": "21:45",
+    "arrivalTime": "07:20",
+    "fare": 505.0,
+    "duration": "9:35h",
+    "offDay": "Friday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "21:45",
+        "departureTime": "21:45",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "23:20",
+        "departureTime": "23:20",
+        "cumulativeFare": 84.17
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "00:56",
+        "departureTime": "00:56",
+        "cumulativeFare": 168.33
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "02:32",
+        "departureTime": "02:32",
+        "cumulativeFare": 252.5
       },
       {
         "station": "Bogura",
-        "arrivalTime": "15:50",
-        "departureTime": "16:00",
-        "cumulativeFare": 320.0
+        "arrivalTime": "04:08",
+        "departureTime": "04:08",
+        "cumulativeFare": 336.67
       },
       {
-        "station": "Rangpur",
-        "arrivalTime": "19:00",
-        "departureTime": "19:00",
+        "station": "Gaibandha",
+        "arrivalTime": "05:44",
+        "departureTime": "05:44",
+        "cumulativeFare": 420.83
+      },
+      {
+        "station": "Lalmonirhat",
+        "arrivalTime": "07:20",
+        "departureTime": "07:20",
+        "cumulativeFare": 505.0
+      }
+    ]
+  },
+  {
+    "trainName": "Sagardari Express(761)",
+    "start": "Khulna",
+    "destination": "Rajshahi",
+    "startTime": "16:00",
+    "arrivalTime": "22:00",
+    "fare": 310.0,
+    "duration": "6:00h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Khulna",
+        "arrivalTime": "16:00",
+        "departureTime": "16:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Jashore",
+        "arrivalTime": "17:12",
+        "departureTime": "17:12",
+        "cumulativeFare": 62.0
+      },
+      {
+        "station": "Jhenaidah",
+        "arrivalTime": "18:24",
+        "departureTime": "18:24",
+        "cumulativeFare": 124.0
+      },
+      {
+        "station": "Chuadanga",
+        "arrivalTime": "19:36",
+        "departureTime": "19:36",
+        "cumulativeFare": 186.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "20:48",
+        "departureTime": "20:48",
+        "cumulativeFare": 248.0
+      },
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "22:00",
+        "departureTime": "22:00",
+        "cumulativeFare": 310.0
+      }
+    ]
+  },
+  {
+    "trainName": "Barendra Express(731)",
+    "start": "Rajshahi",
+    "destination": "Nilphamari",
+    "startTime": "15:00",
+    "arrivalTime": "21:30",
+    "fare": 215.0,
+    "duration": "6:30h",
+    "offDay": "Sunday",
+    "stops": [
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "15:00",
+        "departureTime": "15:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "16:18",
+        "departureTime": "16:18",
+        "cumulativeFare": 43.0
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "17:36",
+        "departureTime": "17:36",
+        "cumulativeFare": 86.0
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "18:54",
+        "departureTime": "18:54",
+        "cumulativeFare": 129.0
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "20:12",
+        "departureTime": "20:12",
+        "cumulativeFare": 172.0
+      },
+      {
+        "station": "Nilphamari",
+        "arrivalTime": "21:30",
+        "departureTime": "21:30",
+        "cumulativeFare": 215.0
+      }
+    ]
+  },
+  {
+    "trainName": "Parjotak Express(816)",
+    "start": "Dhaka",
+    "destination": "Cox\u0027s Bazar",
+    "startTime": "06:15",
+    "arrivalTime": "14:40",
+    "fare": 695.0,
+    "duration": "8:25h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "06:15",
+        "departureTime": "06:15",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Chattogram",
+        "arrivalTime": "10:27",
+        "departureTime": "10:27",
+        "cumulativeFare": 347.5
+      },
+      {
+        "station": "Cox\u0027s Bazar",
+        "arrivalTime": "14:40",
+        "departureTime": "14:40",
+        "cumulativeFare": 695.0
+      }
+    ]
+  },
+  {
+    "trainName": "Subarna Express(701)",
+    "start": "Chattogram",
+    "destination": "Dhaka",
+    "startTime": "07:00",
+    "arrivalTime": "11:55",
+    "fare": 495.0,
+    "duration": "4:55h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Chattogram",
+        "arrivalTime": "07:00",
+        "departureTime": "07:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "11:55",
+        "departureTime": "11:55",
+        "cumulativeFare": 495.0
+      }
+    ]
+  },
+  {
+    "trainName": "Egarosindhur Provati(737)",
+    "start": "Dhaka",
+    "destination": "Kishoreganj",
+    "startTime": "07:15",
+    "arrivalTime": "11:10",
+    "fare": 180.0,
+    "duration": "3:55h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "07:15",
+        "departureTime": "07:15",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Narsingdi",
+        "arrivalTime": "09:12",
+        "departureTime": "09:12",
+        "cumulativeFare": 90.0
+      },
+      {
+        "station": "Kishoreganj",
+        "arrivalTime": "11:10",
+        "departureTime": "11:10",
+        "cumulativeFare": 180.0
+      }
+    ]
+  },
+  {
+    "trainName": "Sirajganj Express(768)",
+    "start": "Sirajganj",
+    "destination": "Dhaka",
+    "startTime": "16:15",
+    "arrivalTime": "20:10",
+    "fare": 240.0,
+    "duration": "3:55h",
+    "offDay": "Saturday",
+    "stops": [
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "16:15",
+        "departureTime": "16:15",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "18:12",
+        "departureTime": "18:12",
+        "cumulativeFare": 120.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "20:10",
+        "departureTime": "20:10",
+        "cumulativeFare": 240.0
+      }
+    ]
+  },
+  {
+    "trainName": "Meghna Express(730)",
+    "start": "Chandpur",
+    "destination": "Chattogram",
+    "startTime": "05:00",
+    "arrivalTime": "09:00",
+    "fare": 135.0,
+    "duration": "4:00h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Chandpur",
+        "arrivalTime": "05:00",
+        "departureTime": "05:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "06:20",
+        "departureTime": "06:20",
+        "cumulativeFare": 45.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "07:40",
+        "departureTime": "07:40",
+        "cumulativeFare": 90.0
+      },
+      {
+        "station": "Chattogram",
+        "arrivalTime": "09:00",
+        "departureTime": "09:00",
+        "cumulativeFare": 135.0
+      }
+    ]
+  },
+  {
+    "trainName": "Drutojan Express(758)",
+    "start": "Panchagarh",
+    "destination": "Dhaka",
+    "startTime": "07:20",
+    "arrivalTime": "18:55",
+    "fare": 740.0,
+    "duration": "11:35h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Panchagarh",
+        "arrivalTime": "07:20",
+        "departureTime": "07:20",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Thakurgaon",
+        "arrivalTime": "08:46",
+        "departureTime": "08:46",
+        "cumulativeFare": 92.5
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "10:13",
+        "departureTime": "10:13",
+        "cumulativeFare": 185.0
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "11:40",
+        "departureTime": "11:40",
+        "cumulativeFare": 277.5
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "13:07",
+        "departureTime": "13:07",
+        "cumulativeFare": 370.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "14:34",
+        "departureTime": "14:34",
+        "cumulativeFare": 462.5
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "16:01",
+        "departureTime": "16:01",
+        "cumulativeFare": 555.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "17:28",
+        "departureTime": "17:28",
+        "cumulativeFare": 647.5
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "18:55",
+        "departureTime": "18:55",
+        "cumulativeFare": 740.0
+      }
+    ]
+  },
+  {
+    "trainName": "Jamalpur Express(799)",
+    "start": "Dhaka",
+    "destination": "Jamalpur",
+    "startTime": "10:00",
+    "arrivalTime": "14:25",
+    "fare": 210.0,
+    "duration": "4:25h",
+    "offDay": "Sunday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "10:00",
+        "departureTime": "10:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Mymensingh",
+        "arrivalTime": "13:05",
+        "departureTime": "13:10",
+        "cumulativeFare": 145.0
+      },
+      {
+        "station": "Jamalpur",
+        "arrivalTime": "14:25",
+        "departureTime": "14:25",
+        "cumulativeFare": 210.0
+      }
+    ]
+  },
+  {
+    "trainName": "Mohonagar Provati(704)",
+    "start": "Dhaka",
+    "destination": "Chattogram",
+    "startTime": "07:45",
+    "arrivalTime": "13:35",
+    "fare": 450.0,
+    "duration": "5:50h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "07:45",
+        "departureTime": "07:45",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Brahmanbaria",
+        "arrivalTime": "09:12",
+        "departureTime": "09:12",
+        "cumulativeFare": 112.5
+      },
+      {
+        "station": "Cumilla",
+        "arrivalTime": "10:40",
+        "departureTime": "10:40",
+        "cumulativeFare": 225.0
+      },
+      {
+        "station": "Feni",
+        "arrivalTime": "12:07",
+        "departureTime": "12:07",
+        "cumulativeFare": 337.5
+      },
+      {
+        "station": "Chattogram",
+        "arrivalTime": "13:35",
+        "departureTime": "13:35",
         "cumulativeFare": 450.0
+      }
+    ]
+  },
+  {
+    "trainName": "Haor Express(775)",
+    "start": "Dhaka",
+    "destination": "Netrokona",
+    "startTime": "22:15",
+    "arrivalTime": "04:10",
+    "fare": 295.0,
+    "duration": "5:55h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "22:15",
+        "departureTime": "22:15",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Kishoreganj",
+        "arrivalTime": "01:12",
+        "departureTime": "01:12",
+        "cumulativeFare": 147.5
+      },
+      {
+        "station": "Netrokona",
+        "arrivalTime": "04:10",
+        "departureTime": "04:10",
+        "cumulativeFare": 295.0
+      }
+    ]
+  },
+  {
+    "trainName": "Bangla Bandha Express(803)",
+    "start": "Rajshahi",
+    "destination": "Panchagarh",
+    "startTime": "21:00",
+    "arrivalTime": "04:40",
+    "fare": 275.0,
+    "duration": "7:40h",
+    "offDay": "Friday",
+    "stops": [
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "21:00",
+        "departureTime": "21:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "22:16",
+        "departureTime": "22:16",
+        "cumulativeFare": 45.83
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "23:33",
+        "departureTime": "23:33",
+        "cumulativeFare": 91.67
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "00:50",
+        "departureTime": "00:50",
+        "cumulativeFare": 137.5
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "02:06",
+        "departureTime": "02:06",
+        "cumulativeFare": 183.33
+      },
+      {
+        "station": "Thakurgaon",
+        "arrivalTime": "03:23",
+        "departureTime": "03:23",
+        "cumulativeFare": 229.17
+      },
+      {
+        "station": "Panchagarh",
+        "arrivalTime": "04:40",
+        "departureTime": "04:40",
+        "cumulativeFare": 275.0
+      }
+    ]
+  },
+  {
+    "trainName": "Jamuna Express(746)",
+    "start": "Jamalpur",
+    "destination": "Dhaka",
+    "startTime": "03:11",
+    "arrivalTime": "08:00",
+    "fare": 210.0,
+    "duration": "4:49h",
+    "offDay": "None",
+    "stops": [
+      {
+        "station": "Jamalpur",
+        "arrivalTime": "03:11",
+        "departureTime": "03:11",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Mymensingh",
+        "arrivalTime": "04:25",
+        "departureTime": "04:30",
+        "cumulativeFare": 65.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "08:00",
+        "departureTime": "08:00",
+        "cumulativeFare": 210.0
+      }
+    ]
+  },
+  {
+    "trainName": "Benapole Express(795)",
+    "start": "Jashore",
+    "destination": "Dhaka",
+    "startTime": "12:25",
+    "arrivalTime": "20:30",
+    "fare": 600.0,
+    "duration": "8:05h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Jashore",
+        "arrivalTime": "12:25",
+        "departureTime": "12:25",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "16:27",
+        "departureTime": "16:27",
+        "cumulativeFare": 300.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "20:30",
+        "departureTime": "20:30",
+        "cumulativeFare": 600.0
+      }
+    ]
+  },
+  {
+    "trainName": "Mohanganj Express(790)",
+    "start": "Mymensingh",
+    "destination": "Dhaka",
+    "startTime": "01:30",
+    "arrivalTime": "04:55",
+    "fare": 145.0,
+    "duration": "3:25h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Mymensingh",
+        "arrivalTime": "01:30",
+        "departureTime": "01:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "04:55",
+        "departureTime": "04:55",
+        "cumulativeFare": 145.0
+      }
+    ]
+  },
+  {
+    "trainName": "Cox\u0027s Bazar Express(814)",
+    "start": "Dhaka",
+    "destination": "Cox\u0027s Bazar",
+    "startTime": "23:00",
+    "arrivalTime": "07:20",
+    "fare": 695.0,
+    "duration": "8:20h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "23:00",
+        "departureTime": "23:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Chattogram",
+        "arrivalTime": "03:10",
+        "departureTime": "03:10",
+        "cumulativeFare": 347.5
+      },
+      {
+        "station": "Cox\u0027s Bazar",
+        "arrivalTime": "07:20",
+        "departureTime": "07:20",
+        "cumulativeFare": 695.0
+      }
+    ]
+  },
+  {
+    "trainName": "Tungipara Express(780)",
+    "start": "Rajshahi",
+    "destination": "Gopalganj",
+    "startTime": "15:30",
+    "arrivalTime": "22:10",
+    "fare": 285.0,
+    "duration": "6:40h",
+    "offDay": "Tuesday",
+    "stops": [
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "15:30",
+        "departureTime": "15:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "17:43",
+        "departureTime": "17:43",
+        "cumulativeFare": 95.0
+      },
+      {
+        "station": "Rajbari",
+        "arrivalTime": "19:56",
+        "departureTime": "19:56",
+        "cumulativeFare": 190.0
+      },
+      {
+        "station": "Gopalganj",
+        "arrivalTime": "22:10",
+        "departureTime": "22:10",
+        "cumulativeFare": 285.0
+      }
+    ]
+  },
+  {
+    "trainName": "Lalmoni Express(752)",
+    "start": "Lalmonirhat",
+    "destination": "Dhaka",
+    "startTime": "09:50",
+    "arrivalTime": "19:45",
+    "fare": 505.0,
+    "duration": "9:55h",
+    "offDay": "Friday",
+    "stops": [
+      {
+        "station": "Lalmonirhat",
+        "arrivalTime": "09:50",
+        "departureTime": "09:50",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Gaibandha",
+        "arrivalTime": "11:29",
+        "departureTime": "11:29",
+        "cumulativeFare": 84.17
+      },
+      {
+        "station": "Bogura",
+        "arrivalTime": "13:08",
+        "departureTime": "13:08",
+        "cumulativeFare": 168.33
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "14:47",
+        "departureTime": "14:47",
+        "cumulativeFare": 252.5
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "16:26",
+        "departureTime": "16:26",
+        "cumulativeFare": 336.67
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "18:05",
+        "departureTime": "18:05",
+        "cumulativeFare": 420.83
+      },
+      {
+        "station": "Dhaka",
+        "arrivalTime": "19:45",
+        "departureTime": "19:45",
+        "cumulativeFare": 505.0
+      }
+    ]
+  },
+  {
+    "trainName": "Sagardari Express(762)",
+    "start": "Rajshahi",
+    "destination": "Khulna",
+    "startTime": "06:00",
+    "arrivalTime": "12:10",
+    "fare": 310.0,
+    "duration": "6:10h",
+    "offDay": "Monday",
+    "stops": [
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "06:00",
+        "departureTime": "06:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "07:14",
+        "departureTime": "07:14",
+        "cumulativeFare": 62.0
+      },
+      {
+        "station": "Chuadanga",
+        "arrivalTime": "08:28",
+        "departureTime": "08:28",
+        "cumulativeFare": 124.0
+      },
+      {
+        "station": "Jhenaidah",
+        "arrivalTime": "09:42",
+        "departureTime": "09:42",
+        "cumulativeFare": 186.0
+      },
+      {
+        "station": "Jashore",
+        "arrivalTime": "10:56",
+        "departureTime": "10:56",
+        "cumulativeFare": 248.0
+      },
+      {
+        "station": "Khulna",
+        "arrivalTime": "12:10",
+        "departureTime": "12:10",
+        "cumulativeFare": 310.0
+      }
+    ]
+  },
+  {
+    "trainName": "Barendra Express(732)",
+    "start": "Nilphamari",
+    "destination": "Rajshahi",
+    "startTime": "05:00",
+    "arrivalTime": "11:10",
+    "fare": 215.0,
+    "duration": "6:10h",
+    "offDay": "Sunday",
+    "stops": [
+      {
+        "station": "Nilphamari",
+        "arrivalTime": "05:00",
+        "departureTime": "05:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "06:14",
+        "departureTime": "06:14",
+        "cumulativeFare": 43.0
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "07:28",
+        "departureTime": "07:28",
+        "cumulativeFare": 86.0
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "08:42",
+        "departureTime": "08:42",
+        "cumulativeFare": 129.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "09:56",
+        "departureTime": "09:56",
+        "cumulativeFare": 172.0
+      },
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "11:10",
+        "departureTime": "11:10",
+        "cumulativeFare": 215.0
+      }
+    ]
+  },
+  {
+    "trainName": "Sirajganj Express(767)",
+    "start": "Dhaka",
+    "destination": "Sirajganj",
+    "startTime": "06:00",
+    "arrivalTime": "10:15",
+    "fare": 240.0,
+    "duration": "4:15h",
+    "offDay": "Saturday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "06:00",
+        "departureTime": "06:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Tangail",
+        "arrivalTime": "08:07",
+        "departureTime": "08:07",
+        "cumulativeFare": 120.0
+      },
+      {
+        "station": "Sirajganj",
+        "arrivalTime": "10:15",
+        "departureTime": "10:15",
+        "cumulativeFare": 240.0
+      }
+    ]
+  },
+  {
+    "trainName": "Benapole Express(796)",
+    "start": "Dhaka",
+    "destination": "Jashore",
+    "startTime": "23:30",
+    "arrivalTime": "07:00",
+    "fare": 600.0,
+    "duration": "7:30h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Dhaka",
+        "arrivalTime": "23:30",
+        "departureTime": "23:30",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Kushtia",
+        "arrivalTime": "03:15",
+        "departureTime": "03:15",
+        "cumulativeFare": 300.0
+      },
+      {
+        "station": "Jashore",
+        "arrivalTime": "07:00",
+        "departureTime": "07:00",
+        "cumulativeFare": 600.0
+      }
+    ]
+  },
+  {
+    "trainName": "Titumir Express(734)",
+    "start": "Nilphamari",
+    "destination": "Rajshahi",
+    "startTime": "15:00",
+    "arrivalTime": "21:30",
+    "fare": 215.0,
+    "duration": "6:30h",
+    "offDay": "Wednesday",
+    "stops": [
+      {
+        "station": "Nilphamari",
+        "arrivalTime": "15:00",
+        "departureTime": "15:00",
+        "cumulativeFare": 0.0
+      },
+      {
+        "station": "Dinajpur",
+        "arrivalTime": "16:18",
+        "departureTime": "16:18",
+        "cumulativeFare": 43.0
+      },
+      {
+        "station": "Joypurhat",
+        "arrivalTime": "17:36",
+        "departureTime": "17:36",
+        "cumulativeFare": 86.0
+      },
+      {
+        "station": "Naogaon",
+        "arrivalTime": "18:54",
+        "departureTime": "18:54",
+        "cumulativeFare": 129.0
+      },
+      {
+        "station": "Natore",
+        "arrivalTime": "20:12",
+        "departureTime": "20:12",
+        "cumulativeFare": 172.0
+      },
+      {
+        "station": "Rajshahi",
+        "arrivalTime": "21:30",
+        "departureTime": "21:30",
+        "cumulativeFare": 215.0
       }
     ]
   }

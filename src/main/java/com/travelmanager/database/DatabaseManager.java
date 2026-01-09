@@ -967,7 +967,7 @@ public class DatabaseManager {
                 busDTO.setFare(price);
                 busDTO.setDuration(duration);
                 
-                if ("CREATE".equals(operationType)) {
+                if ("CREATE".equals(operationType) || "ADD".equals(operationType)) {
                     busStorage.addSchedule(busDTO);
                 } else if ("UPDATE".equals(operationType)) {
                     busStorage.updateSchedule(routeName, busDTO);
@@ -1055,7 +1055,7 @@ public class DatabaseManager {
                 
                 trainDTO.setOffDay(offDay);
                 
-                if ("CREATE".equals(operationType)) {
+                if ("CREATE".equals(operationType) || "ADD".equals(operationType)) {
                     trainStorage.addSchedule(trainDTO);
                 } else if ("UPDATE".equals(operationType)) {
                     trainStorage.updateSchedule(routeName, trainDTO);

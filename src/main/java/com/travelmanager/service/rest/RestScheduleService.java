@@ -154,10 +154,11 @@ public class RestScheduleService {
      * Search only bus schedules
      */
     public List<Schedule> searchBusSchedules(String origin, String destination, LocalDate date) {
-        List<BusSchedule> buses = getAllBusSchedules();
-        return buses.stream()
-                .filter(b -> b.getOrigin().equalsIgnoreCase(origin) && 
-                           b.getDestination().equalsIgnoreCase(destination))
+        // Use the REST API endpoint which has flexible matching logic
+        List<Schedule> allResults = searchSchedules(origin, destination, date);
+        // Filter to only return buses
+        return allResults.stream()
+                .filter(s -> s instanceof BusSchedule)
                 .collect(Collectors.toList());
     }
 
@@ -165,10 +166,11 @@ public class RestScheduleService {
      * Search only train schedules
      */
     public List<Schedule> searchTrainSchedules(String origin, String destination, LocalDate date) {
-        List<TrainSchedule> trains = getAllTrainSchedules();
-        return trains.stream()
-                .filter(t -> t.getOrigin().equalsIgnoreCase(origin) && 
-                           t.getDestination().equalsIgnoreCase(destination))
+        // Use the REST API endpoint which has flexible matching logic
+        List<Schedule> allResults = searchSchedules(origin, destination, date);
+        // Filter to only return trains
+        return allResults.stream()
+                .filter(s -> s instanceof TrainSchedule)
                 .collect(Collectors.toList());
     }
 
@@ -269,6 +271,9 @@ public class RestScheduleService {
             arrivalTime = arrivalTime.plusDays(1);
         }
 
+        String trainNumber = extractTrainNumber(dto.getTrainName());
+        String trainNameOnly = removeTrainNumber(dto.getTrainName());
+
         return new TrainSchedule(
                 dto.getTrainName(),
                 dto.getStart(),
@@ -277,8 +282,8 @@ public class RestScheduleService {
                 arrivalTime,
                 dto.getFare(),
                 100, // default available seats
-                dto.getTrainName(),
-                extractTrainNumber(dto.getTrainName()),
+                trainNameOnly,
+                trainNumber,
                 "Shovan" // default class
         );
     }
@@ -294,6 +299,9 @@ public class RestScheduleService {
             arrivalTime = arrivalTime.plusDays(1);
         }
 
+        String trainNumber = extractTrainNumber(dto.getName());
+        String trainNameOnly = removeTrainNumber(dto.getName());
+
         return new TrainSchedule(
                 dto.getName(),
                 dto.getStart(),
@@ -302,8 +310,8 @@ public class RestScheduleService {
                 arrivalTime,
                 dto.getFare(),
                 100,
-                dto.getName(),
-                extractTrainNumber(dto.getName()),
+                trainNameOnly,
+                trainNumber,
                 "Shovan"
         );
     }
@@ -333,5 +341,13 @@ public class RestScheduleService {
             return trainName.substring(start, end);
         }
         return "000";
+    }
+
+    private String removeTrainNumber(String trainName) {
+        if (trainName.contains("(") && trainName.contains(")")) {
+            int start = trainName.indexOf("(");
+            return trainName.substring(0, start).trim();
+        }
+        return trainName;
     }
 }

@@ -1,8 +1,6 @@
 package com.travelmanager.controller;
 
-import com.travelmanager.api.ScheduleDataManager;
 import com.travelmanager.database.DatabaseManager;
-import com.travelmanager.model.TrainSchedule;
 import com.travelmanager.model.rest.TrainScheduleDTO;
 import com.travelmanager.storage.TrainScheduleStorage;
 import com.travelmanager.util.AuthenticationManager;
@@ -16,9 +14,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,11 +32,11 @@ public class AddTrainRouteController {
     @FXML private Label errorLabel;
     
     private DatabaseManager databaseManager;
-    private ScheduleDataManager scheduleDataManager;
     private TrainScheduleStorage trainScheduleStorage;
     private List<StopRowPane> stopRows;
     private List<String> allLocations;
     private boolean isEditMode = false;
+    private ManageRoutesController.RouteRow editingRoute = null;
     @SuppressWarnings("unused")
     private AutoCompletePopup startStationAutoComplete;
     @SuppressWarnings("unused")
@@ -50,7 +45,6 @@ public class AddTrainRouteController {
     @FXML
     public void initialize() {
         databaseManager = DatabaseManager.getInstance();
-        scheduleDataManager = ScheduleDataManager.getInstance();
         trainScheduleStorage = TrainScheduleStorage.getInstance();
         stopRows = new ArrayList<>();
         
@@ -90,6 +84,7 @@ public class AddTrainRouteController {
     
     private void populateFormForEdit(ManageRoutesController.RouteRow route) {
         isEditMode = true;
+        editingRoute = route; // Store for later use when submitting
         
         // Fetch the actual train schedule DTO which contains all data including offDay and stops
         TrainScheduleDTO trainSchedule = trainScheduleStorage.getSchedule(route.getRouteName()).orElse(null);
@@ -327,8 +322,8 @@ public class AddTrainRouteController {
                 totalFare,
                 startDeparture,
                 "stops:" + stopsJson.toString() + ";offDay:" + offDay + ";duration:" + duration + ";arrivalTime:" + destArrival,
-                "ADD",
-                null,
+                isEditMode ? "UPDATE" : "ADD",
+                isEditMode && editingRoute != null ? editingRoute.getId() : null,
                 currentUser,
                 description
             );

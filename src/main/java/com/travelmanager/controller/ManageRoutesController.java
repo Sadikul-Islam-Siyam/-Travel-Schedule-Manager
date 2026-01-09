@@ -145,17 +145,37 @@ public class ManageRoutesController {
     }
     
     private void loadRoutes() {
-        System.out.println("ManageRoutesController: Loading routes from REST API...");
+        System.out.println("ManageRoutesController: Loading routes from REST API and database...");
         routesList.clear();
         
-        // Load bus schedules from REST API
+        // Track route names from database (these are editable/deletable)
+        java.util.Set<String> databaseRouteNames = new java.util.HashSet<>();
+        java.util.Map<String, Integer> routeIdMap = new java.util.HashMap<>();
+        
+        // First, load routes from database (these have proper IDs)
+        try {
+            java.util.List<DatabaseManager.RouteData> dbRoutes = databaseManager.getAllRoutes();
+            System.out.println("ManageRoutesController: Loaded " + dbRoutes.size() + " routes from database");
+            
+            for (DatabaseManager.RouteData route : dbRoutes) {
+                databaseRouteNames.add(route.getRouteName());
+                routeIdMap.put(route.getRouteName(), route.getId());
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading database routes: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        // Load ALL schedules from REST API/JSON files
         List<BusSchedule> busSchedules = dataManager.getAllBusSchedules();
-        System.out.println("ManageRoutesController: Loaded " + busSchedules.size() + " bus schedules");
-        int id = 1;
+        System.out.println("ManageRoutesController: Loaded " + busSchedules.size() + " bus schedules from JSON");
+        
         for (BusSchedule bus : busSchedules) {
             long duration = java.time.Duration.between(bus.getDepartureTime(), bus.getArrivalTime()).toMinutes();
+            // Use database ID if exists, otherwise use 0 (means not in database, can't edit/delete)
+            int dbId = routeIdMap.getOrDefault(bus.getId(), 0);
             routesList.add(new RouteRow(
-                id++,
+                dbId,
                 bus.getId(),
                 bus.getOrigin(),
                 bus.getDestination(),
@@ -166,13 +186,16 @@ public class ManageRoutesController {
             ));
         }
         
-        // Load train schedules from REST API
+        // Load train schedules
         List<TrainSchedule> trainSchedules = dataManager.getAllTrainSchedules();
-        System.out.println("ManageRoutesController: Loaded " + trainSchedules.size() + " train schedules");
+        System.out.println("ManageRoutesController: Loaded " + trainSchedules.size() + " train schedules from JSON");
+        
         for (TrainSchedule train : trainSchedules) {
             long duration = java.time.Duration.between(train.getDepartureTime(), train.getArrivalTime()).toMinutes();
+            // Use database ID if exists, otherwise use 0
+            int dbId = routeIdMap.getOrDefault(train.getId(), 0);
             routesList.add(new RouteRow(
-                id++,
+                dbId,
                 train.getId(),
                 train.getOrigin(),
                 train.getDestination(),
@@ -183,7 +206,8 @@ public class ManageRoutesController {
             ));
         }
         
-        System.out.println("ManageRoutesController: Total routes loaded: " + routesList.size());
+        System.out.println("ManageRoutesController: Total routes loaded: " + routesList.size() + 
+                         " (" + databaseRouteNames.size() + " editable in database)");
         applyFilters();
         setupActionsColumn();
     }
@@ -216,9 +240,31 @@ public class ManageRoutesController {
                     @Override
                     protected void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
-                        if (empty) {
+                        if (empty || getIndex() >= getTableView().getItems().size()) {
                             setGraphic(null);
                         } else {
+                            RouteRow route = getTableView().getItems().get(getIndex());
+                            
+                            // Show/hide buttons based on whether route is in database (ID > 0)
+                            boolean isEditable = route.getId() > 0;
+                            
+                            if (isEditable) {
+                                // Show colored buttons for editable routes
+                                editBtn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 11px; -fx-padding: 5 10; -fx-cursor: hand; -fx-background-radius: 4;");
+                                deleteBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 11px; -fx-padding: 5 10; -fx-cursor: hand; -fx-background-radius: 4;");
+                                editBtn.setDisable(false);
+                                deleteBtn.setDisable(false);
+                                editBtn.setTooltip(null);
+                                deleteBtn.setTooltip(null);
+                                container.getChildren().setAll(editBtn, deleteBtn);
+                            } else {
+                                // Show "Not Editable" label for REST API only routes
+                                javafx.scene.control.Label notEditableLabel = new javafx.scene.control.Label("(REST API Only)");
+                                notEditableLabel.setStyle("-fx-text-fill: #95a5a6; -fx-font-size: 10px; -fx-font-style: italic;");
+                                notEditableLabel.setTooltip(new javafx.scene.control.Tooltip("Route only exists in JSON file - not editable"));
+                                container.getChildren().setAll(notEditableLabel);
+                            }
+                            
                             setGraphic(container);
                         }
                     }
@@ -262,8 +308,7 @@ public class ManageRoutesController {
                 try {
                     String currentUser = AuthenticationManager.getInstance().getCurrentUsername();
                     
-                    // Submit deletion request - find the original route ID from REST API
-                    // For now, use route name as identifier
+                    // Submit deletion request with the actual route ID from database
                     boolean submitted = databaseManager.submitPendingRoute(
                         route.getRouteName(),
                         route.getOrigin(),
@@ -274,7 +319,7 @@ public class ManageRoutesController {
                         "", // departure time not needed for deletion
                         "", // metadata not needed for deletion
                         "DELETE",
-                        null, // original route ID (would need to be tracked)
+                        route.getId(), // Pass the actual database route ID
                         currentUser,
                         "Request to delete route"
                     );
