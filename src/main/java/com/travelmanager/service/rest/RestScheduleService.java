@@ -168,9 +168,10 @@ public class RestScheduleService {
     public List<Schedule> searchTrainSchedules(String origin, String destination, LocalDate date) {
         // Use the REST API endpoint which has flexible matching logic
         List<Schedule> allResults = searchSchedules(origin, destination, date);
-        // Filter to only return trains
+        // Filter to only return trains that are available on the given date
         return allResults.stream()
                 .filter(s -> s instanceof TrainSchedule)
+                .filter(s -> ((TrainSchedule) s).isAvailableOnDate(date))
                 .collect(Collectors.toList());
     }
 
@@ -178,6 +179,7 @@ public class RestScheduleService {
 
     /**
      * Convert UnifiedScheduleDTO list to Schedule list
+     * Also filters out trains that are not available on the given date
      */
     private List<Schedule> convertUnifiedToSchedules(List<UnifiedScheduleDTO> dtos, LocalDate date) {
         List<Schedule> schedules = new ArrayList<>();
@@ -185,7 +187,11 @@ public class RestScheduleService {
             if ("bus".equals(dto.getType())) {
                 schedules.add(convertBusDTO(dto, date));
             } else if ("train".equals(dto.getType())) {
-                schedules.add(convertTrainDTO(dto, date));
+                TrainSchedule train = convertTrainDTO(dto, date);
+                // Only add train if it's available on the given date
+                if (train.isAvailableOnDate(date)) {
+                    schedules.add(train);
+                }
             }
         }
         return schedules;
@@ -284,7 +290,8 @@ public class RestScheduleService {
                 100, // default available seats
                 trainNameOnly,
                 trainNumber,
-                "Shovan" // default class
+                "Shovan", // default class
+                dto.getOffDay()  // Pass the off day from DTO
         );
     }
 
@@ -312,7 +319,8 @@ public class RestScheduleService {
                 100,
                 trainNameOnly,
                 trainNumber,
-                "Shovan"
+                "Shovan",
+                dto.getOffDay()  // Pass the off day from DTO
         );
     }
 

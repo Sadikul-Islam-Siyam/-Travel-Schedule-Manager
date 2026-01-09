@@ -1,47 +1,461 @@
-[
-  {
-    "busName": "Hanif Paribahan",
-    "start": "Dhaka",
-    "destination": "Cumilla",
-    "startTime": "08:00",
-    "arrivalTime": "14:00",
-    "fare": 850.0,
-    "duration": "6:00h"
-  },
-  {
-    "busName": "Shyamoli Paribahan",
-    "start": "Dhaka",
-    "destination": "Sylhet",
-    "startTime": "07:00",
-    "arrivalTime": "13:30",
-    "fare": 650.0,
-    "duration": "6:30h"
-  },
-  {
-    "busName": "Ena Paribahan",
-    "start": "Dhaka",
-    "destination": "Rajshahi",
-    "startTime": "09:00",
-    "arrivalTime": "15:00",
-    "fare": 700.0,
-    "duration": "6:00h"
-  },
-  {
-    "busName": "Green Line Paribahan",
-    "start": "Dhaka",
-    "destination": "Cox\u0027s Bazar",
-    "startTime": "22:30",
-    "arrivalTime": "08:30",
-    "fare": 1200.0,
-    "duration": "10:00h"
-  },
-  {
-    "busName": "Shamoli NR Travels",
-    "start": "Dhaka",
-    "destination": "Rangpur",
-    "startTime": "23:00",
-    "arrivalTime": "06:00",
-    "fare": 900.0,
-    "duration": "7:00h"
-  }
+﻿[
+    {
+        "busName":  "Hanif Enterprise (Bus-1)",
+        "start":  "Dhaka",
+        "destination":  "Cox\u0027s Bazar",
+        "startTime":  "20:30",
+        "arrivalTime":  "12:00",
+        "fare":  1050,
+        "duration":  "9:00h"
+    },
+    {
+        "busName":  "Shyamoli Paribahan (Bus-2)",
+        "start":  "Dhaka",
+        "destination":  "Cox\u0027s Bazar",
+        "startTime":  "21:30",
+        "arrivalTime":  "12:00",
+        "fare":  1050,
+        "duration":  "9:00h"
+    },
+    {
+        "busName":  "S. Alam Service (Bus-3)",
+        "start":  "Dhaka",
+        "destination":  "Cox\u0027s Bazar",
+        "startTime":  "22:45",
+        "arrivalTime":  "12:00",
+        "fare":  1000,
+        "duration":  "9:00h"
+    },
+    {
+        "busName":  "Ena Paribahan (Bus-4)",
+        "start":  "Dhaka",
+        "destination":  "Sylhet",
+        "startTime":  "06:30",
+        "arrivalTime":  "12:00",
+        "fare":  700,
+        "duration":  "6:00h"
+    },
+    {
+        "busName":  "Hanif Enterprise (Bus-5)",
+        "start":  "Dhaka",
+        "destination":  "Sylhet",
+        "startTime":  "10:00",
+        "arrivalTime":  "12:00",
+        "fare":  700,
+        "duration":  "6:00h"
+    },
+    {
+        "busName":  "Shyamoli NR Travels (Bus-6)",
+        "start":  "Dhaka",
+        "destination":  "Sylhet",
+        "startTime":  "23:30",
+        "arrivalTime":  "12:00",
+        "fare":  700,
+        "duration":  "6:00h"
+    },
+    {
+        "busName":  "Saudia Paribahan (Bus-7)",
+        "start":  "Dhaka",
+        "destination":  "Chattogram",
+        "startTime":  "07:30",
+        "arrivalTime":  "12:00",
+        "fare":  680,
+        "duration":  "6:00h"
+    },
+    {
+        "busName":  "Hanif Enterprise (Bus-9)",
+        "start":  "Dhaka",
+        "destination":  "Chattogram",
+        "startTime":  "23:30",
+        "arrivalTime":  "12:00",
+        "fare":  680,
+        "duration":  "6:00h"
+    },
+    {
+        "busName":  "National Travels (Bus-10)",
+        "start":  "Dhaka",
+        "destination":  "Rajshahi",
+        "startTime":  "08:00",
+        "arrivalTime":  "12:00",
+        "fare":  650,
+        "duration":  "6:00h"
+    },
+    {
+        "busName":  "Desh Travels (Bus-11)",
+        "start":  "Dhaka",
+        "destination":  "Rajshahi",
+        "startTime":  "10:30",
+        "arrivalTime":  "12:00",
+        "fare":  650,
+        "duration":  "6:00h"
+    },
+    {
+        "busName":  "Hanif Enterprise (Bus-12)",
+        "start":  "Dhaka",
+        "destination":  "Rajshahi",
+        "startTime":  "23:15",
+        "arrivalTime":  "12:00",
+        "fare":  650,
+        "duration":  "6:00h"
+    },
+    {
+        "busName":  "Hanif Enterprise (Bus-13)",
+        "start":  "Dhaka",
+        "destination":  "Khulna",
+        "startTime":  "07:45",
+        "arrivalTime":  "12:00",
+        "fare":  650,
+        "duration":  "7:00h"
+    },
+    {
+        "busName":  "Sohag Paribahan (Bus-14)",
+        "start":  "Dhaka",
+        "destination":  "Khulna",
+        "startTime":  "09:15",
+        "arrivalTime":  "12:00",
+        "fare":  650,
+        "duration":  "7:00h"
+    },
+    {
+        "busName":  "Eagle Paribahan (Bus-15)",
+        "start":  "Dhaka",
+        "destination":  "Khulna",
+        "startTime":  "22:30",
+        "arrivalTime":  "12:00",
+        "fare":  650,
+        "duration":  "7:00h"
+    },
+    {
+        "busName":  "Nabil Paribahan (Bus-16)",
+        "start":  "Dhaka",
+        "destination":  "Rangpur",
+        "startTime":  "08:30",
+        "arrivalTime":  "12:00",
+        "fare":  700,
+        "duration":  "7:00h"
+    },
+    {
+        "busName":  "S.R Travels (Bus-17)",
+        "start":  "Dhaka",
+        "destination":  "Rangpur",
+        "startTime":  "11:30",
+        "arrivalTime":  "12:00",
+        "fare":  700,
+        "duration":  "7:00h"
+    },
+    {
+        "busName":  "Hanif Enterprise (Bus-18)",
+        "start":  "Dhaka",
+        "destination":  "Rangpur",
+        "startTime":  "23:00",
+        "arrivalTime":  "12:00",
+        "fare":  700,
+        "duration":  "7:00h"
+    },
+    {
+        "busName":  "Sakura Paribahan (Bus-19)",
+        "start":  "Dhaka",
+        "destination":  "Barishal",
+        "startTime":  "07:15",
+        "arrivalTime":  "12:00",
+        "fare":  550,
+        "duration":  "6:00h"
+    },
+    {
+        "busName":  "Golden Line (Bus-20)",
+        "start":  "Dhaka",
+        "destination":  "Barishal",
+        "startTime":  "11:30",
+        "arrivalTime":  "12:00",
+        "fare":  550,
+        "duration":  "6:00h"
+    },
+    {
+        "busName":  "Hanif Enterprise (Bus-21)",
+        "start":  "Dhaka",
+        "destination":  "Kuakata",
+        "startTime":  "20:30",
+        "arrivalTime":  "12:00",
+        "fare":  750,
+        "duration":  "8:00h"
+    },
+    {
+        "busName":  "Shah Fateh Ali (Bus-22)",
+        "start":  "Dhaka",
+        "destination":  "Bogura",
+        "startTime":  "09:30",
+        "arrivalTime":  "12:00",
+        "fare":  550,
+        "duration":  "5:00h"
+    },
+    {
+        "busName":  "Marsa Transport (Bus-23)",
+        "start":  "Chattogram",
+        "destination":  "Cox\u0027s Bazar",
+        "startTime":  "07:00",
+        "arrivalTime":  "12:00",
+        "fare":  450,
+        "duration":  "4:00h"
+    },
+    {
+        "busName":  "S. Alam Service (Bus-24)",
+        "start":  "Chattogram",
+        "destination":  "Cox\u0027s Bazar",
+        "startTime":  "09:00",
+        "arrivalTime":  "12:00",
+        "fare":  400,
+        "duration":  "4:00h"
+    },
+    {
+        "busName":  "Marsa Transport (Bus-25)",
+        "start":  "Chattogram",
+        "destination":  "Cox\u0027s Bazar",
+        "startTime":  "11:00",
+        "arrivalTime":  "12:00",
+        "fare":  450,
+        "duration":  "4:00h"
+    },
+    {
+        "busName":  "S. Alam Service (Bus-26)",
+        "start":  "Chattogram",
+        "destination":  "Cox\u0027s Bazar",
+        "startTime":  "15:00",
+        "arrivalTime":  "12:00",
+        "fare":  400,
+        "duration":  "4:00h"
+    },
+    {
+        "busName":  "Ena Paribahan (Bus-27)",
+        "start":  "Chattogram",
+        "destination":  "Sylhet",
+        "startTime":  "08:30",
+        "arrivalTime":  "12:00",
+        "fare":  850,
+        "duration":  "8:00h"
+    },
+    {
+        "busName":  "Saudia Paribahan (Bus-28)",
+        "start":  "Chattogram",
+        "destination":  "Sylhet",
+        "startTime":  "20:00",
+        "arrivalTime":  "12:00",
+        "fare":  850,
+        "duration":  "8:00h"
+    },
+    {
+        "busName":  "Ena Paribahan (Bus-29)",
+        "start":  "Chattogram",
+        "destination":  "Sylhet",
+        "startTime":  "21:30",
+        "arrivalTime":  "12:00",
+        "fare":  850,
+        "duration":  "8:00h"
+    },
+    {
+        "busName":  "Paharika Service (Bus-30)",
+        "start":  "Chattogram",
+        "destination":  "Rangamati",
+        "startTime":  "07:30",
+        "arrivalTime":  "12:00",
+        "fare":  180,
+        "duration":  "2:00h"
+    },
+    {
+        "busName":  "Shanti Paribahan (Bus-31)",
+        "start":  "Chattogram",
+        "destination":  "Khagrachhari",
+        "startTime":  "08:00",
+        "arrivalTime":  "12:00",
+        "fare":  250,
+        "duration":  "3:00h"
+    },
+    {
+        "busName":  "Tisha Plus (Bus-32)",
+        "start":  "Chattogram",
+        "destination":  "Cumilla",
+        "startTime":  "10:30",
+        "arrivalTime":  "12:00",
+        "fare":  350,
+        "duration":  "2:00h"
+    },
+    {
+        "busName":  "Hanif Enterprise (Bus-33)",
+        "start":  "Rajshahi",
+        "destination":  "Khulna",
+        "startTime":  "06:45",
+        "arrivalTime":  "12:00",
+        "fare":  650,
+        "duration":  "5:00h"
+    },
+    {
+        "busName":  "Desh Travels (Bus-34)",
+        "start":  "Rajshahi",
+        "destination":  "Khulna",
+        "startTime":  "14:15",
+        "arrivalTime":  "12:00",
+        "fare":  650,
+        "duration":  "5:00h"
+    },
+    {
+        "busName":  "Hanif Enterprise (Bus-35)",
+        "start":  "Rajshahi",
+        "destination":  "Khulna",
+        "startTime":  "22:30",
+        "arrivalTime":  "12:00",
+        "fare":  650,
+        "duration":  "5:00h"
+    },
+    {
+        "busName":  "Nabil Paribahan (Bus-36)",
+        "start":  "Rajshahi",
+        "destination":  "Rangpur",
+        "startTime":  "07:30",
+        "arrivalTime":  "12:00",
+        "fare":  450,
+        "duration":  "4:00h"
+    },
+    {
+        "busName":  "Hanif Enterprise (Bus-37)",
+        "start":  "Rajshahi",
+        "destination":  "Rangpur",
+        "startTime":  "13:30",
+        "arrivalTime":  "12:00",
+        "fare":  450,
+        "duration":  "4:00h"
+    },
+    {
+        "busName":  "Sakura Paribahan (Bus-38)",
+        "start":  "Khulna",
+        "destination":  "Barishal",
+        "startTime":  "08:00",
+        "arrivalTime":  "12:00",
+        "fare":  350,
+        "duration":  "3:00h"
+    },
+    {
+        "busName":  "Local Direct (Bus-39)",
+        "start":  "Khulna",
+        "destination":  "Barishal",
+        "startTime":  "13:00",
+        "arrivalTime":  "12:00",
+        "fare":  300,
+        "duration":  "3:00h"
+    },
+    {
+        "busName":  "Hanif Enterprise (Bus-40)",
+        "start":  "Khulna",
+        "destination":  "Rajshahi",
+        "startTime":  "07:15",
+        "arrivalTime":  "12:00",
+        "fare":  650,
+        "duration":  "5:00h"
+    },
+    {
+        "busName":  "Local Direct (Bus-41)",
+        "start":  "Khulna",
+        "destination":  "Jashore",
+        "startTime":  "08:30",
+        "arrivalTime":  "12:00",
+        "fare":  150,
+        "duration":  "1:00h"
+    },
+    {
+        "busName":  "Ena Paribahan (Bus-42)",
+        "start":  "Sylhet",
+        "destination":  "Chattogram",
+        "startTime":  "08:30",
+        "arrivalTime":  "12:00",
+        "fare":  850,
+        "duration":  "8:00h"
+    },
+    {
+        "busName":  "Hanif Enterprise (Bus-43)",
+        "start":  "Sylhet",
+        "destination":  "Chattogram",
+        "startTime":  "21:30",
+        "arrivalTime":  "12:00",
+        "fare":  850,
+        "duration":  "8:00h"
+    },
+    {
+        "busName":  "Ena Paribahan (Bus-44)",
+        "start":  "Sylhet",
+        "destination":  "Cox\u0027s Bazar",
+        "startTime":  "19:00",
+        "arrivalTime":  "12:00",
+        "fare":  1100,
+        "duration":  "10:00h"
+    },
+    {
+        "busName":  "Hanif Enterprise (Bus-45)",
+        "start":  "Sylhet",
+        "destination":  "Cox\u0027s Bazar",
+        "startTime":  "20:30",
+        "arrivalTime":  "12:00",
+        "fare":  1100,
+        "duration":  "10:00h"
+    },
+    {
+        "busName":  "Tisha Group (Bus-46)",
+        "start":  "Cumilla",
+        "destination":  "Dhaka",
+        "startTime":  "06:00",
+        "arrivalTime":  "12:00",
+        "fare":  300,
+        "duration":  "2:00h"
+    },
+    {
+        "busName":  "Asia Line (Bus-47)",
+        "start":  "Cumilla",
+        "destination":  "Dhaka",
+        "startTime":  "11:30",
+        "arrivalTime":  "12:00",
+        "fare":  300,
+        "duration":  "2:00h"
+    },
+    {
+        "busName":  "Ena Paribahan (Bus-48)",
+        "start":  "Mymensingh",
+        "destination":  "Dhaka",
+        "startTime":  "07:00",
+        "arrivalTime":  "12:00",
+        "fare":  300,
+        "duration":  "3:00h"
+    },
+    {
+        "busName":  "Soukhin Paribahan (Bus-49)",
+        "start":  "Mymensingh",
+        "destination":  "Dhaka",
+        "startTime":  "14:00",
+        "arrivalTime":  "12:00",
+        "fare":  250,
+        "duration":  "3:00h"
+    },
+    {
+        "busName":  "Star Line (Bus-50)",
+        "start":  "Feni",
+        "destination":  "Dhaka",
+        "startTime":  "07:30",
+        "arrivalTime":  "12:00",
+        "fare":  350,
+        "duration":  "3:00h"
+    },
+    {
+        "busName":  "Star Line (Bus-51)",
+        "start":  "Feni",
+        "destination":  "Dhaka",
+        "startTime":  "21:00",
+        "arrivalTime":  "12:00",
+        "fare":  350,
+        "duration":  "3:00h"
+    },
+    {
+        "busName":  "S.R Travels (Bus-52)",
+        "start":  "Bogura",
+        "destination":  "Rangpur",
+        "startTime":  "12:00",
+        "arrivalTime":  "12:00",
+        "fare":  250,
+        "duration":  "3:00h"
+    }
 ]
