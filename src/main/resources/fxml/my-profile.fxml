@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.travelmanager.controller.MyProfileController"
+            minHeight="500.0" minWidth="800.0"
+            stylesheets="@../css/styles.css">
+    
+    <top>
+        <VBox styleClass="header" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER" spacing="10" style="-fx-background-color: #2c3e50; -fx-padding: 20;">
+                <Label text="👤 My Profile" textFill="white">
+                    <font>
+                        <Font name="System Bold" size="26.0"/>
+                    </font>
+                </Label>
+                <Region HBox.hgrow="ALWAYS"/>
+                <VBox alignment="CENTER_RIGHT" spacing="5">
+                    <Label fx:id="welcomeLabel" text="Welcome, User!" textFill="white" style="-fx-font-size: 13px; -fx-font-weight: bold;"/>
+                    <Label fx:id="roleLabel" text="Role: User" textFill="#ecf0f1" style="-fx-font-size: 11px;"/>
+                </VBox>
+                <Button text="❓ Help" onAction="#handleHelp" 
+                        style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 8 20; -fx-cursor: hand; -fx-font-size: 12px; -fx-background-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);"/>
+                <Button text="🚪 Logout" onAction="#handleLogout" 
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 8 20; -fx-cursor: hand; -fx-font-size: 12px; -fx-background-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background: #ecf0f1; -fx-background-color: #ecf0f1;">
+            <VBox alignment="CENTER" spacing="30" style="-fx-background-color: #ecf0f1;">
+                <padding>
+                    <Insets bottom="50" left="50" right="50" top="30"/>
+                </padding>
+                
+                <!-- Profile Card -->
+                <VBox alignment="CENTER" spacing="20" maxWidth="500" minWidth="400"
+                      style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 3);">
+                    
+                    <!-- Profile Icon -->
+                    <Label text="👤" style="-fx-font-size: 64px;"/>
+                    
+                    <Label text="Edit Your Profile" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;">
+                        <padding>
+                            <Insets bottom="10"/>
+                        </padding>
+                    </Label>
+                    
+                    <!-- Status Message -->
+                    <Label fx:id="statusLabel" text="" style="-fx-font-size: 12px;" wrapText="true" textAlignment="CENTER" maxWidth="400"/>
+                    
+                    <!-- Full Name Field -->
+                    <VBox alignment="CENTER_LEFT" spacing="5" maxWidth="350">
+                        <Label text="Full Name" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d; -fx-font-weight: bold;"/>
+                        <TextField fx:id="fullNameField" promptText="Enter your full name" 
+                                   style="-fx-padding: 12; -fx-font-size: 14px; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #bdc3c7; -fx-border-width: 1;"/>
+                    </VBox>
+                    
+                    <!-- Username Field (Read-only) -->
+                    <VBox alignment="CENTER_LEFT" spacing="5" maxWidth="350">
+                        <Label text="Username (cannot be changed)" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d; -fx-font-weight: bold;"/>
+                        <TextField fx:id="usernameField" promptText="Username" editable="false"
+                                   style="-fx-padding: 12; -fx-font-size: 14px; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-background-color: #f0f0f0;"/>
+                    </VBox>
+                    
+                    <!-- Email Field -->
+                    <VBox alignment="CENTER_LEFT" spacing="5" maxWidth="350">
+                        <Label text="Email" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d; -fx-font-weight: bold;"/>
+                        <TextField fx:id="emailField" promptText="Enter your email"
+                                   style="-fx-padding: 12; -fx-font-size: 14px; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #bdc3c7; -fx-border-width: 1;"/>
+                    </VBox>
+                    
+                    <Separator style="-fx-padding: 10 0;"/>
+                    
+                    <!-- Password Change Section -->
+                    <Label text="Change Password (Optional)" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                    
+                    <!-- Current Password -->
+                    <VBox alignment="CENTER_LEFT" spacing="5" maxWidth="350">
+                        <Label text="Current Password" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d; -fx-font-weight: bold;"/>
+                        <PasswordField fx:id="currentPasswordField" promptText="Enter current password"
+                                       style="-fx-padding: 12; -fx-font-size: 14px; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #bdc3c7; -fx-border-width: 1;"/>
+                    </VBox>
+                    
+                    <!-- New Password -->
+                    <VBox alignment="CENTER_LEFT" spacing="5" maxWidth="350">
+                        <Label text="New Password" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d; -fx-font-weight: bold;"/>
+                        <PasswordField fx:id="newPasswordField" promptText="Enter new password (min. 6 characters)"
+                                       style="-fx-padding: 12; -fx-font-size: 14px; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #bdc3c7; -fx-border-width: 1;"/>
+                    </VBox>
+                    
+                    <!-- Confirm New Password -->
+                    <VBox alignment="CENTER_LEFT" spacing="5" maxWidth="350">
+                        <Label text="Confirm New Password" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d; -fx-font-weight: bold;"/>
+                        <PasswordField fx:id="confirmPasswordField" promptText="Confirm new password"
+                                       style="-fx-padding: 12; -fx-font-size: 14px; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #bdc3c7; -fx-border-width: 1;"/>
+                    </VBox>
+                    
+                    <!-- Action Buttons -->
+                    <HBox alignment="CENTER" spacing="15">
+                        <padding>
+                            <Insets top="15"/>
+                        </padding>
+                        <Button text="💾 Save Changes" onAction="#handleSaveProfile"
+                                style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-padding: 12 30; -fx-font-size: 14px; -fx-cursor: hand; -fx-background-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);"/>
+                        <Button text="🔙 Back to Home" onAction="#handleBack"
+                                style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 12 30; -fx-font-size: 14px; -fx-cursor: hand; -fx-background-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);"/>
+                    </HBox>
+                    
+                </VBox>
+                
+                <!-- Account Info Section -->
+                <VBox alignment="CENTER" spacing="10" maxWidth="500" minWidth="400"
+                      style="-fx-background-color: white; -fx-padding: 25; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                    <Label text="📋 Account Information" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                    <HBox alignment="CENTER" spacing="30">
+                        <VBox alignment="CENTER" spacing="3">
+                            <Label text="Account Type" style="-fx-font-size: 11px; -fx-text-fill: #7f8c8d;"/>
+                            <Label fx:id="accountTypeLabel" text="USER" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #3498db;"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="3">
+                            <Label text="User ID" style="-fx-font-size: 11px; -fx-text-fill: #7f8c8d;"/>
+                            <Label fx:id="userIdLabel" text="1" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+                
+            </VBox>
+        </ScrollPane>
+    </center>
+    
+</BorderPane>

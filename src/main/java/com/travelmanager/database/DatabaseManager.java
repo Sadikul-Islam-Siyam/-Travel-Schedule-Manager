@@ -410,6 +410,51 @@ public class DatabaseManager {
         pstmt.executeUpdate();
     }
     
+    // Update user profile (full name, email, and optionally password)
+    public boolean updateUserProfile(int userId, String fullName, String email, String newPassword) throws SQLException {
+        try (Connection conn = DriverManager.getConnection(DB_URL)) {
+            // Check if email is already used by another user
+            String checkEmailQuery = "SELECT id FROM users WHERE email = ? AND id != ?";
+            try (PreparedStatement checkStmt = conn.prepareStatement(checkEmailQuery)) {
+                checkStmt.setString(1, email);
+                checkStmt.setInt(2, userId);
+                ResultSet rs = checkStmt.executeQuery();
+                if (rs.next()) {
+                    return false; // Email already in use by another user
+                }
+            }
+            
+            if (newPassword != null && !newPassword.isEmpty()) {
+                // Update with new password
+                String salt = generateSalt();
+                String query = "UPDATE users SET full_name = ?, email = ?, password_hash = ?, password_salt = ? WHERE id = ?";
+                try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                    pstmt.setString(1, fullName);
+                    pstmt.setString(2, email);
+                    pstmt.setString(3, hashPasswordWithSalt(newPassword, salt));
+                    pstmt.setString(4, salt);
+                    pstmt.setInt(5, userId);
+                    pstmt.executeUpdate();
+                }
+            } else {
+                // Update without changing password
+                String query = "UPDATE users SET full_name = ?, email = ? WHERE id = ?";
+                try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                    pstmt.setString(1, fullName);
+                    pstmt.setString(2, email);
+                    pstmt.setInt(3, userId);
+                    pstmt.executeUpdate();
+                }
+            }
+            return true;
+        } catch (SQLException e) {
+            if (e.getMessage().contains("UNIQUE constraint failed")) {
+                return false;
+            }
+            throw e;
+        }
+    }
+    
     // Create new user with enhanced security
     public boolean createUser(String username, String email, String password, User.Role role, String fullName) throws SQLException {
         String salt = generateSalt();

@@ -112,6 +112,11 @@ public class HomeController {
     }
     
     @FXML
+    private void handleMyProfile() {
+        NavigationManager.navigateTo("my-profile");
+    }
+    
+    @FXML
     private void handleLogout() {
         AuthenticationManager.getInstance().logout();
         NavigationManager.navigateTo("login");

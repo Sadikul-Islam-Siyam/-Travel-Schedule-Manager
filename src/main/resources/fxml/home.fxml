@@ -24,6 +24,8 @@
                     <Label fx:id="welcomeLabel" text="Welcome, User!" textFill="white" style="-fx-font-size: 13px; -fx-font-weight: bold;"/>
                     <Label fx:id="roleLabel" text="Role: User" textFill="#ecf0f1" style="-fx-font-size: 11px;"/>
                 </VBox>
+                <Button text="👤 My Profile" onAction="#handleMyProfile" 
+                        style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-padding: 8 20; -fx-cursor: hand; -fx-font-size: 12px; -fx-background-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);"/>
                 <Button text="❓ Help" onAction="#handleHelp" 
                         style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 8 20; -fx-cursor: hand; -fx-font-size: 12px; -fx-background-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);"/>
                 <Button text="🚪 Logout" onAction="#handleLogout" 
