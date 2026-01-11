@@ -629,6 +629,32 @@ public class DatabaseManager {
         return false;
     }
     
+    // Get user by username
+    public User getUserByUsername(String username) {
+        String query = "SELECT id, username, email, password_hash, role, full_name FROM users WHERE username = ?";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                return new User(
+                    rs.getInt("id"),
+                    rs.getString("username"),
+                    rs.getString("email"),
+                    rs.getString("password_hash"),
+                    User.Role.valueOf(rs.getString("role")),
+                    rs.getString("full_name")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     // Change user role (Master only)
     public boolean changeUserRole(String username, String newRole) throws SQLException {
         String query = "UPDATE users SET role = ? WHERE username = ?";

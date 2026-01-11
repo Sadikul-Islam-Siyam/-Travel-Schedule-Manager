@@ -11,11 +11,13 @@ public class RestApiServer {
     private Javalin app;
     private final int port;
     private final ScheduleController scheduleController;
+    private final UserController userController;
     private boolean isRunning = false;
 
     private RestApiServer(int port) {
         this.port = port;
         this.scheduleController = new ScheduleController();
+        this.userController = new UserController();
     }
 
     public static synchronized RestApiServer getInstance() {
@@ -40,16 +42,27 @@ public class RestApiServer {
 
         try {
             app = Javalin.create(config -> {
-                // Enable CORS for development
+                // Enable CORS for development (including Android app access)
                 config.plugins.enableCors(cors -> {
                     cors.add(it -> {
                         it.anyHost();
+                        it.allowCredentials = false;
                     });
                 });
                 
                 // Configure JSON serialization
                 config.jsonMapper(new io.javalin.json.JavalinGson());
             });
+
+            // Add explicit CORS headers for Android app compatibility
+            app.before("/api/*", ctx -> {
+                ctx.header("Access-Control-Allow-Origin", "*");
+                ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+            });
+
+            // Handle preflight OPTIONS requests
+            app.options("/api/*", ctx -> ctx.status(200));
 
             // Register all routes
             registerRoutes();
@@ -75,6 +88,17 @@ public class RestApiServer {
             System.out.println("  PUT    /api/schedules/train/{trainName}");
             System.out.println("  DELETE /api/schedules/train/{trainName}");
             System.out.println("  GET    /api/routes?start={start}&destination={destination}");
+            System.out.println("----------------------------------------------");
+            System.out.println("Authentication Endpoints (for Android app):");
+            System.out.println("  POST   /api/auth/login");
+            System.out.println("  POST   /api/auth/register");
+            System.out.println("  GET    /api/auth/status/{username}");
+            System.out.println("  GET    /api/users/profile");
+            System.out.println("----------------------------------------------");
+            System.out.println("Admin Endpoints (Master/Developer only):");
+            System.out.println("  GET    /api/admin/pending-users");
+            System.out.println("  POST   /api/admin/approve/{userId}");
+            System.out.println("  POST   /api/admin/reject/{userId}");
             System.out.println("==============================================");
             
         } catch (Exception e) {
@@ -138,6 +162,31 @@ public class RestApiServer {
         
         // DELETE /api/schedules/train/{trainName} - Delete train schedule
         app.delete("/api/schedules/train/{trainName}", scheduleController::deleteTrainSchedule);
+
+        // ============= AUTHENTICATION ENDPOINTS =============
+        
+        // POST /api/auth/login - User login
+        app.post("/api/auth/login", userController::login);
+        
+        // POST /api/auth/register - User registration (pending approval)
+        app.post("/api/auth/register", userController::register);
+        
+        // GET /api/auth/status/{username} - Check account approval status
+        app.get("/api/auth/status/{username}", userController::checkAccountStatus);
+        
+        // GET /api/users/profile - Get current user profile
+        app.get("/api/users/profile", userController::getProfile);
+
+        // ============= ADMIN ENDPOINTS (Master/Developer only) =============
+        
+        // GET /api/admin/pending-users - Get all pending registrations
+        app.get("/api/admin/pending-users", userController::getPendingUsers);
+        
+        // POST /api/admin/approve/{userId} - Approve a pending user
+        app.post("/api/admin/approve/{userId}", userController::approveUser);
+        
+        // POST /api/admin/reject/{userId} - Reject a pending user
+        app.post("/api/admin/reject/{userId}", userController::rejectUser);
 
         // 404 handler
         app.error(404, ctx -> {
