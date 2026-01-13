@@ -25,7 +25,17 @@ public class App extends Application {
         
         NavigationManager.setPrimaryStage(stage);
         scene = new Scene(loadFXML("login"), 900, 600);
-        stage.setTitle("Smart Multi-Modal Travel Schedule Manager");
+        stage.setTitle("Travel Schedule Manager");
+        
+        // Set application icon
+        try {
+            javafx.scene.image.Image icon = new javafx.scene.image.Image(getClass().getResourceAsStream("/App_icon.png"));
+            stage.getIcons().add(icon);
+        } catch (Exception e) {
+            System.err.println("Warning: Failed to load application icon");
+            e.printStackTrace();
+        }
+        
         stage.setScene(scene);
         
         // Set minimum window size for responsiveness

@@ -98,7 +98,7 @@
                 </VBox>
             </HBox>
             
-            <!-- Developer-only section -->
+            <!-- Admin-only section -->
             <VBox fx:id="developerSection" alignment="CENTER" spacing="25" managed="false" visible="false">
                 <!-- First row: Edit API and Pending Requests -->
                 <HBox alignment="CENTER" spacing="30">
@@ -184,7 +184,7 @@
                         </font>
                     </Label>
                     <Label text="Review and approve" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
-                    <Label text="developer changes" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
+                    <Label text="admin changes" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
                     <Button text="Review Changes" onAction="#handleApiApproval"
                             style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-padding: 10 25; -fx-font-size: 13px; -fx-cursor: hand; -fx-background-radius: 5;"/>
                 </VBox>
